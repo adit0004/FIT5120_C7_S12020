@@ -58,7 +58,7 @@
 	define('ENVIRONMENT', 'development');
 
 	// Set the environment to production
-	define('ENVIRONMENT', 'production');
+	// define('ENVIRONMENT', 'production');
 
 /*
  *---------------------------------------------------------------
