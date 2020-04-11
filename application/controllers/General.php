@@ -2,7 +2,16 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class General extends CI_Controller {
-
+ 
+    /**
+     * Constructor - Loads the model for this controller
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model('General_model', 'model');
+    }
+    
     /**
      * Present the home page
      * @return void
