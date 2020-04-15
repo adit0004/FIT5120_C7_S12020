@@ -52,7 +52,7 @@ class General extends CI_Controller {
             if($d['met_guidelines'] == "Yes")
             {
                 if(isset($data['y'][$d['age']]))
-                    $data['y'][$d['age']] += $d['met_guidelines_proportional'];
+                    $data['y'][$d['age']] = ($d['met_guidelines_proportional']+$data['y'][$d['age']])/2;
                 else
                     $data['y'][$d['age']] = $d['met_guidelines_proportional'];
                 if($d['gender'] == 'Male')
@@ -67,7 +67,7 @@ class General extends CI_Controller {
             else if($d['met_guidelines'] == "No")
             {
                 if(isset($data['n'][$d['age']]))
-                    $data['n'][$d['age']] += $d['met_guidelines_proportional'];
+                    $data['n'][$d['age']] = ($d['met_guidelines_proportional']+$data['n'][$d['age']])/2;
                 else
                     $data['n'][$d['age']] = $d['met_guidelines_proportional'];
                 if($d['gender'] == 'Male')
