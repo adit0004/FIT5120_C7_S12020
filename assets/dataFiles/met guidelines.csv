@@ -1,0 +1,29 @@
+﻿age,met_guidelines,gender,met_guidelines_proportional,number
+18-24,Yes,Male,37.3,380.3
+25-34,Yes,Male,34.3,495.8
+35-44,Yes,Male,29.5,443.8
+45-54,Yes,Male,31.6,449.2
+55-64,Yes,Male,34.6,405.8
+65-74,Yes,Male,38.6,272.2
+75 +,Yes,Male,27.5,138.7
+18-24,Yes,Female,32.7,321.2
+25-34,Yes,Female,33.7,481.9
+35-44,Yes,Female,30.2,466
+45-54,Yes,Female,29.8,436.5
+55-64,Yes,Female,27.1,317.3
+65-74,Yes,Female,29.5,217.7
+75 +,Yes,Female,16.1,105.1
+18-24,No,Male,53,539.5
+25-34,No,Male,57.9,837.7
+35-44,No,Male,62.2,934.1
+45-54,No,Male,63.3,900.6
+55-64,No,Male,59.1,692.2
+65-74,No,Male,56.8,400.4
+75 +,No,Male,70.3,354.6
+18-24,No,Female,59,579.5
+25-34,No,Female,58.1,830
+35-44,No,Female,63.3,977
+45-54,No,Female,64.5,943.1
+55-64,No,Female,65.5,767.1
+65-74,No,Female,63.9,472.1
+75 +,No,Female,80.2,523.9

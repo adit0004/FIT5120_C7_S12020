@@ -1,0 +1,57 @@
+﻿type_of_exercise,age,gender,proportion,number
+No exercise,18-24,Male,33.2,338.2
+No exercise,25-34,Male,33.8,488.9
+No exercise,35-44,Male,37,555.6
+No exercise,45-54,Male,43,611.4
+No exercise,55-64,Male,38.7,453.1
+No exercise,65-74,Male,40.4,284.9
+No exercise,75 +,Male,55.7,280.9
+Walking,18-24,Male,28.9,294
+Walking,25-34,Male,39.4,570.8
+Walking,35-44,Male,41.3,620
+Walking,45-54,Male,43.6,620
+Walking,55-64,Male,45.5,533.5
+Walking,65-74,Male,50.3,354.7
+Walking,75 +,Male,36.1,182
+Moderate,18-24,Male,47.2,480.5
+Moderate,25-34,Male,41.5,600.5
+Moderate,35-44,Male,36.2,544.2
+Moderate,45-54,Male,29.8,424.3
+Moderate,55-64,Male,28.6,335.6
+Moderate,65-74,Male,22.9,161.6
+Moderate,75 +,Male,17.6,88.5
+Vigorous,18-24,Male,32.2,328.2
+Vigorous,25-34,Male,22.6,327.1
+Vigorous,35-44,Male,18.5,277.9
+Vigorous,45-54,Male,13.3,188.7
+Vigorous,55-64,Male,7.9,92.1
+Vigorous,65-74,Male,4.4,31.1
+Vigorous,75 +,Male,1.9,9.4
+No exercise,18-24,Female,38.5,378.3
+No exercise,25-34,Female,34.7,495.5
+No exercise,35-44,Female,38.8,599.1
+No exercise,45-54,Female,38.5,562.4
+No exercise,55-64,Female,40.5,474.6
+No exercise,65-74,Female,43.5,320.9
+No exercise,75 +,Female,61.2,399.7
+Walking,18-24,Female,43.2,425.0
+Walking,25-34,Female,49,701.2
+Walking,35-44,Female,47,725.5
+Walking,45-54,Female,50,731.1
+Walking,55-64,Female,48.5,567.9
+Walking,65-74,Female,46.7,344.9
+Walking,75 +,Female,31.3,204.4
+Moderate,18-24,Female,34.9,343.4
+Moderate,25-34,Female,35.8,512.1
+Moderate,35-44,Female,29.5,455.4
+Moderate,45-54,Female,27.2,397.6
+Moderate,55-64,Female,27.6,323.5
+Moderate,65-74,Female,22.5,166.2
+Moderate,75 +,Female,13.8,89.9
+Vigorous,18-24,Female,16.7,164.4
+Vigorous,25-34,Female,15.7,224.0
+Vigorous,35-44,Female,11,169.0
+Vigorous,45-54,Female,7.7,112.5
+Vigorous,55-64,Female,6.1,71.5
+Vigorous,65-74,Female,2.4,17.5
+Vigorous,75 +,Female,0.5,3.4

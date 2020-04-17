@@ -18,7 +18,9 @@ class General extends CI_Controller {
      */
 	public function index()
 	{
-		$this->load->view('general/home');
+        $this->load->view('general/header');
+        $this->load->view('general/home');
+        $this->load->view('general/footer',['activePage'=>'home']);
     }
 
     public function testMethods()
@@ -80,7 +82,9 @@ class General extends CI_Controller {
                 }
             }
         }
+        $this->load->view('general/header');
         $this->load->view('general/charts', $data);
+        $this->load->view('general/footer',['activePage'=>'charts']);
     }
 
     public function getDataForCharts()
@@ -88,5 +92,40 @@ class General extends CI_Controller {
         $data = $this->input->post('data') || null;
         $filters = $this->input->post('filters') || null;
         echo "<pre>".print_r($this->model->fetchDataForChart($data, $filters),1);die();
+    }
+
+    public function addFilesToDb()
+    {
+        $strings = [
+            0 => file_get_contents(base_url().'assets/dataFiles/0.json'),
+            1 => file_get_contents(base_url().'assets/dataFiles/1.json'),
+            2 => file_get_contents(base_url().'assets/dataFiles/2.json'),
+            3 => file_get_contents(base_url().'assets/dataFiles/3.json'),
+            4 => file_get_contents(base_url().'assets/dataFiles/4.json'),
+            5 => file_get_contents(base_url().'assets/dataFiles/5.json'),
+            6 => file_get_contents(base_url().'assets/dataFiles/6.json'),
+            7 => file_get_contents(base_url().'assets/dataFiles/7.json'),
+            8 => file_get_contents(base_url().'assets/dataFiles/8.json'),
+            9 => file_get_contents(base_url().'assets/dataFiles/9.json'),
+            10 => file_get_contents(base_url().'assets/dataFiles/10.json'),
+            11 => file_get_contents(base_url().'assets/dataFiles/11.json'),
+            12 => file_get_contents(base_url().'assets/dataFiles/12.json')
+        ];
+        $this->model->addJsonDataToDb($strings);
+    }
+
+    public function showSpaces()
+    {
+        // This page needs to show the featured spaces as well, get them from DB
+        $data['places'] = $this->model->loadFeaturedSpaces(); 
+        
+        // Build the image path here
+        foreach($data['places'] as &$place)
+        {
+            $place['area_image_url'] = base_url().'assets/img/spaces/'.$place['area_image_url'];
+        }
+        $this->load->view('general/header');
+        $this->load->view('general/spaces', $data);
+        $this->load->view('general/footer');
     }
 }

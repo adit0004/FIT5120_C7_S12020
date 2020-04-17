@@ -1,19 +1,76 @@
-.navbar{
-    box-shadow:0px 2px 10px rgba(100,100,100,0.2);
+.navbar {
+    box-shadow: 0px 2px 10px rgba(100, 100, 100, 0.2);
+    height: 100px;
 }
 
-.navbar-brand img{
-    max-height:25px!important;
+.navbar-brand img {
+    max-height: 80px!important;
 }
 
-.card-custom
-{
-    background:#fff;
-    border-radius:10px;
-    box-shadow:0px 2px 3px rgba(100,100,100,0.2);
+.card-custom {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 2px 3px rgba(100, 100, 100, 0.2);
 }
 
-.background-image{
-    background-image:linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.05)), url('../img/bg.jpg');
-    background-size:cover;
+.active {
+    border-bottom: 3px solid #000;
+}
+
+.hero {
+    /* Sizing */
+    height: 50vh;
+    /* Flexbox stuff */
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Text styles */
+    text-align: center;
+    /* Background styles */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)), url('../img/body_bg.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.hero-lead {
+    font-size: 2rem;
+}
+
+.hero-inner .btn-light {
+    font-size: 1.5rem;
+    border-radius: 50px;
+}
+
+.quick-links .card .card-img-top {
+    max-height: 400px!important;
+    width: auto;
+}
+
+.hero-spaces {
+    height: 30vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../img/spaces_bg.jpg');
+    background-position: bottom center;
+}
+
+.custom-card a {
+    overflow: hidden;
+}
+
+.custom-card a img {
+    transition: 0.3s all ease;
+}
+
+.custom-card a img:after {
+    background-color: transparent;
+}
+
+.custom-card a img:hover {
+    transform: scale(1.1);
+}
+
+.custom-card a img:hover:after {
+    background-color: #FFC10E;
 }

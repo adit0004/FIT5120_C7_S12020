@@ -1,80 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel='stylesheet' type='text/css' href='<?php echo base_url(); ?>assets/css/bootstrap.css'>
-    <link rel='stylesheet' type='text/css' href='<?php echo base_url(); ?>assets/css/custom.css'>
-    <title>EldVisor</title>
-</head>
-
-<body class='bg-light background-image'>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#"><img src="<?php echo base_url();?>assets/img/nav_logo.png"></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarColor03">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Events</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Elderly Health</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About Us</a>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
-            </form>
+    <section class="hero mt-5">
+        <div class="hero-inner">
+            <h1 class='display-1 text-white'>EldVisor</h1>
+            <p class='text-white hero-lead'>Guiding you to a healthier life!</p>
         </div>
-    </nav>
+    </section>
 
-    <div class="container-fluid mt-3">
-        <div class="row">
-            <div class="col-12 col-md-9 pt-4 pb-2">
-                <div class="col-12">
-                    <div class="row pt-4 pb-2 px-4 card-custom">
-                        Open Space Icon Here
-                    </div>
-                </div>
+    <div class="container-fluid mt-3 bg-white">
+        <!-- Quick links section -->
+        <div class="row p-4 m-5 d-flex justify-content-center">
+            <div class="col-12 text-center">
+                <h3>Quick Links</h3>
             </div>
-            <div class="col-12 col-md-3 pt-4 pb-2">
-                <div class="col-12">
-                    <div class="row pt-4 pb-2 px-4 card-custom">
-                        <div class="row d-flex align-items-left">
-                            <div class="col-3">
-                                <h1><i class="fa fa-cloud-sun-rain"></i></h1>
-                            </div>
-                            <div class="col-9">
-                                <h4>23 &deg; C<br>
-                                Rain Today</h4>
-                            </div>
+
+            <div class="card-deck quick-links mt-4 row">
+                <a href="<?php echo site_url(['general','showCharts']);?>" class="text-dark col-12 col-md-4">
+                    <div class="card">
+                        <img src="<?php echo base_url(); ?>assets/img/woman_near_flowers.jpg" class="card-img-top img-fluid">
+                        <div class="card-body">
+                            <h5 class="card-title">Health Facts</h5>
+                            <p class="card-text">See the numbers and what they mean</p>
                         </div>
                     </div>
-                </div>
+                </a>
+                <a href="#!" class="text-dark col-12 col-md-4">
+                    <div class="card">
+                        <img src="<?php echo base_url(); ?>assets/img/park.jpg" class="card-img-top img-fluid">
+                        <div class="card-body">
+                            <h5 class="card-title">Places</h5>
+                            <p class="card-text">Find new places around you.</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="#!" class="text-dark col-12 col-md-4">
+                    <div class="card">
+                        <img src="<?php echo base_url(); ?>assets/img/events.jpg" class="card-img-top img-fluid">
+                        <div class="card-body">
+                            <h5 class="card-title">Events</h5>
+                            <p class="card-text">Discover what's happening in the community</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
 
-                <!-- AQI and weather information -->
+        <hr>
+
+        <!-- Who we are section -->
+        <div class="row p-4 m-5">
+            <div class='col-12 col-md-6 text-center'>
+                <img src="<?php echo base_url(); ?>assets/img/logo_white_bg.jpg" style="max-height:500px;text-align:center;margin:auto" class="img-fluid">
+            </div>
+            <div class="col-12 col-md-6 text-center bg-light p-5 d-flex align-items-center">
+                <div>
+                    <h3>Who we are</h3>
+                    <p>As a dedicated Elderly Assistance Service, EldVisor is devoted to making life easier in and around the house. Founded in 2020, we offer home care and maintenance services for all, providing personalized administrative and health care for the Greater Geelong area. We do our best to provide affordable solutions and take care to respect your privacy and preferences.</p>
+                </div>
             </div>
         </div>
     </div>
-    <!-- Vendor scripts -->
-    <!-- jQuery -->
-    <script src='<?php echo base_url(); ?>assets/js/jquery.min.js'></script>
-    <!-- Popper -->
-    <script src='<?php echo base_url(); ?>assets/js/popper.min.js'></script>
-    <!-- Bootstrap (Custom) -->
-    <script src='<?php echo base_url(); ?>assets/js/bootstrap.min.js'></script>
-    <!-- Font Awesome -->
-    <script src="https://kit.fontawesome.com/1370f26db3.js" crossorigin="anonymous"></script>
-</body>
-
-</html>
