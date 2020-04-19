@@ -176,4 +176,15 @@ class General_model extends CI_Model {
     {
         return $this->db->query("SELECT * FROM areas_information WHERE featured = 1 ORDER BY area_name")->result_array();
     }
+
+    function fetchAreasCategory($spacesId)
+    {
+        return $this->db->query("SELECT area_name FROM areas_information WHERE area_id = ".$spacesId)->row_array()['area_name'];
+    }
+
+    function fetchDataForMaps($spacesId, $page = 1)
+    {
+        $tableName = $this->db->query("SELECT table_name FROM areas_information WHERE area_id = ".$spacesId)->row_array()['table_name'];
+        return $this->db->query("SELECT * FROM ".$tableName." LIMIT ".(($page-1)*10).",10")->result_array();
+    }
 }

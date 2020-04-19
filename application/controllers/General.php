@@ -23,23 +23,14 @@ class General extends CI_Controller {
         $this->load->view('general/footer',['activePage'=>'home']);
     }
 
-    public function testMethods()
+    public function fetchWeather($lat, $long)
     {
-        $this->load->view('general/testMethods');
+        return $this->weatheraqi->fetchWeatherData($lat, $long);
     }
 
-    public function fetchWeather()
+    public function fetchAqi($lat, $long)
     {
-        $lat = $this->input->post('lat');
-        $long = $this->input->post('long');
-        echo json_encode($this->weatheraqi->fetchWeatherData($lat, $long));
-    }
-
-    public function fetchAqi()
-    {
-        $lat = $this->input->post('lat');
-        $long = $this->input->post('long');
-        echo json_encode($this->weatheraqi->fetchAqiData($lat, $long));
+        return $this->weatheraqi->fetchAqiData($lat, $long);
     }
 
     public function showCharts()
@@ -126,6 +117,24 @@ class General extends CI_Controller {
         }
         $this->load->view('general/header');
         $this->load->view('general/spaces', $data);
-        $this->load->view('general/footer');
+        $this->load->view('general/footer', ['activePage' => 'places']);
+    }
+
+    public function getWeatherAndAqi()
+    {
+        $lat = $this->input->post('lat');
+        $long = $this->input->post('long');
+        $weather = $this->fetchWeather($lat, $long);
+        $aqi = $this->fetchAqi($lat, $long);
+        echo json_encode(['weather'=>$weather, 'aqi'=>$aqi]);
+    }
+
+    public function showSpacesMap($spaceId)
+    {
+        $data['spaces'] = $this->model->fetchDataForMaps($spaceId);
+        $data['categoryName'] = $this->model->fetchAreasCategory($spaceId);
+        $this->load->view('general/header');
+        $this->load->view('general/placesMap', $data);
+        $this->load->view('general/footer', ['activePage' => 'placesMap']);
     }
 }
