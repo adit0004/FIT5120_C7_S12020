@@ -63,14 +63,12 @@
     transition: 0.3s all ease;
 }
 
-.custom-card a img:after {
-    background-color: transparent;
-}
-
 .custom-card a img:hover {
     transform: scale(1.1);
 }
 
-.custom-card a img:hover:after {
-    background-color: #FFC10E;
+.overlay {
+    display: none;
+    height: 100%;
+    width: 100%;
 }
