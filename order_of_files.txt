@@ -1,0 +1,13 @@
+0. Open Spaces
+1. Dog walking area
+2. Elder people clubs (senior citizen facilities)
+3. Amenities around
+4. Golf courses
+5. Parish
+6. art centers
+7. barbeque area
+8. Playgrounds - this has names of all the places too. this we can match with the co-ordinates in open space data which had pos Id and no names of the places
+9. community halls
+10. emergency hospitals
+11. bike trails
+12. neighbourhood houses
