@@ -185,6 +185,6 @@ class General_model extends CI_Model {
     function fetchDataForMaps($spacesId, $page = 1)
     {
         $tableName = $this->db->query("SELECT table_name FROM areas_information WHERE area_id = ".$spacesId)->row_array()['table_name'];
-        return $this->db->query("SELECT * FROM ".$tableName." LIMIT ".(($page-1)*10).",10")->result_array();
+        return $this->db->query("SELECT t.*, os.OSCATEGORY FROM ".$tableName." t LEFT OUTER JOIN open_space os ON os.lat = t.lat AND os.long = t.long LIMIT ".(($page-1)*10).",10")->result_array();
     }
 }

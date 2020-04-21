@@ -133,6 +133,20 @@ class General extends CI_Controller {
     {
         $data['spaces'] = $this->model->fetchDataForMaps($spaceId);
         $data['categoryName'] = $this->model->fetchAreasCategory($spaceId);
+        $data['category'] = [
+            'LL' => 'Linear and Linkage',
+            'S' => 'Sport',
+            'IP' => 'Informal Parks',
+            'LA' => 'Landscape and Amenity',
+            'CH' => 'Conservation, Habitat and Heritage',
+            'WL' => 'Waterway and Lake',
+            'FB' => 'Foreshore, Beach and Ocean',
+            'US' => 'Utilities and Services',
+            'PF' => 'Possible Future Use',
+            'U' => 'Undeveloped',
+            'CL' => 'Crown Land'
+        ];
+
         $this->load->view('general/header');
         $this->load->view('general/placesMap', $data);
         $this->load->view('general/footer', ['activePage' => 'placesMap']);

@@ -22,13 +22,13 @@
         // Check if geolocation is supported, and if yes, get the location:
         function getLocation() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition);
+                navigator.geolocation.getCurrentPosition(getWeatherAndAqi);
             } else {
                 console.log("Geolocation is not supported by this browser.");
             }
         }
 
-        function showPosition(position) {
+        function getWeatherAndAqi(position) {
             // console.log("Latitude: " + position.coords.latitude +
             //     "<br>Longitude: " + position.coords.longitude);
             // If we got the location, pull the weather and AQI
@@ -66,7 +66,40 @@
                 $("#placesNav").addClass('active');
             getLocation();
 
-
+            // Smooth-Scroll
+            $('a[href*="#"]')
+                // Remove links that don't actually link to anything
+                .not('[href="#"]')
+                .not('[href="#!"]')
+                .click(function(event) {
+                    // On-page links
+                    if (
+                        location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') &&
+                        location.hostname == this.hostname
+                    ) {
+                        // Figure out element to scroll to
+                        var target = $(this.hash);
+                        target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                        // Does a scroll target exist?
+                        if (target.length) {
+                            // Only prevent default if animation is actually gonna happen
+                            event.preventDefault();
+                            $('html, body').animate({
+                                scrollTop: target.offset().top
+                            }, 1000, function() {
+                                // // Callback after animation
+                                // // Must change focus!
+                                // var $target = $(target);
+                                // $target.focus();
+                                // if ($target.is(":focus")) { // Checking if the target was focused
+                                //     return false;
+                                // } else {
+                                //     $target.attr('tabindex', '-1'); // Adding tabindex for elements not focusable
+                                // };
+                            });
+                        }
+                    }
+                });
 
             // Only initialize charts if this is the charts page.
             <?php if ($activePage == 'charts') { ?>
@@ -118,58 +151,58 @@
                     }
                     chart.update();
                 });
-            <?php } else if ($activePage == 'places') { ?>
-                $('a[href*="#"]')
-                    // Remove links that don't actually link to anything
-                    .not('[href="#"]')
-                    .not('[href="#!"]')
-                    .click(function(event) {
-                        // On-page links
-                        if (
-                            location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') &&
-                            location.hostname == this.hostname
-                        ) {
-                            // Figure out element to scroll to
-                            var target = $(this.hash);
-                            target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-                            // Does a scroll target exist?
-                            if (target.length) {
-                                // Only prevent default if animation is actually gonna happen
-                                event.preventDefault();
-                                $('html, body').animate({
-                                    scrollTop: target.offset().top
-                                }, 1000, function() {
-                                    // // Callback after animation
-                                    // // Must change focus!
-                                    // var $target = $(target);
-                                    // $target.focus();
-                                    // if ($target.is(":focus")) { // Checking if the target was focused
-                                    //     return false;
-                                    // } else {
-                                    //     $target.attr('tabindex', '-1'); // Adding tabindex for elements not focusable
-                                    // };
-                                });
-                            }
-                        }
-                    });
             <?php } ?>
         })
         <?php if ($activePage == 'placesMap') { ?>
             var map;
 
-            var spaces = <?php echo json_encode($spaces);?>;
+            <?php foreach ($spaces as &$space) {
+                $addressJson = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' . $space['lat'] .
+                    ',' . $space['long'] . '&key=AIzaSyCrGmHjWjkwhyXqb9HDaiwQ9htOZCrs0Hs';
+                $space['urlString'] = $addressJson;
+            }; ?>
+
+            spaces = <?php echo json_encode($spaces); ?>;
+
+
+            // var flickerAPI = "https://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
+            // $.getJSON(flickerAPI, {
+            //         tags: "mount rainier",
+            //         tagmode: "any",
+            //         format: "json"
+            //     })
+            //     .done(function(data) {
+            //         $.each(data.items, function(i, item) {
+            //             $("<img>").attr("src", item.media.m).appendTo("#images");
+            //             if (i === 3) {
+            //                 return false;
+            //             }
+            //         });
+            //     });
+
+            // Add addresses to the divs
             console.log(spaces);
             // Calculate average lat, lng
             var latSum = 0;
             var lngSum = 0;
-            for (var i = 0 ; i < spaces.length ; i++)
-            {
+            for (var i = 0; i < spaces.length; i++) {
                 latSum += parseFloat(spaces[i].lat);
                 lngSum += parseFloat(spaces[i].long);
             }
-            avgLat = latSum/10;
-            avgLng = lngSum/10;
-            function initMap() {
+            avgLat = latSum / 10;
+            avgLng = lngSum / 10;
+
+            function seeOnMap(index) {
+                $('html, body').animate({
+                    scrollTop: $("#map").offset().top
+                }, 800);
+                // map.setCenter(markers[index].getPosition());
+                
+                google.maps.event.trigger(markers[index], 'click');
+            }
+
+            async function initMap() {
+                markers = [];
                 map = new google.maps.Map(document.getElementById('map'), {
                     center: {
                         lat: avgLat,
@@ -177,13 +210,101 @@
                     },
                     zoom: 10
                 });
-                for (var i = 0 ; i < spaces.length ; i++)
-                {
-                    var loc = {lat:parseFloat(spaces[i].lat), lng:parseFloat(spaces[i].long)};
-                    console.log(loc);
-                    var marker = new google.maps.Marker({position:loc, map:map});
+                // Marker for user
+                // getCurrentPosition(function(position){})
+                if (navigator.geolocation) {
+                    var location = navigator.geolocation.getCurrentPosition(function(location) {
+                        var icon = {
+                            url: "<?php echo base_url(); ?>assets/img/user_icon.png", // url
+                            size: new google.maps.Size(137, 197),
+                            scaledSize: new google.maps.Size((137 * 50 / 197), 50), // scaled size
+                            origin: new google.maps.Point(0, 0), // origin
+                            anchor: new google.maps.Point(((137 * 50) / (197 * 2)), 50) // anchor
+                        };
+                        var user = new google.maps.Marker({
+                            position: {
+                                lat: location.coords.latitude,
+                                lng: location.coords.longitude
+                            },
+                            map: map,
+                            icon: icon
+                        });
+                        console.log(location);
+                    });
                 }
+
+
+
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: ""
+                });
+                spaces.forEach(function(space) {
+                    var marker = new google.maps.Marker({
+                        position: {
+                            lat: parseFloat(space.lat),
+                            lng: parseFloat(space.long)
+                        },
+                        content: space.name,
+                        map: map
+                    });
+                    var content = space.name;
+                    marker.addListener('click', function() {
+                        map.panTo(marker.getPosition());
+                        map.setZoom(15);
+                        infowindow.setContent('<div><strong>' + marker.content + '</strong></div>');
+                        infowindow.open(map, marker);
+                    });
+                    markers.push(marker)
+                });
+
+
+
+
+
+
+
+
+
+                // // Marker for Open Spaces
+                // for (var i = 0; i < spaces.length; i++) {
+                //     var loc = {
+                //         lat: parseFloat(spaces[i].lat),
+                //         lng: parseFloat(spaces[i].long)
+                //     };
+                //     console.log(loc);
+                //     var marker = new google.maps.Marker({
+                //         position: loc,
+                //         map: map
+                //     });
+
+                //     markers.push(marker);
+                //     var infowindow = new google.maps.InfoWindow({
+                //         content: '<strong>' + spaces[i].name + '</strong>'
+                //     })
+                //     marker.addListener('click', function() {
+                //         infowindow.open(map, markers[i]);
+                //     })
+                // }
             }
+            $(function() {
+                for (var i = 1; i < spaces.length + 1; i++) {
+                    // console.log($("tr").eq(i).find("td").eq(1).html())
+                    $.ajax({
+                        url: spaces[i - 1].urlString,
+                        method: "POST",
+                        async: false,
+                        success: function(data) {
+                            spaces[i - 1].address = data.results[0].formatted_address;
+                            var address = data.results[0].formatted_address.split(",");
+                            $("tr").eq(i).find("td").eq(1).find("#addressBlock").html("<address>" + address[0] + "<br>" + address[1] + "</address>");
+                            console.log(data.results[0].formatted_address);
+                        }
+                    })
+                }
+            })
+
+
         <?php } ?>
     </script>
     </body>
