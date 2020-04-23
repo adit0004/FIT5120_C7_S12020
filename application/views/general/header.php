@@ -18,7 +18,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarColor03">
-            <div id="weatherContainer" class='mr-auto'></div>
+            <div id="weatherContainer" class='mr-auto'><button class='btn btn-outline-dark' onclick='getLocation()'>Show Weather</button></div>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item ml-4" id="homeNav">
                     <a class="nav-link" href="<?php echo site_url(['general','index']);?>">Home <span class="sr-only">(current)</span></a>

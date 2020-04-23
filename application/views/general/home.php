@@ -18,7 +18,7 @@
                         <img src="<?php echo base_url(); ?>assets/img/woman_near_flowers.jpg" class="card-img-top img-fluid">
                         <div class="card-body">
                             <h5 class="card-title">Health Facts</h5>
-                            <p class="card-text">See the numbers and what they mean</p>
+                            <p class="card-text">Understand health information and how it affects you</p>
                         </div>
                     </div>
                 </a>
@@ -27,7 +27,7 @@
                         <img src="<?php echo base_url(); ?>assets/img/park.jpg" class="card-img-top img-fluid">
                         <div class="card-body">
                             <h5 class="card-title">Places</h5>
-                            <p class="card-text">Find new places around you.</p>
+                            <p class="card-text">Find spaces around you to exercise and get healthy</p>
                         </div>
                     </div>
                 </a>
@@ -48,12 +48,12 @@
         <!-- Who we are section -->
         <div class="row p-4 m-5">
             <div class='col-12 col-md-6 text-center'>
-                <img src="<?php echo base_url(); ?>assets/img/logo_white_bg.jpg" style="max-height:500px;text-align:center;margin:auto" class="img-fluid">
+                <img src="<?php echo base_url(); ?>assets/img/logo_white_bg.jpg" style="max-height:300px;text-align:center;margin:auto" class="img-fluid">
             </div>
             <div class="col-12 col-md-6 text-center bg-light p-5 d-flex align-items-center">
                 <div>
                     <h3>Who we are</h3>
-                    <p>As a dedicated Elderly Assistance Service, EldVisor is devoted to making life easier in and around the house. Founded in 2020, we offer home care and maintenance services for all, providing personalized administrative and health care for the Greater Geelong area. We do our best to provide affordable solutions and take care to respect your privacy and preferences.</p>
+                    <p style='font-size:1rem'>As a dedicated Elderly Assistance Service, EldVisor is devoted to making life easier in and around the house. Founded in 2020, we offer home care and maintenance services for all, providing personalized administrative and health care for the Greater Geelong area. We do our best to provide affordable solutions and take care to respect your privacy and preferences.</p>
                 </div>
             </div>
         </div>

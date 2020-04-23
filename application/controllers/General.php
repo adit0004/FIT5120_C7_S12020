@@ -120,19 +120,35 @@ class General extends CI_Controller {
         $this->load->view('general/footer', ['activePage' => 'places']);
     }
 
-    public function getWeatherAndAqi()
+    public function getWeatherAndAqi($index = 0)
     {
-        $lat = $this->input->post('lat');
-        $long = $this->input->post('long');
+        if (!empty($this->input->post('lat')))
+        {
+            $lat = $this->input->post('lat');
+            $long = $this->input->post('long');
+        }
         $weather = $this->fetchWeather($lat, $long);
         $aqi = $this->fetchAqi($lat, $long);
-        echo json_encode(['weather'=>$weather, 'aqi'=>$aqi]);
+        echo json_encode(['weather'=>$weather, 'aqi'=>$aqi, 'index'=>$index]);
     }
 
-    public function showSpacesMap($spaceId)
+    public function showSpacesMap($spaceId, $page = 1, $distanceFromUser = 'All', $latitude = 0, $longitude = 0, $category = 'All')
     {
-        $data['spaces'] = $this->model->fetchDataForMaps($spaceId);
+        $filters['distanceFromUser'] = empty($this->input->post('distanceFilter'))?($distanceFromUser == 'All'?'All':$distanceFromUser):$this->input->post('distanceFilter');
+        $filters['userLocation']['latitude'] = $this->input->post('lat') == 0? ($latitude == 0?0:$latitude):$this->input->post('lat');
+        $filters['userLocation']['longitude'] = $this->input->post('long') == 0? ($longitude == 0?0:$longitude):$this->input->post('long');
+        $filters['category'] = empty($this->input->post('categoryFilter'))?($category == 'All'?'All':$category):$this->input->post('categoryFilter');
+        $data['spaceId'] = $spaceId;
+        $data['spaces'] = $this->model->fetchDataForMaps($spaceId, $filters, $page);
+        foreach($data['spaces'] as &$space)
+        {
+            if(!empty($space['name']))
+                $space['name'] = ucwords(strtolower($space['name']));
+        }
+        $data['page'] = $page;
+        $data['pages'] = ceil($this->model->fetchPageCount($spaceId, $filters)/10);
         $data['categoryName'] = $this->model->fetchAreasCategory($spaceId);
+        $data['filters'] = $filters;
         $data['category'] = [
             'LL' => 'Linear and Linkage',
             'S' => 'Sport',
