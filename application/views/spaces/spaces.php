@@ -11,7 +11,7 @@
             <div>
                 <h1 class="align-self-center">Greater Geelong Open Spaces</h1>
                 <p class="mt-5 align-self-center">EldVisor aims to help older people in Greater Geelong stay connected with the community by providing information about nearby open spaces such as parks, meditation centers, trails and others.</p>
-                <a href="#featuredSpaces" class='btn btn-outline-dark btn-lg'>See places &rarr;</a>
+                <a href="#featuredSpaces" class='btn btn-primary btn-lg'>See places &rarr;</a>
             </div>
         </div>
         <div class="col-12 col-md-6 text-center">
@@ -30,8 +30,8 @@
         <?php
             foreach($places as $place){
                 echo "<div class='col-6 col-md-3 custom-card my-5 text-center'>";
-                echo "<a href='".site_url(['general','showSpacesMap',$place['area_id']])."' class='d-block h-100'><img class='img-fluid' src='".$place['area_image_url']."'></a>";
-                echo "<a href='".site_url(['general','showSpacesMap',$place['area_id']])."' class='text-dark'>".$place['area_name']."</a>";
+                echo "<a href='".site_url(['spaces','showSpacesMap',$place['area_id']])."' class='d-block h-100'><img class='img-fluid' src='".$place['area_image_url']."'></a>";
+                echo "<a href='".site_url(['spaces','showSpacesMap',$place['area_id']])."' class='text-dark'>".$place['area_name']."</a>";
                 echo "</div>";
             }
         ?>

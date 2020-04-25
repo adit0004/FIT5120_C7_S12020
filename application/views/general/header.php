@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet' type='text/css' href='<?php echo base_url(); ?>assets/css/bootstrap.css'>
     <link rel='stylesheet' type='text/css' href='<?php echo base_url(); ?>assets/css/custom.css'>
+    <!-- Chartist -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <!-- Datepicker -->
+    <link rel="stylesheet" type='text/css' href="<?php echo base_url(); ?>assets/css/bootstrap-datepicker.min.css">
     <title>EldVisor</title>
 </head>
 
@@ -27,13 +31,10 @@
                     <a class="nav-link" href="<?php echo site_url(['general','showCharts']);?>">Health Facts</a>
                 </li>
                 <li class="nav-item ml-4" id="placesNav">
-                    <a class="nav-link" href="<?php echo site_url(['general', 'showSpaces']);?>">Places</a>
+                    <a class="nav-link" href="<?php echo site_url(['spaces', 'showSpaces']);?>">Places</a>
                 </li>
                 <li class="nav-item ml-4" id="eventsNav">
-                    <a class="nav-link" href="#">Find Events</a>
-                </li>
-                <li class="nav-item ml-4" id="aboutNav">
-                    <a class="nav-link" href="#">About Us</a>
+                    <a class="nav-link" href="<?php echo site_url(['events', 'showEvents']);?>">Find Events</a>
                 </li>
                 <!-- <li class="nav-item ml-4">
                     <a class="nav-link" href="#">News</a>

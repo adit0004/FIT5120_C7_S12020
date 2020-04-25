@@ -22,7 +22,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="<?php echo site_url(['general', 'showSpaces']);?>" class="text-dark col-12 col-md-4">
+                <a href="<?php echo site_url(['spaces', 'showSpaces']);?>" class="text-dark col-12 col-md-4">
                     <div class="card">
                         <img src="<?php echo base_url(); ?>assets/img/park.jpg" class="card-img-top img-fluid">
                         <div class="card-body">
@@ -31,7 +31,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="#!" class="text-dark col-12 col-md-4">
+                <a href="<?php echo site_url(['events', 'showEvents']);?>" class="text-dark col-12 col-md-4">
                     <div class="card">
                         <img src="<?php echo base_url(); ?>assets/img/events.jpg" class="card-img-top img-fluid">
                         <div class="card-body">

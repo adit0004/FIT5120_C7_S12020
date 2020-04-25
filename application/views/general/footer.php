@@ -4,6 +4,7 @@
         </p>
     </footer>
 
+    <?php $activePage = isset($activePage)?$activePage:'';?>
     <?php if ($activePage == 'placesMap') { ?>
         <div class="modal fade" id="locateMeModal" tabindex="-1" role="dialog" aria-labelledby="locateMeModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -37,8 +38,10 @@
     <script src="https://kit.fontawesome.com/1370f26db3.js"></script>
     <!-- Charts -->
     <script src="<?php echo base_url(); ?>assets/js/Chart.bundle.min.js"></script>
-    <!-- Maps -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrGmHjWjkwhyXqb9HDaiwQ9htOZCrs0Hs&callback=initMap&libraries=places" async defer></script>
+    <!-- Datepicker -->
+    <script src="<?php echo base_url(); ?>assets/js/bootstrap-datepicker.min.js"></script>
+
+
     <script>
         // Location methods
         // Ask for location and append weather, temperature and AQI to nav
@@ -52,78 +55,22 @@
         }
 
         function getWeatherAndAqi(position) {
-
-            // Check if sessionstorage has weather set
-            let weatherStr = sessionStorage.getItem('weather');
-            if (typeof weatherStr !== null) {
-                // If it's set, check if it's more than 20 minutes old
-                var date1;
-                date1 = new Date();
-                var date2 = sessionStorage.getItem('date');
-                if (date1 - date2 >= 300) {
-
-                    // Clear the earlier data
-                    sessionStorage.removeItem('weather');
-                    sessionStorage.removeItem('date');
-
-                    $.ajax({
-                        url: '<?php echo site_url(['general', 'getWeatherAndAqi']); ?>',
-                        method: 'POST',
-                        data: {
-                            'lat': position.coords.latitude,
-                            'long': position.coords.longitude
-                        },
-                        success: function(data) {
-                            data = JSON.parse(data);
-                            var temperature = Math.round(((data.weather.main.temp - 273.15) * 10)) / 10;
-                            var weather = data.weather.weather[0].main;
-                            var icon = '<?php echo base_url(); ?>assets/img/weather_icons/' + data.weather.weather[0].icon + '.png';
-                            var elem = '<div class="d-flex align-items-centre"><div class="d-inline-block"><img src="' + icon + '" height="50px"></div><div class="d-inline-block ml-2">' + temperature + ' &deg;C<br>' + weather + '</div></div>';
-                            $("#weatherContainer").html(elem);
-                            // Set the weather and date sessionStorage
-                            sessionStorage.setItem('weather', JSON.stringify(data));
-                            sessionStorage.setItem('date', date1);
-
-                        }
-                    })
-                } else {
-                    // Just use the local version
-                    dataStr = weatherStr;
-                    data = JSON.parse(dataStr);
+            $.ajax({
+                url: '<?php echo site_url(['general', 'getWeatherAndAqi']); ?>',
+                method: 'POST',
+                data: {
+                    'lat': position.coords.latitude,
+                    'long': position.coords.longitude
+                },
+                success: function(data) {
+                    data = JSON.parse(data);
                     var temperature = Math.round(((data.weather.main.temp - 273.15) * 10)) / 10;
                     var weather = data.weather.weather[0].main;
                     var icon = '<?php echo base_url(); ?>assets/img/weather_icons/' + data.weather.weather[0].icon + '.png';
                     var elem = '<div class="d-flex align-items-centre"><div class="d-inline-block"><img src="' + icon + '" height="50px"></div><div class="d-inline-block ml-2">' + temperature + ' &deg;C<br>' + weather + '</div></div>';
                     $("#weatherContainer").html(elem);
                 }
-                // If we got the location, pull the weather and AQI
-
-            } else {
-                $.ajax({
-                    url: '<?php echo site_url(['general', 'getWeatherAndAqi']); ?>',
-                    method: 'POST',
-                    data: {
-                        'lat': position.coords.latitude,
-                        'long': position.coords.longitude
-                    },
-                    success: function(data) {
-                        try {
-                            data = JSON.parse(data);
-                            var temperature = Math.round(((data.weather.main.temp - 273.15) * 10)) / 10;
-                            var weather = data.weather.weather[0].main;
-                            var icon = '<?php echo base_url(); ?>assets/img/weather_icons/' + data.weather.weather[0].icon + '.png';
-                            var elem = '<div class="d-flex align-items-centre"><div class="d-inline-block"><img src="' + icon + '" height="50px"></div><div class="d-inline-block ml-2">' + temperature + ' &deg;C<br>' + weather + '</div></div>';
-                            $("#weatherContainer").html(elem);
-
-                            // Set the weather and date sessionStorage
-                            sessionStorage.setItem('weather', JSON.stringify(data));
-                            sessionStorage.setItem('date', date1);
-                        } catch {
-                            console.log('Error fetching weather and aqi');
-                        }
-                    }
-                })
-            }
+            })
         }
 
         $(function() {
@@ -134,6 +81,8 @@
                 $("#healthNav").addClass('active');
             else if (<?php echo $activePage == 'places' || $activePage == 'placesMap' ? '1' : 'false' ?>)
                 $("#placesNav").addClass('active');
+            else if (<?php echo $activePage == 'events'? '1' : 'false'; ?>)
+                $("#eventsNav").addClass('active');
             getLocation();
 
 
@@ -161,57 +110,11 @@
                         }
                     }
                 });
-
-            // Only initialize charts if this is the charts page.
-            <?php if ($activePage == 'charts') { ?>
-                // Initialize with met guidelines
-                const ctx = document.getElementById('chart').getContext('2d');
-                var chart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['<?php echo implode('\',\'', array_keys($y)); ?>'],
-                        datasets: [{
-                            label: 'Yes',
-                            data: [<?php echo implode(',', $y); ?>],
-                            backgroundColor: "#FFC10E",
-                            // categoryPercentage:1.0,
-                            barPercentage: 0.9
-                        }, {
-                            label: 'No',
-                            data: [<?php echo implode(',', $n); ?>],
-                            backgroundColor: "#1368A4",
-                            barPercentage: 0.9
-                        }]
-                    },
-                    options: {
-                        categoryPercentage: 1.0,
-                    }
-                });
-                $(ctx).data('chart', chart)
-                $('input[name="gender"]').on('change', function(e) {
-                    var chart = $(ctx).data('chart');
-                    if ($(this).val() == 'Male') {
-                        <?php for ($i = 0; $i < count($male['n']); $i++) {
-                            echo 'chart.data.datasets[0].data[' . $i . '] = ' . $male['y'][$i] . ';';
-                            echo 'chart.data.datasets[1].data[' . $i . '] = ' . $male['n'][$i] . ';';
-                        } ?>
-                    } else if ($(this).val() == 'Female') {
-                        <?php for ($i = 0; $i < count($female['n']); $i++) {
-                            echo 'chart.data.datasets[0].data[' . $i . '] = ' . $female['y'][$i] . ';';
-                            echo 'chart.data.datasets[1].data[' . $i . '] = ' . $female['n'][$i] . ';';
-                        } ?>
-                    } else {
-                        <?php
-                        $i = 0;
-                        foreach ($y as $age => $yes) {
-                            echo 'chart.data.datasets[0].data[' . $i . '] = ' . $yes . ';';
-                            echo 'chart.data.datasets[1].data[' . $i++ . '] = ' . $n[$age] . ';';
-                        }
-                        ?>
-                    }
-                    chart.update();
-                });
-            <?php } ?>
+            <?php if($activePage == 'events') {?>
+                var options = {format:'dd M yyyy'};
+                $("#startDate").datepicker(options);
+                $("#endDate").datepicker(options);
+            <?php }?>
         })
         <?php if ($activePage == 'placesMap') { ?>
             var map;
@@ -333,6 +236,77 @@
                         infowindow.open(map, marker);
                     });
                     markers.push(marker)
+
+                    // Only bind if lat and long are not 0
+                    if ($("#lat").val() == 0 && $("#long").val() == 0) {
+                        var input = document.getElementById('locationFilter');
+                        var options = {
+                            componentRestrictions: {
+                                country: 'au'
+                            }
+                        };
+                        autocomplete = new google.maps.places.Autocomplete(input, options);
+                        autocomplete.addListener('place_changed', function() {
+                            var place = autocomplete.getPlace()
+                            var geocoder = new google.maps.Geocoder;
+                            geocoder.geocode({
+                                'placeId': place.place_id
+                            }, function(results, status) {
+                                if (status !== 'OK') {
+                                    window.alert('Geocoder failed due to: ' + status);
+                                    return;
+                                }
+                                $("#lat").val(results[0].geometry.location.lat());
+                                $("#long").val(results[0].geometry.location.lng())
+                                map.setZoom(11);
+                                map.setCenter(results[0].geometry.location);
+
+                                // Set the position of the marker using the place ID and location.
+                                userMarker.setPlace({
+                                    placeId: place.place_id,
+                                    location: results[0].geometry.location
+                                });
+                                userMarker.setVisible(true);
+                            });
+                        });
+                    } else {
+                        // Bind only on first change
+                        console.log(typeof autocomplete === 'undefined');
+                        if (typeof autocomplete === 'undefined') {
+                            $("#locationFilter").on('keydown', function() {
+                                var input = document.getElementById('locationFilter');
+                                var options = {
+                                    componentRestrictions: {
+                                        country: 'au'
+                                    }
+                                };
+                                autocomplete = new google.maps.places.Autocomplete(input, options);
+                                autocomplete.addListener('place_changed', function() {
+                                    var place = autocomplete.getPlace()
+                                    var geocoder = new google.maps.Geocoder;
+                                    geocoder.geocode({
+                                        'placeId': place.place_id
+                                    }, function(results, status) {
+                                        if (status !== 'OK') {
+                                            window.alert('Geocoder failed due to: ' + status);
+                                            return;
+                                        }
+                                        $("#lat").val(results[0].geometry.location.lat());
+                                        $("#long").val(results[0].geometry.location.lng())
+                                        map.setZoom(11);
+                                        map.setCenter(results[0].geometry.location);
+
+                                        // Set the position of the marker using the place ID and location.
+                                        userMarker.setPlace({
+                                            placeId: place.place_id,
+                                            location: results[0].geometry.location
+                                        });
+                                        userMarker.setVisible(true);
+                                    });
+                                });
+                            })
+                        }
+                    }
                 });
             }
 
@@ -399,6 +373,7 @@
             }
 
             $(function() {
+
                 // If the server has lat/lng, don't do this 
                 if ($("#lat").val() != 0 && $("#long").val() != 0) {
                     userAddress = $("#lat").val() + ',' + $("#long").val();
@@ -411,76 +386,6 @@
                         })
                 }
                 getAllAddresses();
-                // Only bind if lat and long are not 0
-                if ($("#lat").val() == 0 && $("#long").val() == 0) {
-                    var input = document.getElementById('locationFilter');
-                    var options = {
-                        componentRestrictions: {
-                            country: 'au'
-                        }
-                    };
-                    autocomplete = new google.maps.places.Autocomplete(input, options);
-                    autocomplete.addListener('place_changed', function() {
-                        var place = autocomplete.getPlace()
-                        var geocoder = new google.maps.Geocoder;
-                        geocoder.geocode({
-                            'placeId': place.place_id
-                        }, function(results, status) {
-                            if (status !== 'OK') {
-                                window.alert('Geocoder failed due to: ' + status);
-                                return;
-                            }
-                            $("#lat").val(results[0].geometry.location.lat());
-                            $("#long").val(results[0].geometry.location.lng())
-                            map.setZoom(11);
-                            map.setCenter(results[0].geometry.location);
-
-                            // Set the position of the marker using the place ID and location.
-                            userMarker.setPlace({
-                                placeId: place.place_id,
-                                location: results[0].geometry.location
-                            });
-                            userMarker.setVisible(true);
-                        });
-                    });
-                } else {
-                    // Bind only on first change
-                    console.log(typeof autocomplete === 'undefined');
-                    if (typeof autocomplete === 'undefined') {
-                        $("#locationFilter").on('keydown', function() {
-                            var input = document.getElementById('locationFilter');
-                            var options = {
-                                componentRestrictions: {
-                                    country: 'au'
-                                }
-                            };
-                            autocomplete = new google.maps.places.Autocomplete(input, options);
-                            autocomplete.addListener('place_changed', function() {
-                                var place = autocomplete.getPlace()
-                                var geocoder = new google.maps.Geocoder;
-                                geocoder.geocode({
-                                    'placeId': place.place_id
-                                }, function(results, status) {
-                                    if (status !== 'OK') {
-                                        window.alert('Geocoder failed due to: ' + status);
-                                        return;
-                                    }
-                                    $("#lat").val(results[0].geometry.location.lat());
-                                    $("#long").val(results[0].geometry.location.lng())
-                                    map.setZoom(11);
-                                    map.setCenter(results[0].geometry.location);
-
-                                    // Set the position of the marker using the place ID and location.
-                                    userMarker.setPlace({
-                                        placeId: place.place_id,
-                                        location: results[0].geometry.location
-                                    });
-                                    userMarker.setVisible(true);
-                                });
-                            });
-                        })
-                    }
-                }
             })
 
 

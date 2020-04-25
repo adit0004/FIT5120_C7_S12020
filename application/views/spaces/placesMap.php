@@ -23,7 +23,7 @@
                         // echo "<pre>".print_r($spaces,1);die();
                         foreach ($spaces as $space) {
                             echo "<tr>";
-                            echo "<td>" . $i . "</td>";
+                            echo "<td>" . ($i+(($page-1)*10)) . "</td>";
                             if (!empty($space['name'])) {
                                 echo "<td class='d-flex'><div class='col-6'>" . ucwords(strtolower($space['name'])) . "";
                             } else {
@@ -53,18 +53,18 @@
                                     <li class="page-item"><a class="page-link text-dark" href="#">Previous</a></li>
                                 <?php } ?>
                                 <?php if ($page != 1 && $page != 2){?>
-                                    <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['general', 'showSpacesMap', $spaceId, $page-2, $filters['distanceFromUser'], $filters['userLocation']['latitude'], $filters['userLocation']['longitude'], $filters['category']]);?>"><?php echo $page-2;?></a></li>
+                                    <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['spaces', 'showSpacesMap', $spaceId, $page-2, $filters['distanceFromUser'], $filters['userLocation']['latitude'], $filters['userLocation']['longitude'], $filters['category']]);?>"><?php echo $page-2;?></a></li>
                                 <?php }?>
                                 <?php if ($page != 1) {?>
-                                    <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['general', 'showSpacesMap', $spaceId, $page-1, $filters['distanceFromUser'], $filters['userLocation']['latitude'], $filters['userLocation']['longitude'], $filters['category']]);?>"><?php echo $page-1;?></a></li>
+                                    <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['spaces', 'showSpacesMap', $spaceId, $page-1, $filters['distanceFromUser'], $filters['userLocation']['latitude'], $filters['userLocation']['longitude'], $filters['category']]);?>"><?php echo $page-1;?></a></li>
                                 <?php }?>
                                 <li class="page-item"><a class="page-link text-light bg-dark" href="#!"><?php echo $page;?></a></li>
                                 <?php if ($page < $pages){?>
-                                    <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['general', 'showSpacesMap', $spaceId, $page+1, $filters['distanceFromUser'], $filters['userLocation']['latitude'], $filters['userLocation']['longitude'], $filters['category']]);?>"><?php echo $page+1;?></a></li>
+                                    <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['spaces', 'showSpacesMap', $spaceId, $page+1, $filters['distanceFromUser'], $filters['userLocation']['latitude'], $filters['userLocation']['longitude'], $filters['category']]);?>"><?php echo $page+1;?></a></li>
                                 <?php }?>
                                 <?php if ($page != $pages && $page != ($pages - 1)) { ?>
-                                    <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['general', 'showSpacesMap', $spaceId, $page+2, $filters['distanceFromUser'], $filters['userLocation']['latitude'], $filters['userLocation']['longitude'], $filters['category']]);?>"><?php echo $page+2;?></a></li>
-                                    <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['general', 'showSpacesMap', $spaceId, $page+2, $filters['distanceFromUser'], $filters['userLocation']['latitude'], $filters['userLocation']['longitude'], $filters['category']]);?>">Next</a></li>
+                                    <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['spaces', 'showSpacesMap', $spaceId, $page+2, $filters['distanceFromUser'], $filters['userLocation']['latitude'], $filters['userLocation']['longitude'], $filters['category']]);?>"><?php echo $page+2;?></a></li>
+                                    <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['spaces', 'showSpacesMap', $spaceId, $page+2, $filters['distanceFromUser'], $filters['userLocation']['latitude'], $filters['userLocation']['longitude'], $filters['category']]);?>">Next</a></li>
                                 <?php } ?>
                             </ul>
                         </nav>
@@ -73,7 +73,7 @@
             </div>
             <div class="col-12 col-md-4 px-5">
                 <h3>Refine results:</h3>
-                <?php echo form_open(site_url(['general', 'showSpacesMap', $spaceId])); ?>
+                <?php echo form_open(site_url(['spaces', 'showSpacesMap', $spaceId])); ?>
                 <div class='form-group mt-4'>
                     <label for="locationFilter">Your location</label>
                     <input class='form-control' name='locationFilter' id='locationFilter' type='text'>
@@ -109,7 +109,7 @@
                     </select>
                 </div>
                 <hr class='my-5'>
-                <div class='form-group mt-4'>
+                <div class='form-group mt-4 d-none'>
                     <label for="categoryFilter">Categories</label>
                     <select class='form-control' name='categoryFilter' id="categoryFilter">
                         <option value="All">Show All</option>
@@ -133,3 +133,5 @@
             <?php } ?>
         </div>
     </div>
+        <!-- Maps -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrGmHjWjkwhyXqb9HDaiwQ9htOZCrs0Hs&callback=initMap&libraries=places" async defer></script>
