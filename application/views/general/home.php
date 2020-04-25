@@ -1,4 +1,4 @@
-    <section class="hero mt-5">
+    <section class="hero mt-4">
         <div class="hero-inner">
             <h1 class='display-1 text-white'>EldVisor</h1>
             <p class='text-white hero-lead'>Guiding you to a healthier life!</p>
@@ -26,7 +26,7 @@
                     <div class="card">
                         <img src="<?php echo base_url(); ?>assets/img/park.jpg" class="card-img-top img-fluid">
                         <div class="card-body">
-                            <h5 class="card-title">Places</h5>
+                            <h5 class="card-title">Explore The Outdoors</h5>
                             <p class="card-text">Find spaces around you to exercise and get healthy</p>
                         </div>
                     </div>

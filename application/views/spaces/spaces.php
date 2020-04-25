@@ -1,4 +1,4 @@
-<section class="hero hero-spaces mt-5">
+<section class="hero hero-spaces mt-4">
     <div class="hero-inner">
         <h1 class='display-1 text-white'>Open Spaces</h1>
         <!-- <p class='text-white hero-lead'>Guiding you to a healthier life!</p> -->
@@ -38,7 +38,7 @@
     </div>
     <div class="row mt-5">
         <div class="col-12 text-center">
-            <a href="#!" class="btn btn-dark btn-lg">See More Spaces <i class="fa fa-caret-down"></i></a>
+            <a class="btn btn-primary btn-lg text-white" href="<?php echo site_url(['spaces', 'moreSpaces']);?>">See More Spaces <i class="fa fa-arrow-right"></i></a>
         </div>
     </div>
 </div>

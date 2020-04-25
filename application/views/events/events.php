@@ -1,4 +1,4 @@
-<section class="hero hero-events mt-5">
+<section class="hero hero-events mt-4">
     <div class="hero-inner">
         <h1 class='display-1 text-white'>Events</h1>
         <p class='text-white hero-lead'>Stay connected!</p>
@@ -73,6 +73,11 @@
                 </div>
             </div>
         <?php } ?>
+        <?php
+        if (empty($events)) {
+            echo "<h5>No results found for current search. Try broadening your search!</h5>";
+        }
+        ?>
 
         <!-- Pages -->
         <?php if ($pages > 1) { ?>

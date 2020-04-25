@@ -11,6 +11,11 @@ class Spaces_model extends CI_Model {
         return $this->db->query("SELECT * FROM areas_information WHERE featured = 1 ORDER BY area_name")->result_array();
     }
 
+    function loadAllSpaces()
+    {
+        return $this->db->query("SELECT * FROM areas_information ORDER BY area_name")->result_array();
+    }
+
     function fetchAreasCategory($spacesId)
     {
         return $this->db->query("SELECT area_name FROM areas_information WHERE area_id = ".$spacesId)->row_array()['area_name'];

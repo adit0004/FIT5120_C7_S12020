@@ -37,6 +37,21 @@ class Spaces extends CI_Controller {
         $this->load->view('general/footer', ['activePage' => 'places']);
     }
 
+    public function moreSpaces()
+    {
+        // This page needs to show the featured spaces as well, get them from DB
+        $data['places'] = $this->model->loadAllSpaces(); 
+        
+        // Build the image path here
+        foreach($data['places'] as &$place)
+        {
+            $place['area_image_url'] = base_url().'assets/img/spaces/'.$place['area_image_url'];
+        }
+        $this->load->view('general/header');
+        $this->load->view('spaces/moreSpaces', $data);
+        $this->load->view('general/footer', ['activePage' => 'places']);
+    }
+
     public function getWeatherAndAqi($index = 0)
     {
         if (!empty($this->input->post('lat')))
