@@ -386,11 +386,11 @@
                         })
                 }
                 getAllAddresses();
-            })
-
-
+            });
         <?php } ?>
     </script>
+    <?php if ($activePage == 'placesMap') {?>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrGmHjWjkwhyXqb9HDaiwQ9htOZCrs0Hs&callback=initMap&libraries=places" async defer></script><?php }?>
     </body>
 
     </html>

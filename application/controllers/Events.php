@@ -83,9 +83,16 @@ class Events extends CI_Controller {
         $filters['name'] = empty($this->input->post('name'))?($name==0?0:$name):$this->input->post('name');
         $filters['startDate'] = empty($this->input->post('startDate'))?($startDate == 0?0:$startDate):$this->input->post('startDate');
         $filters['endDate'] = empty($this->input->post('endDate'))?($endDate == 0?0:$endDate):$this->input->post('endDate');
-        echo "<pre>".print_r($filters,1);die();
+        $data['earliestDate'] = $this->model->fetchEarliestDate();
+        $data['latestDate'] = $this->model->fetchLatestDate();
+        $filters['startDate'] = urldecode($filters['startDate']);
+        $filters['endDate'] = urldecode($filters['endDate']);
         $data['events'] = $this->model->fetchEventsData($page, $filters['name'], $filters['startDate'], $filters['endDate']);
         $data['filters'] = $filters;
+        $data['count'] = $this->model->fetchEventsCount($page, $filters['name'], $filters['startDate'], $filters['endDate']);
+        $data['page'] = $page;
+        $data['pages'] = ceil($data['count']/10);
+        // echo "<pre>".print_r($data,1);die();
         $this->load->view('general/header');
         $this->load->view('events/events', $data);
         $this->load->view('general/footer', ['activePage' => 'events']);

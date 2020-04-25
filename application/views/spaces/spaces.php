@@ -38,7 +38,7 @@
     </div>
     <div class="row mt-5">
         <div class="col-12 text-center">
-            <a href="#!" class="btn btn-dark btn-lg">See More Spaces &rarr;</a>
+            <a href="#!" class="btn btn-dark btn-lg">See More Spaces <i class="fa fa-caret-down"></i></a>
         </div>
     </div>
 </div>

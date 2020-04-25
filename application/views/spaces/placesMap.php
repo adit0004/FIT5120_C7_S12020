@@ -77,7 +77,7 @@
                 <div class='form-group mt-4'>
                     <label for="locationFilter">Your location</label>
                     <input class='form-control' name='locationFilter' id='locationFilter' type='text'>
-                </div><hr class='my-5'>
+                </div><hr class='my-3'>
                 <div class='form-group'>
                     <label for="distanceFilter">Maximum Distance From You (Approximate)</label>
                     <select class='form-control' name='distanceFilter' id="distanceFilter">
@@ -108,7 +108,7 @@
                         <?php } ?>
                     </select>
                 </div>
-                <hr class='my-5'>
+                <hr class='my-3'>
                 <div class='form-group mt-4 d-none'>
                     <label for="categoryFilter">Categories</label>
                     <select class='form-control' name='categoryFilter' id="categoryFilter">
@@ -122,7 +122,7 @@
                 </div>
                 <input type="hidden" name="lat" id="lat" value=<?php echo $filters['userLocation']['latitude'];?>>
                 <input type="hidden" name="long" id="long" value=<?php echo $filters['userLocation']['longitude'];?>>
-                <button type="submit" class="btn btn-outline-dark mt-5">Refine</button>
+                <button type="submit" class="btn btn-outline-dark">Refine</button>
                 <?php echo form_close(); ?>
             </div>
             <?php if (!empty($spaces)) { ?>
@@ -133,5 +133,3 @@
             <?php } ?>
         </div>
     </div>
-        <!-- Maps -->
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrGmHjWjkwhyXqb9HDaiwQ9htOZCrs0Hs&callback=initMap&libraries=places" async defer></script>
