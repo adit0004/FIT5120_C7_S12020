@@ -6,14 +6,6 @@ class General_model extends CI_Model {
         $this->load->database();
     }
 
-    function fetchDataForChart($data=false, $filters=false)
-    {
-        if ((empty($data) || $data == 'met_guidelines') && empty($filters))
-        {
-            return $this->db->query("SELECT age,met_guidelines,gender,met_guidelines_proportional FROM met_guidelines")->result_array();
-        }
-    }
-
     function addJsonDataToDb($strings)
     {
 
@@ -172,55 +164,76 @@ class General_model extends CI_Model {
         // echo "<pre>".print_r($fields,1);die();
     }
 
+    // Return featured spaces
     function loadFeaturedSpaces()
     {
         return $this->db->query("SELECT * FROM areas_information WHERE featured = 1 ORDER BY area_name")->result_array();
     }
 
+    // Return title for space ID 
     function fetchAreasCategory($spacesId)
     {
         return $this->db->query("SELECT area_name FROM areas_information WHERE area_id = ".$spacesId)->row_array()['area_name'];
     }
 
+
     function fetchDataForMaps($spacesId, $filters, $page = 1)
     {
-        $distance = $filters['distanceFromUser'];
-
+        // Escape category parameter for db query
         $filters['category'] = $this->db->escape($filters['category']);
+     
+        $distance = $filters['distanceFromUser'];
         $distanceWhere = ' 1 = 1 ';
+     
         $orderBy = ' ';
+        
+        // Since we're subtracting from the database value, if the latitude is < 0, make it positive
         if($filters['userLocation']['latitude'] < 0)
             $filters['userLocation']['latitude'] *= (-1);
+
+        // Same with longitude
+        if($filters['userLocation']['longitude'] < 0)
+            $filters['userLocation']['longitude'] *= (-1);
+        
+        // Need to fetch differences in lat/long as a string
         $distanceLatString = '';
         $distanceLongString = '';
-            
+        
+        // If lat isn't set, filters aren't set for lat/long, so return true
         if($filters['userLocation']['latitude'] == 0){
             $distanceWhere = ' 1 = 1 ';
         }
         else{
+            // Else filter by distance
             if($distance == '100')
-                $distanceWhere = ' ABS(t.lat) - '.$filters['userLocation']['latitude'].' < 2 AND ABS(t.long) - '.$filters['userLocation']['longitude'].' < 2 ';
+                $distanceWhere = ' ABS(t.lat) - '.$filters['userLocation']['latitude'].' < 1 AND ABS(t.long) - '.$filters['userLocation']['longitude'].' < 1 ';
+            else if($distance == '50')
+                $distanceWhere = ' ABS(t.lat) - '.$filters['userLocation']['latitude'].' < 0.5 AND ABS(t.long) - '.$filters['userLocation']['longitude'].' < 0.5 ';
             else if($distance == '10')
                 $distanceWhere = ' ABS(t.lat) - '.$filters['userLocation']['latitude'].' < 0.1 AND ABS(t.long) - '.$filters['userLocation']['longitude'].' < 0.1 ';
             else if ($distance == '5')
                 $distanceWhere = ' ABS(t.lat) - '.$filters['userLocation']['latitude'].' < 0.05 AND ABS(t.long) - '.$filters['userLocation']['longitude'].' < 0.05 ';
             else if ($distance == '1')
                 $distanceWhere = ' ABS(t.lat) - '.$filters['userLocation']['latitude'].' < 0.01 AND ABS(t.long) - '.$filters['userLocation']['longitude'].' < 0.01 ';
+            
             $distanceLatString = ' ,ABS(t.lat) - '.$filters['userLocation']['latitude'].' as latString';
             $distanceLongString = ' ,ABS(t.lat) - '.$filters['userLocation']['longitude'].' as longString';
+            
+            // Order by latString and longString
             $orderBy = ' ORDER BY latString asc, longString asc ';
         }
 
         $categoryWhere = ' 1 = 1 ';
+        // If category filter is set, set it in the query string too
         if($filters['category'] != "'All'" && !empty($filters['category']))
             $categoryWhere = ' os.OSCATEGORY = '.$filters['category'].' ';
 
+        // Return the results
         $tableName = $this->db->query("SELECT table_name FROM areas_information WHERE area_id = ".$spacesId)->row_array()['table_name'];
-        $queryString = "SELECT t.*, os.OSCATEGORY ".$distanceLatString.$distanceLongString." FROM ".$tableName." t LEFT OUTER JOIN open_space os ON os.lat = t.lat AND os.long = t.long WHERE ".$categoryWhere." AND ".$distanceWhere.$orderBy."LIMIT ".(($page-1)*10).",10";
-        // echo $queryString;die();
         return $this->db->query($queryString)->result_array();
     }
 
+    // Return number of records to calculate pages in the controller
     function fetchPageCount($spacesId, $filters)
     {
         $distance = $filters['distanceFromUser'];
@@ -230,6 +243,8 @@ class General_model extends CI_Model {
 
         if($distance == '100')
             $distanceWhere = ' ABS(t.lat - '.$filters['userLocation']['latitude'].') < 2 AND ABS(t.long - '.$filters['userLocation']['longitude'].') < 2 ';
+        else if($distance == '50')
+            $distanceWhere = ' ABS(t.lat - '.$filters['userLocation']['latitude'].') < 0.5 AND ABS(t.long - '.$filters['userLocation']['longitude'].') < 0.5 ';
         else if($distance == '10')
             $distanceWhere = ' ABS(t.lat - '.$filters['userLocation']['latitude'].') < 0.1 AND ABS(t.long - '.$filters['userLocation']['longitude'].') < 0.1 ';
         else if ($distance == '5')

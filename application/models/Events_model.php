@@ -6,15 +6,25 @@ class Events_model extends CI_Model {
         $this->load->database();
     }
 
+    // Add the XML data to database
     public function addDataToDb($data)
     {
+        // For each record...
         foreach($data as &$item)
         {
+            // Get what columns it has
             $insertCols = [];
+
+            // And what values each column 
             $insertVals = [];
+
+            // For each column=>value pair, escape all values for DB insert 
             foreach($item as $key=>&$value) {
+                // Get column name
                 $insertCols[] = $key;
+                // Get value
                 $value = $this->db->escape($value);
+                // Parse dates
                 if ($key == "pubDate" || $key == 'dtstart' || $key == 'dtend')
                 {
                     $value = substr($value, 6,11);
@@ -27,10 +37,11 @@ class Events_model extends CI_Model {
                     $insertVals[] = $value;
                 }
             }
+            // Make the query params
             $insertColsString = implode(",", $insertCols);
             $insertValsString = implode(",", $insertVals);
-            // $queryString = "INSERT INTO events(event_id, ".$insertColsString.") VALUES(null, ".$insertValsString.")";
-            // echo $queryString;
+            
+            // Insert
             $this->db->query("INSERT INTO events(event_id, ".$insertColsString.") VALUES(null, ".$insertValsString.")");
         }
         // echo "<pre>".print_r($data, 1);die();

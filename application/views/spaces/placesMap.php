@@ -27,7 +27,7 @@
                             if (!empty($space['name'])) {
                                 echo "<td class='d-flex'><div class='col-6'>" . ucwords(strtolower($space['name'])) . "";
                             } else {
-                                echo "<td class='d-flex'><div class='col-6'>Unnamed Location";
+                                echo "<td class='d-flex'><div class='col-6'>Location";
                             }
                             echo "<br><span class='text-muted' id='addressBlock'><div class='spinner-border' role='status'><span class='sr-only'>Loading...</span></div>";
                             echo "</span></div><div class='col-6 text-right'>";
@@ -90,6 +90,11 @@
                             <option value='100' selected>100 km</option>
                         <?php } else { ?>
                             <option value='100'>100 km</option>
+                        <?php } ?>
+                        <?php if ($filters['distanceFromUser'] == "50") { ?>
+                            <option value='50' selected>50 km</option>
+                        <?php } else { ?>
+                            <option value='50'>50 km</option>
                         <?php } ?>
                         <?php if ($filters['distanceFromUser'] == "10") { ?>
                             <option value='10' selected>10 km</option>

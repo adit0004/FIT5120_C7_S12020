@@ -54,7 +54,6 @@
             }
         }
 
-        // Fetch weather and AQI for navbar
         function getWeatherAndAqi(position) {
             $.ajax({
                 url: '<?php echo site_url(['general', 'getWeatherAndAqi']); ?>',
@@ -68,9 +67,7 @@
                     var temperature = Math.round(((data.weather.main.temp - 273.15) * 10)) / 10;
                     var weather = data.weather.weather[0].main;
                     var icon = '<?php echo base_url(); ?>assets/img/weather_icons/' + data.weather.weather[0].icon + '.png';
-                    // Create element to attach to navbar
                     var elem = '<div class="d-flex align-items-centre"><div class="d-inline-block"><img src="' + icon + '" height="50px"></div><div class="d-inline-block ml-2">' + temperature + ' &deg;C<br>' + weather + '</div></div>';
-                    // Attach the element
                     $("#weatherContainer").html(elem);
                 }
             })
@@ -86,7 +83,6 @@
                 $("#placesNav").addClass('active');
             else if (<?php echo $activePage == 'events'? '1' : 'false'; ?>)
                 $("#eventsNav").addClass('active');
-            // Fetch weather and AQI
             getLocation();
 
 
@@ -123,7 +119,6 @@
         <?php if ($activePage == 'placesMap') { ?>
             var map;
 
-            // Generate address URL for each location
             <?php foreach ($spaces as &$space) {
                 $addressJson = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' . $space['lat'] .
                     ',' . $space['long'] . '&key=AIzaSyCrGmHjWjkwhyXqb9HDaiwQ9htOZCrs0Hs';
@@ -132,8 +127,8 @@
 
             spaces = <?php echo json_encode($spaces); ?>;
 
+            // Add addresses to the divs
             console.log(spaces);
-            
             // Calculate average lat, lng
             var latSum = 0;
             var lngSum = 0;
@@ -144,7 +139,6 @@
             avgLat = latSum / spaces.length;
             avgLng = lngSum / spaces.length;
 
-            // Animate to the map and show the marker's popup
             function seeOnMap(index) {
                 $('html, body').animate({
                     scrollTop: $("#map").offset().top
@@ -154,11 +148,8 @@
                 google.maps.event.trigger(markers[index], 'click');
             }
 
-            // Initialize map
             async function initMap() {
                 markers = [];
-
-                // Center to average lat,long
                 map = new google.maps.Map(document.getElementById('map'), {
                     center: {
                         lat: avgLat,
@@ -168,7 +159,6 @@
                 });
 
                 // Marker for user
-                // If the user changed his location, use this location
                 if ($("#lat").val() != 0 && $("#long").val() != 0) {
                     icon = {
                         url: "<?php echo base_url(); ?>assets/img/user_icon.png", // url
@@ -186,9 +176,7 @@
                         icon: icon,
                         zIndex: 100
                     });
-                } 
-                // Else if location is enabled in browser, use that location
-                else if (navigator.geolocation && $("#lat").val() != 0 && $("#long").val() != 0) {
+                } else if (navigator.geolocation && $("#lat").val() != 0 && $("#long").val() != 0) {
                     var location = navigator.geolocation.getCurrentPosition(function(location) {
                         icon = {
                             url: "<?php echo base_url(); ?>assets/img/user_icon.png", // url
@@ -206,9 +194,7 @@
                             icon: icon
                         });
                     });
-                } 
-                // Else create a marker but don't place it yet
-                else {
+                } else {
                     icon = {
                         url: "<?php echo base_url(); ?>assets/img/user_icon.png", // url
                         size: new google.maps.Size(137, 197),
@@ -222,15 +208,10 @@
                     });
                 }
 
-                // Create a popup to display name and get directions button
                 var infowindow = new google.maps.InfoWindow({
                     content: ""
                 });
-
-                // For each space, create a marker, and add the popup information
                 spaces.forEach(function(space) {
-
-                    // Create the marker
                     var marker = new google.maps.Marker({
                         position: {
                             lat: parseFloat(space.lat),
@@ -239,10 +220,7 @@
                         content: space.name == undefined ? "Unnamed Location" : space.name,
                         map: map
                     });
-
                     var content = space.name;
-
-                    // Get user's address for marker if browser allows so that we can show the map with the route pre-loaded
                     userAddress = '';
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(function(location) {
@@ -251,8 +229,6 @@
                     } else {
                         userAddress = '';
                     }
-
-                    // Add popup content and bind on click
                     marker.addListener('click', function() {
                         map.panTo(marker.getPosition());
                         map.setZoom(15);
@@ -261,7 +237,7 @@
                     });
                     markers.push(marker)
 
-                    // Only bind autocomplete if lat and long are not 0
+                    // Only bind if lat and long are not 0
                     if ($("#lat").val() == 0 && $("#long").val() == 0) {
                         var input = document.getElementById('locationFilter');
                         var options = {
@@ -269,7 +245,6 @@
                                 country: 'au'
                             }
                         };
-                        // Create autocomplete from places API
                         autocomplete = new google.maps.places.Autocomplete(input, options);
                         autocomplete.addListener('place_changed', function() {
                             var place = autocomplete.getPlace()
@@ -335,7 +310,6 @@
                 });
             }
 
-            // Do that actual fetching
             function getAddress(i, url) {
                 return new Promise((resolve, reject) => {
                     fetch(url)
@@ -347,7 +321,6 @@
                 })
             }
 
-            // Fetch addresses for each location
             async function getAllAddresses() {
 
                 // Variable to hold addresses once promise is resolved
@@ -362,7 +335,6 @@
                 await Promise.all(addresses)
             }
 
-            // Get the location's weather and AQI to display to user
             function getWeatherAndAqiOnClick(i, lat, long) {
 
                 $.ajax({
@@ -401,9 +373,6 @@
             }
 
             $(function() {
-                // If the user is picking a distance, make the address mandatory
-                if($("#distanceFilter").val() != 'All')
-                    $("#locationFilter").prop('required', true);
 
                 // If the server has lat/lng, don't do this 
                 if ($("#lat").val() != 0 && $("#long").val() != 0) {

@@ -75,9 +75,9 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
+	'hostname' => 'eldvisor.mysql.database.azure.com',
+	'username' => 'eldvisor_admin@eldvisor',
+	'password' => 'X9z8h7i6b5i4t3',
 	'database' => 'eldvisor',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
@@ -88,9 +88,11 @@ $db['default'] = array(
 	'char_set' => 'utf8',
 	'dbcollat' => 'utf8_general_ci',
 	'swap_pre' => '',
-	'encrypt' => FALSE,
+	'encrypt' => [ 'ssl_ca' => realpath('./cert/ca.crt'), 'ssl_verify' => false ],
 	'compress' => FALSE,
 	'stricton' => FALSE,
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+
+// $con=mysqli_init(); mysqli_ssl_set($con, NULL, NULL, {ca-cert filename}, NULL, NULL); mysqli_real_connect($con, "eldvisor.mysql.database.azure.com", "eldvisor_admin@eldvisor", {your_password}, {your_database}, 3306);

@@ -55,10 +55,10 @@
  */
 	// define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 	// Set the environment to development
-	define('ENVIRONMENT', 'development');
+	// define('ENVIRONMENT', 'development');
 
 	// Set the environment to production
-	// define('ENVIRONMENT', 'production');
+	define('ENVIRONMENT', 'production');
 
 /*
  *---------------------------------------------------------------

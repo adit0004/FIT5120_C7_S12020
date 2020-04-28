@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+/**
+* Controls home and charts pages
+*/
 class General extends CI_Controller {
  
     /**
@@ -23,70 +26,30 @@ class General extends CI_Controller {
         $this->load->view('general/footer',['activePage'=>'home']);
     }
 
+    // Fetch weather from the library for the given lat,long
     public function fetchWeather($lat, $long)
     {
         return $this->weatheraqi->fetchWeatherData($lat, $long);
     }
 
+    // Fetch AQI from the library for the given lat,long
     public function fetchAqi($lat, $long)
     {
         return $this->weatheraqi->fetchAqiData($lat, $long);
     }
 
+    // Display the health facts page
     public function showCharts()
     {
-        $dataForChart = $this->model->fetchDataForChart();
-        $data['y'] = [];
-        $data['n'] = [];
-        $data['male'] = [];
-        $data['female'] = [];
-        foreach($dataForChart as $d)
-        {
-            if($d['met_guidelines'] == "Yes")
-            {
-                if(isset($data['y'][$d['age']]))
-                    $data['y'][$d['age']] = ($d['met_guidelines_proportional']+$data['y'][$d['age']])/2;
-                else
-                    $data['y'][$d['age']] = $d['met_guidelines_proportional'];
-                if($d['gender'] == 'Male')
-                {
-                    $data['male']['y'][] = $d['met_guidelines_proportional'];
-                }
-                else if($d['gender'] == 'Female')
-                {
-                    $data['female']['y'][] = $d['met_guidelines_proportional'];
-                }
-            }
-            else if($d['met_guidelines'] == "No")
-            {
-                if(isset($data['n'][$d['age']]))
-                    $data['n'][$d['age']] = ($d['met_guidelines_proportional']+$data['n'][$d['age']])/2;
-                else
-                    $data['n'][$d['age']] = $d['met_guidelines_proportional'];
-                if($d['gender'] == 'Male')
-                {
-                    $data['male']['n'][] = $d['met_guidelines_proportional'];
-                }
-                else if($d['gender'] == 'Female')
-                {
-                    $data['female']['n'][] = $d['met_guidelines_proportional'];
-                }
-            }
-        }
         $this->load->view('general/header');
-        $this->load->view('general/charts', $data);
+        $this->load->view('general/charts');
         $this->load->view('general/footer',['activePage'=>'charts']);
     }
 
-    public function getDataForCharts()
-    {
-        $data = $this->input->post('data') || null;
-        $filters = $this->input->post('filters') || null;
-        echo "<pre>".print_r($this->model->fetchDataForChart($data, $filters),1);die();
-    }
-
+    // Add files from JSON to database
     public function addFilesToDb()
     {
+        // Read all json strings as strings into an array
         $strings = [
             0 => file_get_contents(base_url().'assets/dataFiles/0.json'),
             1 => file_get_contents(base_url().'assets/dataFiles/1.json'),
@@ -102,11 +65,15 @@ class General extends CI_Controller {
             11 => file_get_contents(base_url().'assets/dataFiles/11.json'),
             12 => file_get_contents(base_url().'assets/dataFiles/12.json')
         ];
+
+        // Pass this array to the model
         $this->model->addJsonDataToDb($strings);
     }
 
+    // Fetch weather and AQI using this controller's methods and return them as a JSON object
     public function getWeatherAndAqi($index = 0)
     {
+        // Only do this if we have a valid lat/long pair
         if (!empty($this->input->post('lat')))
         {
             $lat = $this->input->post('lat');

@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+/**
+* Spaces controller - Controls all business rules for open spaces
+*/
 class Spaces extends CI_Controller {
  
     /**
@@ -12,16 +15,25 @@ class Spaces extends CI_Controller {
         $this->load->model('Spaces_model', 'model');
     }
 
+    /**
+    * Fetches weather from the library
+    */
     public function fetchWeather($lat, $long)
     {
         return $this->weatheraqi->fetchWeatherData($lat, $long);
     }
 
+    /**
+    * Fetches AQI from the library
+    */
     public function fetchAqi($lat, $long)
     {
         return $this->weatheraqi->fetchAqiData($lat, $long);
     }
 
+    /**
+    * Fetches featured spaces from the database
+    */
     public function showSpaces()
     {
         // This page needs to show the featured spaces as well, get them from DB
@@ -37,6 +49,9 @@ class Spaces extends CI_Controller {
         $this->load->view('general/footer', ['activePage' => 'places']);
     }
 
+    /**
+    * Fetches all spaces from the database
+    */
     public function moreSpaces()
     {
         // This page needs to show the featured spaces as well, get them from DB
@@ -52,9 +67,13 @@ class Spaces extends CI_Controller {
         $this->load->view('general/footer', ['activePage' => 'places']);
     }
 
+    /**
+    * Fetches weather and AQI from the methods above and returns as a JSON array
+    */
     public function getWeatherAndAqi($index = 0)
     {
-        if (!empty($this->input->post('lat')))
+        // ONLY PROCEED IF WE HAVE A VALID LAT/LONG pair
+        if (!empty($this->input->post('lat'))&&!empty($this->input->post('long')))
         {
             $lat = $this->input->post('lat');
             $long = $this->input->post('long');
@@ -64,23 +83,42 @@ class Spaces extends CI_Controller {
         echo json_encode(['weather'=>$weather, 'aqi'=>$aqi, 'index'=>$index]);
     }
 
+    /**
+    * Show open spaces on map
+    */
     public function showSpacesMap($spaceId, $page = 1, $distanceFromUser = 'All', $latitude = 0, $longitude = 0, $category = 'All')
     {
+        // If the filter was sent via post, use it
+        // Else if it was sent via url, use it
+        // Else use 'All'
         $filters['distanceFromUser'] = empty($this->input->post('distanceFilter'))?($distanceFromUser == 'All'?'All':$distanceFromUser):$this->input->post('distanceFilter');
         $filters['userLocation']['latitude'] = $this->input->post('lat') == 0? ($latitude == 0?0:$latitude):$this->input->post('lat');
         $filters['userLocation']['longitude'] = $this->input->post('long') == 0? ($longitude == 0?0:$longitude):$this->input->post('long');
         $filters['category'] = empty($this->input->post('categoryFilter'))?($category == 'All'?'All':$category):$this->input->post('categoryFilter');
+        // End filters
+
         $data['spaceId'] = $spaceId;
+
+        // Fetch data from model
         $data['spaces'] = $this->model->fetchDataForMaps($spaceId, $filters, $page);
+        
+        // Format to camel case
         foreach($data['spaces'] as &$space)
         {
             if(!empty($space['name']))
                 $space['name'] = ucwords(strtolower($space['name']));
         }
+
+        // Pagination details
         $data['page'] = $page;
+        //Number of pages = upper rounding off (total spaces / 10)
         $data['pages'] = ceil($this->model->fetchPageCount($spaceId, $filters)/10);
+    
         $data['categoryName'] = $this->model->fetchAreasCategory($spaceId);
+
         $data['filters'] = $filters;
+        
+        // Unused this iteration
         $data['category'] = [
             'LL' => 'Linear and Linkage',
             'S' => 'Sport',
