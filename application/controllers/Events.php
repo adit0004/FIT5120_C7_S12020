@@ -66,7 +66,7 @@ class Events extends CI_Controller {
                     $nullables[] = $column;
             }
         }
-        echo "<pre>".print_r($nullables,1);die();
+        // echo "<pre>".print_r($nullables,1);die();
 
         // Each item is an stdObject, make it an array instead
         foreach($json as $key=>&$item)
@@ -78,9 +78,20 @@ class Events extends CI_Controller {
         // echo "<pre>".print_r($json,1);die();
     }
 
+
+    public function login($error = 0) 
+    {
+        $this->load->view('general/login', ['error' => $error]);
+    }
+
     // Show events page
     public function showEvents($page = 1, $name = 0, $startDate = 0, $endDate = 0)
     {
+
+        if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true)
+        {
+            $this->login(); return;
+        }
         // If the filters are coming from the form, use those
         // Else if the filters are coming from the url, use those
         // Else use 0s

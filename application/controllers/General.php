@@ -15,12 +15,36 @@ class General extends CI_Controller {
         $this->load->model('General_model', 'model');
     }
     
+    public function login($error = 0) 
+    {
+        $this->load->view('general/login', ['error' => $error]);
+    }
+
+    public function checkPassword()
+    {
+        if(sha1($this->input->post('password')) == 'b1d9bc2e2b4ce89edc612887b22e78c29d7acf13') {
+            $this->session->set_userdata('loggedIn', 'true');
+            // $_SESSION['loggedIn'] == TRUE;
+            $this->index();
+        }
+        else 
+        {
+            $this->login(1);
+            return;
+        }
+    }
+
     /**
      * Present the home page
      * @return void
      */
 	public function index()
 	{
+        // if(!$this->session->loggedIn)
+        if(!isset($_SESSION['loggedIn']))
+        {
+            $this->login(); return;
+        }
         $this->load->view('general/header');
         $this->load->view('general/home');
         $this->load->view('general/footer',['activePage'=>'home']);
@@ -41,6 +65,10 @@ class General extends CI_Controller {
     // Display the health facts page
     public function showCharts()
     {
+        if(!isset($_SESSION['loggedIn']))
+        {
+            $this->login(); return;
+        }
         $this->load->view('general/header');
         $this->load->view('general/charts');
         $this->load->view('general/footer',['activePage'=>'charts']);

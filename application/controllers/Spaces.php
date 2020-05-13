@@ -15,6 +15,12 @@ class Spaces extends CI_Controller {
         $this->load->model('Spaces_model', 'model');
     }
 
+
+    public function login($error = 0) 
+    {
+        $this->load->view('general/login', ['error' => $error]);
+    }
+
     /**
     * Fetches weather from the library
     */
@@ -36,6 +42,11 @@ class Spaces extends CI_Controller {
     */
     public function showSpaces()
     {
+        if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true)
+        {
+            $this->login(); return;
+        }
+
         // This page needs to show the featured spaces as well, get them from DB
         $data['places'] = $this->model->loadFeaturedSpaces(); 
         
@@ -54,6 +65,12 @@ class Spaces extends CI_Controller {
     */
     public function moreSpaces()
     {
+
+        if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true)
+        {
+            $this->login(); return;
+        }
+
         // This page needs to show the featured spaces as well, get them from DB
         $data['places'] = $this->model->loadAllSpaces(); 
         
@@ -88,6 +105,12 @@ class Spaces extends CI_Controller {
     */
     public function showSpacesMap($spaceId, $page = 1, $distanceFromUser = 'All', $latitude = 0, $longitude = 0, $category = 'All')
     {
+
+        if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true)
+        {
+            $this->login(); return;
+        }
+        
         // If the filter was sent via post, use it
         // Else if it was sent via url, use it
         // Else use 'All'
