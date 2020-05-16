@@ -50,6 +50,42 @@ class General extends CI_Controller {
         $this->load->view('general/footer',['activePage'=>'home']);
     }
 
+    // Return the Know your own Health page
+    public function personalizedQuiz()
+    {
+        if(!isset($_SESSION['loggedIn']))
+        {
+            $this->login(); return;
+        }
+
+        $headerData['breadcrumbs'] = [
+            "Home" => site_url(['general','index']),
+            "Health Facts" => site_url(['general','showCharts']),
+            "Know your own health" => "#!"
+        ];
+
+        $this->load->view('general/header', $headerData);
+        $this->load->view('general/personalizedQuiz');
+        $this->load->view('general/footer',['activePage'=>'personalizedHealth']);
+    }
+    
+    // Return the Know your own Health page
+    public function crimeStats()
+    {
+        if(!isset($_SESSION['loggedIn']))
+        {
+            $this->login(); return;
+        }
+
+        $headerData['breadcrumbs'] = [
+            "Home" => site_url(['general','index']),
+            "Crime Stats" => "#!",
+        ];
+        $this->load->view('general/header', $headerData);
+        $this->load->view('general/crimeStats');
+        $this->load->view('general/footer',['activePage'=>'crimeStats']);
+    }
+
     // Fetch weather from the library for the given lat,long
     public function fetchWeather($lat, $long)
     {
@@ -69,7 +105,11 @@ class General extends CI_Controller {
         {
             $this->login(); return;
         }
-        $this->load->view('general/header');
+        $headerData['breadcrumbs'] = [
+            "Home" => site_url(['general','index']),
+            "Health Facts" => "#!",
+        ];
+        $this->load->view('general/header', $headerData);
         $this->load->view('general/charts');
         $this->load->view('general/footer',['activePage'=>'charts']);
     }

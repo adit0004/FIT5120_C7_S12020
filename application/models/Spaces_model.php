@@ -26,6 +26,7 @@ class Spaces_model extends CI_Model {
         $distance = $filters['distanceFromUser'];
 
         $filters['category'] = $this->db->escape($filters['category']);
+        // echo "<pre>".print_r($filters,1)."</pre>";
         $distanceWhere = ' 1 = 1 ';
         $orderBy = ' ';
         if($filters['userLocation']['latitude'] < 0)
@@ -38,15 +39,17 @@ class Spaces_model extends CI_Model {
         }
         else{
             if($distance == '100')
-                $distanceWhere = ' ABS(t.lat) - '.$filters['userLocation']['latitude'].' < 2 AND ABS(t.long) - '.$filters['userLocation']['longitude'].' < 2 ';
+                $distanceWhere = ' ABS(ABS(t.lat) - '.$filters['userLocation']['latitude'].') < 2 AND ABS(ABS(t.long) - '.$filters['userLocation']['longitude'].') < 2 ';
+            else if($distance == '50')
+                    $distanceWhere = ' ABS(ABS(t.lat) - '.$filters['userLocation']['latitude'].') < 0.5 AND ABS(ABS(t.long) - '.$filters['userLocation']['longitude'].') < 0.5 ';
             else if($distance == '10')
-                $distanceWhere = ' ABS(t.lat) - '.$filters['userLocation']['latitude'].' < 0.1 AND ABS(t.long) - '.$filters['userLocation']['longitude'].' < 0.1 ';
+                $distanceWhere = ' ABS(ABS(t.lat) - '.$filters['userLocation']['latitude'].') < 0.1 AND ABS(ABS(t.long) - '.$filters['userLocation']['longitude'].') < 0.1 ';
             else if ($distance == '5')
-                $distanceWhere = ' ABS(t.lat) - '.$filters['userLocation']['latitude'].' < 0.05 AND ABS(t.long) - '.$filters['userLocation']['longitude'].' < 0.05 ';
+                $distanceWhere = ' ABS(ABS(t.lat) - '.$filters['userLocation']['latitude'].') < 0.05 AND ABS(ABS(t.long) - '.$filters['userLocation']['longitude'].') < 0.05 ';
             else if ($distance == '1')
-                $distanceWhere = ' ABS(t.lat) - '.$filters['userLocation']['latitude'].' < 0.01 AND ABS(t.long) - '.$filters['userLocation']['longitude'].' < 0.01 ';
+                $distanceWhere = ' ABS(ABS(t.lat) - '.$filters['userLocation']['latitude'].') < 0.01 AND ABS(ABS(t.long) - '.$filters['userLocation']['longitude'].') < 0.01 ';
             $distanceLatString = ' ,ABS(t.lat) - '.$filters['userLocation']['latitude'].' as latString';
-            $distanceLongString = ' ,ABS(t.lat) - '.$filters['userLocation']['longitude'].' as longString';
+            $distanceLongString = ' ,ABS(t.long) - '.$filters['userLocation']['longitude'].' as longString';
             $orderBy = ' ORDER BY latString asc, longString asc ';
         }
 
@@ -58,6 +61,7 @@ class Spaces_model extends CI_Model {
         $queryString = "SELECT t.*, os.OSCATEGORY ".$distanceLatString.$distanceLongString." FROM ".$tableName." t LEFT OUTER JOIN open_space os ON os.lat = t.lat AND os.long = t.long WHERE ".$categoryWhere." AND ".$distanceWhere.$orderBy."LIMIT ".(($page-1)*10).",10";
         // echo $queryString;die();
         return $this->db->query($queryString)->result_array();
+        // echo "<pre>".print_r($this->db->query($queryString)->result_array(),1);die();
     }
 
     function fetchPageCount($spacesId, $filters)
@@ -69,7 +73,9 @@ class Spaces_model extends CI_Model {
 
         if($distance == '100')
             $distanceWhere = ' ABS(t.lat - '.$filters['userLocation']['latitude'].') < 2 AND ABS(t.long - '.$filters['userLocation']['longitude'].') < 2 ';
-        else if($distance == '10')
+        else if($distance == '50')
+                    $distanceWhere = ' ABS(ABS(t.lat) - '.$filters['userLocation']['latitude'].') < 0.5 AND ABS(ABS(t.long) - '.$filters['userLocation']['longitude'].') < 0.5 ';
+            else if($distance == '10')
             $distanceWhere = ' ABS(t.lat - '.$filters['userLocation']['latitude'].') < 0.1 AND ABS(t.long - '.$filters['userLocation']['longitude'].') < 0.1 ';
         else if ($distance == '5')
             $distanceWhere = ' ABS(t.lat - '.$filters['userLocation']['latitude'].') < 0.05 AND ABS(t.long - '.$filters['userLocation']['longitude'].') < 0.05 ';

@@ -87,17 +87,15 @@ class Events extends CI_Controller {
     // Show events page
     public function showEvents($page = 1, $name = 0, $startDate = 0, $endDate = 0)
     {
-
-        if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true)
-        {
-            $this->login(); return;
-        }
-
         $headerData['breadcrumbs'] = [
             "Home" => site_url(['general','index']),
             "Events" => "#!"
         ];
 
+        if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] != true)
+        {
+            $this->login(); return;
+        }
         // If the filters are coming from the form, use those
         // Else if the filters are coming from the url, use those
         // Else use 0s

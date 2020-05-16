@@ -7,6 +7,7 @@ class Events_model extends CI_Model {
     }
 
     // Add the XML data to database
+// Add the XML data to database
     public function addDataToDb($data)
     {
         // For each record...
@@ -21,29 +22,57 @@ class Events_model extends CI_Model {
             // For each column=>value pair, escape all values for DB insert 
             foreach($item as $key=>&$value) {
                 // Get column name
-                $insertCols[] = $key;
+                // $insertCols[] = $key;
                 // Get value
                 $value = $this->db->escape($value);
                 // Parse dates
-                if ($key == "pubDate" || $key == 'dtstart' || $key == 'dtend')
+                if ($key == "pubDate")
                 {
                     $value = substr($value, 6,11);
-                    echo $value." ";
                     $value = date('Y-m-d', strtotime($value));
-                    echo $value."<br>";
-                    $insertVals[] = $this->db->escape($value);
+                    $insertVals[$key] = $this->db->escape($value);
+                }
+                elseif(($key == 'dtstart' || $key == 'dtend') && !isset($insertVals['dtstart']))
+                {
+                    $value = substr($value, 6,11);
+                    $value = date('Y-m-d', strtotime($value));
+                    $insertVals[$key] = $this->db->escape($value);
+                }
+                elseif ($key == 'dtstart' || $key == 'dtend') 
+                {
+                    // Explicitly mark continue so that it doesn't override the dsummary parsing
+                    continue;
+                }
+                elseif ($key == "dsummary") {
+                    $date_check = explode(" ", $value);
+                    if(isset($date_check[sizeof($date_check)-8]) && strtolower($date_check[sizeof($date_check)-8]) == "from" && strtolower($date_check[sizeof($date_check)-4]) == "to")
+                    {
+                        // if(!in_array('dtstart', $insertCols))
+                        //     $insertCols[] = 'dtstart';
+                        // if(!in_array('dtend', $insertCols))
+                        //     $insertCols[] = 'dtend';
+                        $insertVals['dtstart'] = $this->db->escape(date("Y-m-d", strtotime($date_check[sizeof($date_check)-7]." ".$date_check[sizeof($date_check)-6]." ".$date_check[sizeof($date_check)-5])));
+                        $insertVals['dtend'] = $this->db->escape(date("Y-m-d", strtotime($date_check[sizeof($date_check)-3]." ".$date_check[sizeof($date_check)-2]." ".str_replace("'", "", $date_check[sizeof($date_check)-1]))));
+                    }
+                    $insertVals[$key] = $value;
                 }
                 else{
-                    $insertVals[] = $value;
+                    $insertVals[$key] = $value;
                 }
             }
             // Make the query params
-            $insertColsString = implode(",", $insertCols);
+            $insertColsString = implode(",", array_keys($insertVals));
             $insertValsString = implode(",", $insertVals);
+
+            echo "<pre>".print_r($insertVals,1)."</pre>";
             
+            // echo "INSERT INTO events(event_id, ".$insertColsString.") VALUES(null, ".$insertValsString.")";
             // Insert
             $this->db->query("INSERT INTO events(event_id, ".$insertColsString.") VALUES(null, ".$insertValsString.")");
         }
+
+        // Once this is done, remove duplicate rows
+        $this->db->query("DELETE a FROM events as a, events as b where a.event_id < b.event_id and a.title <=> b.title and a.description <=> b.description and a.link <=> b.link and a.pubdate <=> b.pubdate and a.location <=> b.location and a.dtstart <=> b.dtstart and a.dtend <=> b.dtend");
         // echo "<pre>".print_r($data, 1);die();
     }
 
@@ -79,6 +108,7 @@ class Events_model extends CI_Model {
             $dateWhere = ' dtstart >= "'.$dateObj->format("Y-m-d").'" AND dtend <= "'.$dateObj2->format("Y-m-d").'" ';
         }
         $query = $this->db->query("SELECT * FROM events WHERE ".$nameWhere." AND ".$dateWhere." ORDER BY dtstart desc LIMIT ".(($page-1)*10).",10 ");
+        // echo "SELECT * FROM events WHERE ".$nameWhere." AND ".$dateWhere." AND dtend > '".date('Y-m-d',strtotime('yesterday'))."' ORDER BY dtstart desc LIMIT ".(($page-1)*10).",10 ";die();
         return $query->result_array();
     }
 
@@ -113,7 +143,7 @@ class Events_model extends CI_Model {
             $dateObj2 = DateTime::createFromFormat($format, $endDate);
             $dateWhere = ' dtstart >= "'.$dateObj->format("Y-m-d").'" AND dtend <= "'.$dateObj2->format("Y-m-d").'" ';
         }
-        $query = $this->db->query("SELECT count(*) as count FROM events WHERE ".$nameWhere." AND ".$dateWhere." ORDER BY dtstart desc");
+         $query = $this->db->query("SELECT count(*) as count FROM events WHERE ".$nameWhere." AND ".$dateWhere." AND dtend > '".date('Y-m-d',strtotime('yesterday'))."' ORDER BY dtstart desc");
         return $query->row_array()['count'];
     }
 

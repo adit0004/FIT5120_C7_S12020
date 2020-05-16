@@ -16,7 +16,7 @@
     <div class="row d-flex align-items-end">
         <div class="col-12 col-md-3">
             <label for="name">Name</label>
-            <input type="text" name="name" id="name" value="<?php echo (isset($filters['name']) && $filters['name'] !== 0) ? $filters['name'] : ''; ?>" class="form-control">
+            <input type="text" name="name" id="name" value="<?php echo (isset($filters['name']) && $filters['name'] !== 0) ? $filters['name'] : ''; ?>" class="form-control" placeholder="Search for an event">
         </div>
         <div class="col-12 col-md-3">
             <label for="startDate">Start Date</label>
@@ -43,8 +43,11 @@
                     <div class="row">
                         <div class="col-12 col-md-8">
                             <strong class="card-title"><?php echo $event['title']; ?></strong>
-                            <?php if (!empty($event['dtstart']) && !empty($event['dtend'])) { ?>
+                            <?php if (!empty($event['dtstart']) && !empty($event['dtend']) && $event['dtstart'] != $event['dtend']) { ?>
                                 <p class='text-muted'><?php echo date('d M Y', strtotime($event['dtstart'])); ?> - <?php echo date('d M Y', strtotime($event['dtend'])); ?></p>
+                                <strong>Description</strong>
+                            <?php } else if (!empty($event['dtstart']) && !empty($event['dtend']) && $event['dtstart'] == $event['dtend']) { ?>
+                                <p class='text-muted'><?php echo date('d M Y', strtotime($event['dtstart'])); ?></p>
                                 <strong>Description</strong>
                             <?php } else if (!empty($event['dtsummary'])) { ?>
                                 <p class='text-muted'><?php echo $event['dtsummary']; ?></p>

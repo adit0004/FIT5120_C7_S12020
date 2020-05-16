@@ -19,33 +19,78 @@
                     </thead>
                     <tbody>
                         <?php
-                        $i = 1;
-                        // echo "<pre>".print_r($spaces,1);die();
-                        foreach ($spaces as $space) {
-                            echo "<tr>";
-                            echo "<td>" . ($i+(($page-1)*10)) . "</td>";
-                            if (!empty($space['name'])) {
-                                echo "<td class='d-flex'><div class='col-6'>" . ucwords(strtolower($space['name'])) . "";
-                            } else {
-                                echo "<td class='d-flex'><div class='col-6'>Location";
+                        if($spaceId == 13)
+                        {
+                            // echo "<pre>".print_r($spaces,1);
+                            $i = 1;
+                            foreach ($spaces['results'] as $space) {
+                                echo "<tr>";
+                                echo "<td>" . $i . "</td>";
+                                if (!empty($space['name'])) {
+                                    echo "<td class='d-flex'><div class='col-6'>" . ucwords(strtolower($space['name']));
+                                }
+                                else {
+                                    echo "<td class='d-flex'><div class='col-6'>Park";
+                                }
+                                echo "<br><span class='text-muted' id='addressBlock'>".$space['formatted_address']."</div>";
+                                echo "</span></div><div class='col-6 text-right'>";
+                                echo "<span id='weatherBlock'><button class='btn btn-outline-dark' onclick='getWeatherAndAqiOnClick(" . $i . "," . $space['geometry']['location']['lat'] . "," . $space['geometry']['location']['lng'] . ")'>Know Weather</button></span>";
+                                echo "</div></td>";
+                                echo "<td><button class='btn btn-outline-dark' onClick='seeOnMap(" . ($i - 1) . ")'>See on map</button></td>";
+                                echo "</tr>";
+                                $i++;
                             }
-                            echo "<br><span class='text-muted' id='addressBlock'><div class='spinner-border' role='status'><span class='sr-only'>Loading...</span></div>";
-                            echo "</span></div><div class='col-6 text-right'>";
-                            echo "<span id='weatherBlock'><button class='btn btn-outline-dark' onclick='getWeatherAndAqiOnClick(" . $i . "," . $space['lat'] . "," . $space['long'] . ")'>Know Weather</button></span>";
-                            echo "</div></td>";
-                            echo "<td><button class='btn btn-outline-dark' onClick='seeOnMap(" . ($i - 1) . ")'>See on map</button></td>";
-                            echo "</tr>";
-                            $i++;
                         }
-                        if (empty($spaces)) {
-                            echo "<tr><td colspan = '3'>No results found for current search. Try broadening your search!</td></tr>";
+                        else {
+                            $i = 1;
+                            // echo "<pre>".print_r($spaces,1);die();
+                            foreach ($spaces as $space) {
+                                echo "<tr>";
+                                echo "<td>" . ($i+(($page-1)*10)) . "</td>";
+                                if (!empty($space['name'])) {
+                                    echo "<td class='d-flex'><div class='col-6'>" . ucwords(strtolower($space['name']));
+                                }
+                                else if(!empty($space['quantity']))
+                                {
+                                    echo "<td class='d-flex'><div class='col-6'>" . $space['quantity'] . " " . ($space['quantity'] == 1 ? 'Barbeque Grill' : 'Barbeque Grills');
+                                }
+                                else if(!empty($space['parish']))
+                                {
+                                    echo "<td class='d-flex'><div class='col-6'>". ucwords(strtolower($space['parish']));
+                                }
+                                else if(!empty($space['PG_NAME']))
+                                {
+                                    echo "<td class='d-flex'><div class='col-6'>". ucwords(strtolower($space['PG_NAME']));
+                                }
+                                else if(!empty($space['type']) && ($space['type'] == 'ONRD' || $space['type'] == 'OFRD' || $space['type'] == 'TRNG'))
+                                {
+                                    if($space['type'] == 'ONRD') $type="On-Road Track";
+                                    else if ($space['type'] == 'OFRD') $type="Off-Road Track";
+                                    else if ($space['type'] == 'TRNG') $type="Training Track";
+                                    else $type="Bike Trail";
+                                    echo "<td class='d-flex'><div class='col-6'>". $type;
+                                }
+                                else {
+                                    echo "<td class='d-flex'><div class='col-6'>";
+                                }
+                                echo "<br><span class='text-muted' id='addressBlock'><div class='spinner-border' role='status'><span class='sr-only'>Loading...</span></div>";
+                                echo "</span></div><div class='col-6 text-right'>";
+                                echo "<span id='weatherBlock'><button class='btn btn-outline-dark' onclick='getWeatherAndAqiOnClick(" . $i . "," . $space['lat'] . "," . $space['long'] . ")'>Know Weather</button></span>";
+                                echo "</div></td>";
+                                echo "<td><button class='btn btn-outline-dark' onClick='seeOnMap(" . ($i - 1) . ")'>See on map</button></td>";
+                                echo "</tr>";
+                                $i++;
+                            }
+                            if (empty($spaces)) {
+                                echo "<tr><td colspan = '3'>No results found for current search. Try broadening your search!</td></tr>";
+                            }
                         }
                         ?>
 
                     </tbody>
                 </table>
-                <?php // Todo: Paginate
-                if ($pages > 1) { ?>
+                <?php // Paginate if not parks, else just show load more
+                if ($spaceId != 13 && $pages > 1) { ?>
                     <div class='d-flex justify-content-center'>
                         <nav aria-label="Page Navigation">
                             <ul class="pagination">
@@ -69,14 +114,16 @@
                             </ul>
                         </nav>
                     </div>
-                <?php } ?>
+                <?php } else if ($spaceId == 13) {?>
+                    Button
+                <?php }?>
             </div>
             <div class="col-12 col-md-4 px-5">
                 <h3>Refine results:</h3>
                 <?php echo form_open(site_url(['spaces', 'showSpacesMap', $spaceId])); ?>
                 <div class='form-group mt-4'>
                     <label for="locationFilter">Your location</label>
-                    <input class='form-control' name='locationFilter' id='locationFilter' type='text'>
+                    <input class='form-control' name='locationFilter' id='locationFilter' type='text' required>
                 </div><hr class='my-3'>
                 <div class='form-group'>
                     <label for="distanceFilter">Maximum Distance From You (Approximate)</label>

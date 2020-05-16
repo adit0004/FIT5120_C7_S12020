@@ -4,7 +4,7 @@
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
 :root {
   --blue: #428bca;
   --indigo: #6610f2;
@@ -52,8 +52,8 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 body {
   margin: 0;
   font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 1.075rem;
+  font-weight: 400;
   line-height: 1.5;
   color: #212529;
   text-align: left;
@@ -298,30 +298,29 @@ template {
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
   margin-bottom: 0.5rem;
-  font-family: "Playfair Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-weight: 500;
   line-height: 1.2; }
 
 h1, .h1 {
-  font-size: 2.25rem; }
+  font-size: 2.6875rem; }
 
 h2, .h2 {
-  font-size: 1.8rem; }
+  font-size: 2.15rem; }
 
 h3, .h3 {
-  font-size: 1.575rem; }
+  font-size: 1.88125rem; }
 
 h4, .h4 {
-  font-size: 1.35rem; }
+  font-size: 1.6125rem; }
 
 h5, .h5 {
-  font-size: 1.125rem; }
+  font-size: 1.34375rem; }
 
 h6, .h6 {
-  font-size: 0.9rem; }
+  font-size: 1.075rem; }
 
 .lead {
-  font-size: 1.125rem;
+  font-size: 1.34375rem;
   font-weight: 300; }
 
 .display-1 {
@@ -353,7 +352,7 @@ hr {
 small,
 .small {
   font-size: 80%;
-  font-weight: 500; }
+  font-weight: 400; }
 
 mark,
 .mark {
@@ -379,7 +378,7 @@ mark,
 
 .blockquote {
   margin-bottom: 1rem;
-  font-size: 1.125rem; }
+  font-size: 1.34375rem; }
 
 .blockquote-footer {
   display: block;
@@ -1566,8 +1565,8 @@ pre {
   width: 100%;
   height: calc(1.5em + 0.75rem + 2px);
   padding: 0.375rem 0.75rem;
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 1.075rem;
+  font-weight: 400;
   line-height: 1.5;
   color: #495057;
   background-color: #fff;
@@ -1616,13 +1615,13 @@ select.form-control:focus::-ms-value {
 .col-form-label-lg {
   padding-top: calc(0.5rem + 1px);
   padding-bottom: calc(0.5rem + 1px);
-  font-size: 1.125rem;
+  font-size: 1.34375rem;
   line-height: 1.5; }
 
 .col-form-label-sm {
   padding-top: calc(0.25rem + 1px);
   padding-bottom: calc(0.25rem + 1px);
-  font-size: 0.7875rem;
+  font-size: 0.940625rem;
   line-height: 1.5; }
 
 .form-control-plaintext {
@@ -1630,7 +1629,7 @@ select.form-control:focus::-ms-value {
   width: 100%;
   padding: 0.375rem 0;
   margin-bottom: 0;
-  font-size: 0.9rem;
+  font-size: 1.075rem;
   line-height: 1.5;
   color: #212529;
   background-color: transparent;
@@ -1643,14 +1642,14 @@ select.form-control:focus::-ms-value {
 .form-control-sm {
   height: calc(1.5em + 0.5rem + 2px);
   padding: 0.25rem 0.5rem;
-  font-size: 0.7875rem;
+  font-size: 0.940625rem;
   line-height: 1.5;
   border-radius: 0.2rem; }
 
 .form-control-lg {
   height: calc(1.5em + 1rem + 2px);
   padding: 0.5rem 1rem;
-  font-size: 1.125rem;
+  font-size: 1.34375rem;
   line-height: 1.5;
   border-radius: 0.3rem; }
 
@@ -1718,7 +1717,7 @@ textarea.form-control {
   max-width: 100%;
   padding: 0.25rem 0.5rem;
   margin-top: .1rem;
-  font-size: 0.7875rem;
+  font-size: 0.940625rem;
   line-height: 1.5;
   color: #fff;
   background-color: rgba(40, 167, 69, 0.9);
@@ -1793,7 +1792,7 @@ textarea.form-control {
   max-width: 100%;
   padding: 0.25rem 0.5rem;
   margin-top: .1rem;
-  font-size: 0.7875rem;
+  font-size: 0.940625rem;
   line-height: 1.5;
   color: #212529;
   background-color: rgba(247, 113, 113, 0.9);
@@ -1900,7 +1899,7 @@ textarea.form-control {
 
 .btn {
   display: inline-block;
-  font-weight: 500;
+  font-weight: 400;
   color: #212529;
   text-align: center;
   vertical-align: middle;
@@ -1909,7 +1908,7 @@ textarea.form-control {
   background-color: transparent;
   border: 1px solid transparent;
   padding: 0.375rem 0.75rem;
-  font-size: 0.9rem;
+  font-size: 1.075rem;
   line-height: 1.5;
   border-radius: 0.25rem;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; }
@@ -2274,7 +2273,7 @@ fieldset:disabled a.btn {
       box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5); }
 
 .btn-link {
-  font-weight: 500;
+  font-weight: 400;
   color: #e93f4a;
   text-decoration: none; }
   .btn-link:hover {
@@ -2289,13 +2288,13 @@ fieldset:disabled a.btn {
 
 .btn-lg, .btn-group-lg > .btn {
   padding: 0.5rem 1rem;
-  font-size: 1.125rem;
+  font-size: 1.34375rem;
   line-height: 1.5;
   border-radius: 0.3rem; }
 
 .btn-sm, .btn-group-sm > .btn {
   padding: 0.25rem 0.5rem;
-  font-size: 0.7875rem;
+  font-size: 0.940625rem;
   line-height: 1.5;
   border-radius: 0.2rem; }
 
@@ -2360,7 +2359,7 @@ input[type="button"].btn-block {
   min-width: 10rem;
   padding: 0.5rem 0;
   margin: 0.125rem 0 0;
-  font-size: 0.9rem;
+  font-size: 1.075rem;
   color: #212529;
   text-align: left;
   list-style: none;
@@ -2487,7 +2486,7 @@ input[type="button"].btn-block {
   width: 100%;
   padding: 0.25rem 1.5rem;
   clear: both;
-  font-weight: 500;
+  font-weight: 400;
   color: #212529;
   text-align: inherit;
   white-space: nowrap;
@@ -2513,7 +2512,7 @@ input[type="button"].btn-block {
   display: block;
   padding: 0.5rem 1.5rem;
   margin-bottom: 0;
-  font-size: 0.7875rem;
+  font-size: 0.940625rem;
   color: #6c757d;
   white-space: nowrap; }
 
@@ -2687,8 +2686,8 @@ input[type="button"].btn-block {
   align-items: center;
   padding: 0.375rem 0.75rem;
   margin-bottom: 0;
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 1.075rem;
+  font-weight: 400;
   line-height: 1.5;
   color: #495057;
   text-align: center;
@@ -2711,7 +2710,7 @@ input[type="button"].btn-block {
 .input-group-lg > .input-group-prepend > .btn,
 .input-group-lg > .input-group-append > .btn {
   padding: 0.5rem 1rem;
-  font-size: 1.125rem;
+  font-size: 1.34375rem;
   line-height: 1.5;
   border-radius: 0.3rem; }
 
@@ -2726,7 +2725,7 @@ input[type="button"].btn-block {
 .input-group-sm > .input-group-prepend > .btn,
 .input-group-sm > .input-group-append > .btn {
   padding: 0.25rem 0.5rem;
-  font-size: 0.7875rem;
+  font-size: 0.940625rem;
   line-height: 1.5;
   border-radius: 0.2rem; }
 
@@ -2755,7 +2754,7 @@ input[type="button"].btn-block {
 .custom-control {
   position: relative;
   display: block;
-  min-height: 1.35rem;
+  min-height: 1.6125rem;
   padding-left: 1.5rem; }
 
 .custom-control-inline {
@@ -2767,7 +2766,7 @@ input[type="button"].btn-block {
   left: 0;
   z-index: -1;
   width: 1rem;
-  height: 1.175rem;
+  height: 1.30625rem;
   opacity: 0; }
   .custom-control-input:checked ~ .custom-control-label::before {
     color: #fff;
@@ -2792,7 +2791,7 @@ input[type="button"].btn-block {
   vertical-align: top; }
   .custom-control-label::before {
     position: absolute;
-    top: 0.175rem;
+    top: 0.30625rem;
     left: -1.5rem;
     display: block;
     width: 1rem;
@@ -2803,7 +2802,7 @@ input[type="button"].btn-block {
     border: #adb5bd solid 1px; }
   .custom-control-label::after {
     position: absolute;
-    top: 0.175rem;
+    top: 0.30625rem;
     left: -1.5rem;
     display: block;
     width: 1rem;
@@ -2840,7 +2839,7 @@ input[type="button"].btn-block {
     pointer-events: all;
     border-radius: 0.5rem; }
   .custom-switch .custom-control-label::after {
-    top: calc(0.175rem + 2px);
+    top: calc(0.30625rem + 2px);
     left: calc(-2.25rem + 2px);
     width: calc(1rem - 4px);
     height: calc(1rem - 4px);
@@ -2861,8 +2860,8 @@ input[type="button"].btn-block {
   width: 100%;
   height: calc(1.5em + 0.75rem + 2px);
   padding: 0.375rem 1.75rem 0.375rem 0.75rem;
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 1.075rem;
+  font-weight: 400;
   line-height: 1.5;
   color: #495057;
   vertical-align: middle;
@@ -2895,14 +2894,14 @@ input[type="button"].btn-block {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
   padding-left: 0.5rem;
-  font-size: 0.7875rem; }
+  font-size: 0.940625rem; }
 
 .custom-select-lg {
   height: calc(1.5em + 1rem + 2px);
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   padding-left: 1rem;
-  font-size: 1.125rem; }
+  font-size: 1.34375rem; }
 
 .custom-file {
   position: relative;
@@ -2936,7 +2935,7 @@ input[type="button"].btn-block {
   z-index: 1;
   height: calc(1.5em + 0.75rem + 2px);
   padding: 0.375rem 0.75rem;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.5;
   color: #495057;
   background-color: #fff;
@@ -3151,10 +3150,10 @@ input[type="button"].btn-block {
 
 .navbar-brand {
   display: inline-block;
-  padding-top: 0.33125rem;
-  padding-bottom: 0.33125rem;
+  padding-top: 0.2984375rem;
+  padding-bottom: 0.2984375rem;
   margin-right: 1rem;
-  font-size: 1.125rem;
+  font-size: 1.34375rem;
   line-height: inherit;
   white-space: nowrap; }
   .navbar-brand:hover, .navbar-brand:focus {
@@ -3185,7 +3184,7 @@ input[type="button"].btn-block {
 
 .navbar-toggler {
   padding: 0.25rem 0.75rem;
-  font-size: 1.125rem;
+  font-size: 1.34375rem;
   line-height: 1;
   background-color: transparent;
   border: 1px solid transparent;
@@ -3646,7 +3645,7 @@ input[type="button"].btn-block {
 
 .pagination-lg .page-link {
   padding: 0.75rem 1.5rem;
-  font-size: 1.125rem;
+  font-size: 1.34375rem;
   line-height: 1.5; }
 .pagination-lg .page-item:first-child .page-link {
   border-top-left-radius: 0.3rem;
@@ -3657,7 +3656,7 @@ input[type="button"].btn-block {
 
 .pagination-sm .page-link {
   padding: 0.25rem 0.5rem;
-  font-size: 0.7875rem;
+  font-size: 0.940625rem;
   line-height: 1.5; }
 .pagination-sm .page-item:first-child .page-link {
   border-top-left-radius: 0.2rem;
@@ -3802,7 +3801,7 @@ input[type="button"].btn-block {
   font-weight: 700; }
 
 .alert-dismissible {
-  padding-right: 3.85rem; }
+  padding-right: 4.1125rem; }
   .alert-dismissible .close {
     position: absolute;
     top: 0;
@@ -3891,7 +3890,7 @@ input[type="button"].btn-block {
   display: flex;
   height: 1rem;
   overflow: hidden;
-  font-size: 0.675rem;
+  font-size: 0.80625rem;
   background-color: #e9ecef;
   border-radius: 0.25rem; }
 
@@ -4156,7 +4155,7 @@ input[type="button"].btn-block {
 
 .close {
   float: right;
-  font-size: 1.35rem;
+  font-size: 1.6125rem;
   font-weight: 700;
   line-height: 1;
   color: #000;
@@ -4368,7 +4367,7 @@ a.close.disabled {
   margin: 0;
   font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.5;
   text-align: left;
   text-align: start;
@@ -4380,7 +4379,7 @@ a.close.disabled {
   word-spacing: normal;
   white-space: normal;
   line-break: auto;
-  font-size: 0.7875rem;
+  font-size: 0.940625rem;
   word-wrap: break-word;
   opacity: 0; }
   .tooltip.show {
@@ -4453,7 +4452,7 @@ a.close.disabled {
   max-width: 276px;
   font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.5;
   text-align: left;
   text-align: start;
@@ -4465,7 +4464,7 @@ a.close.disabled {
   word-spacing: normal;
   white-space: normal;
   line-break: auto;
-  font-size: 0.7875rem;
+  font-size: 0.940625rem;
   word-wrap: break-word;
   background-color: #fff;
   background-clip: padding-box;
@@ -4554,7 +4553,7 @@ a.close.disabled {
 .popover-header {
   padding: 0.5rem 0.75rem;
   margin-bottom: 0;
-  font-size: 0.9rem;
+  font-size: 1.075rem;
   background-color: #f7f7f7;
   border-bottom: 1px solid #ebebeb;
   border-top-left-radius: calc(0.3rem - 1px);
@@ -7605,7 +7604,7 @@ button.bg-dark:focus {
   font-weight: lighter !important; }
 
 .font-weight-normal {
-  font-weight: 500 !important; }
+  font-weight: 400 !important; }
 
 .font-weight-bold {
   font-weight: 700 !important; }
