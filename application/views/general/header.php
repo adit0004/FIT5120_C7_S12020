@@ -16,7 +16,7 @@
 <body class='background-image'>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <a class="navbar-brand" href="<?php echo base_url(); ?>">EldVisor</a>
+        <a class="navbar-brand" href="<?php echo base_url(); ?>"><h4>EldVisor</h4></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -29,9 +29,6 @@
                 </li>
                 <li class="nav-item ml-4" id="personalNav">
                     <a class="nav-link" href="<?php echo site_url(['general', 'personalizedQuiz']); ?>">Know your own Health</a>
-                </li>
-                <li class="nav-item ml-4" id="healthNav">
-                    <a class="nav-link" href="<?php echo site_url(['general', 'showCharts']); ?>">Health Facts</a>
                 </li>
                 <li class="nav-item ml-4" id="placesNav">
                     <a class="nav-link" href="<?php echo site_url(['spaces', 'showSpaces']); ?>">Explore the Outdoors</a>

@@ -12,12 +12,13 @@
                  <option value="25to34">45 to 54 years</option>
                  <option value="25to34">55 to 64 years</option>
                  <option value="25to34">65 to 74 years</option>
-                 <option value="75andabove">75 years and above</option>
+                 <option value="75toabove">75 years and above</option>
              </select>
-             <button class="btn btn-outline-primary mt-3" onclick="processAgeGroup()">Continue &rarr;</button>
+             <button class="btn btn-outline-primary mt-3" id="processAgeButton">Continue &rarr;</button>
+             <button class="btn btn-outline-primary mt-3" id="processMetGuidelines">Continue &rarr;</button>
          </div>
          <div class="col-12 col-md-6 p-5 bg-primary visualizationContainer" style="height:100%;">
-            <svg width="100%" height="100%"></svg>
+            <svg width="500" height="500"></svg>
          </div>
      </div>
  </div>

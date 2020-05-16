@@ -128,6 +128,7 @@
         <?php } ?>
 
         <?php if ($activePage == 'personalizedHealth') { ?>
+            $("#processMetGuidelines").hide();
             var navbarHeight = $(".navbar").outerHeight();
             var breadCrumbHeight = $(".breadcrumb").outerHeight();
             var windowHeight = $(window).outerHeight();
@@ -135,6 +136,10 @@
             if (containerHeight < windowHeight) {
                 $(".visualizationContainer").css('min-height', containerHeight + "px");
             }
+            // Figure out height and width of SVG container
+            $("svg").attr('height', containerHeight);
+            $("svg").attr('width', $(".visualizationContainer").outerWidth());
+
         <?php } ?>
     })
     <?php if ($activePage == 'placesMap') { ?>
@@ -415,76 +420,88 @@
 </script>
 <?php if ($activePage == 'placesMap') { ?>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrGmHjWjkwhyXqb9HDaiwQ9htOZCrs0Hs&callback=initMap&libraries=places" async defer></script><?php } ?>
-<?php if ($activePage == 'personalizedHealth') {?>
+<?php if ($activePage == 'personalizedHealth') { ?>
     <script>
         var svg = d3.select("svg"),
-                width = +svg.attr("width"),
-                height = +svg.attr("height");
+            width = $(".visualizationContainer").outerWidth(),
+            height = $(".visualizationContainer").outerHeight();
 
-            const forceStrength = 0.05;
+        const forceStrength = 0.03;
 
-            // "Electric repulsive charge", prevents overlap of nodes
-            var chargeForce = d3.forceManyBody();
+        // "Electric repulsive charge", prevents overlap of nodes
+        var chargeForce = d3.forceManyBody();
 
-            // Keep nodes centered on screen
-            var centerXForce = d3.forceX().x(width / 2).strength(forceStrength);
-            var centerYForce = d3.forceY().y(height / 2).strength(forceStrength);
+        // Keep nodes centered on screen
+        var centerXForce = d3.forceX().x(width / 2).strength(forceStrength);
+        var centerYForce = d3.forceY().y(height / 2).strength(forceStrength);
+        console.log(centerXForce);
+        console.log(centerYForce);
 
+        d3.csv("<?php echo base_url(); ?>assets/dataFiles/55to64.csv", function(error, data) {
+            console.log(error);
+            var typeScale = d3.scalePoint()
+                .domain(data.map(function(d) {
+                    return d['type'];
+                }))
+                .range([0, width])
+                .padding(0.5); // give some space at the outer edges
 
-            d3.csv("<?php echo base_url();?>assets/dataFiles/55to64.csv", function(error, data) {
+            var xTypeForce = d3.forceX(d => typeScale(d['type']));
 
-                var typeScale = d3.scalePoint()
-                    .domain(data.map(function(d) {
-                        return d['type'];
-                    }))
-                    .range([0, width])
-                    .padding(0.5); // give some space at the outer edges
+            var node = svg.selectAll("circle")
+                .data(data)
+                .enter().append("circle")
+                .attr("r", 5)
+                .attr("fill", "#eeeeee");
 
-                var xTypeForce = d3.forceX(d => typeScale(d['type']));
+            var labels = svg.selectAll("text")
+                .data(typeScale.domain()) // heh, scales take care of the unique, so grab from there
+                .enter().append("text")
+                .attr("class", "label")
+                .text(function(d) {
+                    return d;
+                })
+                .attr("fill", "rgba(0,0,0,0)")
+                .attr("text-anchor", "middle")
+                .attr("x", function(d) {
+                    return typeScale(d) - 40;
+                })
+                .attr("y", height / 2.0 - 150);
 
-                var node = svg.selectAll("circle")
-                    .data(data)
-                    .enter().append("circle")
-                    .attr("r", 8)
-                    .attr("fill", "#eeeeee");
+            var simulation = d3.forceSimulation()
+                .force("charge", chargeForce.strength(5))
+                .force("x", centerXForce)
+                .force("y", centerYForce)
+                .force('collision', d3.forceCollide().radius(7));
 
-                var labels = svg.selectAll("text")
-                    .data(typeScale.domain()) // heh, scales take care of the unique, so grab from there
-                    .enter().append("text")
-                    .attr("class", "label")
-                    .text(function(d) {
-                        return d;
-                    })
-                    .attr("fill", "#DDD")
-                    .attr("text-anchor", "middle")
-                    .attr("x", function(d) {
-                        return typeScale(d);
-                    })
-                    .attr("y", height / 2.0 - 100);
+            // Add the nodes to the simulation, and specify how to draw
+            simulation.nodes(data)
+                .on("tick", function() {
+                    // The d3 force simulation updates the x & y coordinates
+                    // of each node every tick/frame, based on the various active forces.
+                    // It is up to us to translate these coordinates to the screen.
+                    node.attr("cx", function(d) {
+                            return d.x;
+                        })
+                        .attr("cy", function(d) {
+                            return d.y;
+                        });
+                });
 
-                var simulation = d3.forceSimulation()
-                    .force("charge", chargeForce.strength(8))
-                    .force("x", centerXForce)
-                    .force("y", centerYForce)
-                    .force('collision', d3.forceCollide().radius(10));
+            var splitState = false;
+            document.getElementById("processAgeButton").onclick = function() {
+                console.log($("#age-bracket").val());
+                // Update the data first 
+                $("#processAgeButton").hide();
+                $("#processMetGuidelines").show();
+                updateData($("#age-bracket").val());
+            };
+            
+           
+        });
 
-                // Add the nodes to the simulation, and specify how to draw
-                simulation.nodes(data)
-                    .on("tick", function() {
-                        console.log(data);
-                        // The d3 force simulation updates the x & y coordinates
-                        // of each node every tick/frame, based on the various active forces.
-                        // It is up to us to translate these coordinates to the screen.
-                        node.attr("cx", function(d) {
-                                return d.x;
-                            })
-                            .attr("cy", function(d) {
-                                return d.y;
-                            });
-                    });
-            });
     </script>
-<?php }?>
+<?php } ?>
 </body>
 
 </html>

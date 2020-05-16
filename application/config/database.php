@@ -88,7 +88,10 @@ $db['default'] = array(
 	'char_set' => 'utf8',
 	'dbcollat' => 'utf8_general_ci',
 	'swap_pre' => '',
-	'encrypt' => [ 'ssl_ca' => realpath('./cert/ca.crt'), 'ssl_verify' => false ],
+	// Production
+	// 'encrypt' => [ 'ssl_ca' => realpath('./cert/ca.crt'), 'ssl_verify' => false ],
+	// Development
+	'encrypt' => [],
 	'compress' => FALSE,
 	'stricton' => FALSE,
 	'failover' => array(),
