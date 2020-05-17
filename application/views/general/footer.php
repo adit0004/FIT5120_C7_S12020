@@ -477,10 +477,11 @@
                 .attr("y", height / 2.0 - 150);
 
             var simulation = d3.forceSimulation()
-                .force("charge", chargeForce.strength(5))
+                .force("charge", chargeForce.strength(-5))
                 .force("x", centerXForce)
                 .force("y", centerYForce)
-                .force('collision', d3.forceCollide().radius(7));
+                .force("center", d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide(5));
 
             // Add the nodes to the simulation, and specify how to draw
             simulation.nodes(data)
@@ -500,12 +501,12 @@
             document.getElementById("processAgeButton").onclick = function() {
                 console.log($("#age-bracket").val());
                 // Update the data first 
-                $("#q1").fadeOut(400,function(){
+                $("#q1").fadeOut(400, function() {
                     $("#q2").fadeIn();
                 });
                 updateData($("#age-bracket").val());
             };
-           
+
         });
 
         function updateData(sheetToFetch) {
@@ -513,7 +514,6 @@
             console.log("Work damn you!")
 
             d3.csv("<?php echo base_url(); ?>assets/dataFiles/" + sheetToFetch + ".csv", function(error, data) {
-                console.log(data);
                 var typeScale = d3.scalePoint()
                     .domain(data.map(function(d) {
                         return d['type'];
@@ -546,12 +546,13 @@
                     .attr("y", height / 2.0 - 150);
 
                 var simulation = d3.forceSimulation()
-                    .force("charge", chargeForce.strength(5))
+                    .force("charge", chargeForce.strength(-5))
                     .force("x", centerXForce)
                     .force("y", centerYForce)
-                    .force('collision', d3.forceCollide().radius(7));
+                    .force("center", d3.forceCenter(width / 2, height / 2))
+                    .force('collision', d3.forceCollide(5));
 
-                    var i = 0;
+                var i = 0;
                 // Add the nodes to the simulation, and specify how to draw
                 simulation.nodes(data)
                     .on("tick", function() {
@@ -564,55 +565,91 @@
                             .attr("cy", function(d) {
                                 return d.y;
                             });
-                            // console.log(i++);
+                        // console.log(i++);
                     });
 
                 var splitState = false;
 
                 document.getElementById('processMetGuidelinesYes').onclick = function() {
-                    $("#q2").fadeOut(400, function(){
+                    $("#q2").fadeOut(400, function() {
                         // DO D3 HERE
+                        if (!splitState) {
+                            // push the nodes towards respective spots
+                            simulation.force("x", xTypeForce);
+                            labels.attr("fill", "#fff");
+                            d3.selectAll('circle').transition()
+                        } else {
+                            simulation.force("x", centerXForce);
+                            labels.attr("fill", "rgba(0,0,0,0)");
+                            d3.selectAll('circle').transition()
+                        }
+
+                        // Toggle state
+                        splitState = !splitState;
+
+                        // NOTE: Very important to call both alphaTarget AND restart in conjunction
+                        // Restart by itself will reset alpha (cooling of simulation)
+                        // but won't reset the velocities of the nodes (inertia)
+                        simulation.alpha(1).restart();
                         $("#q2yes").fadeIn();
-                    });    
+                    });
                 }
                 document.getElementById('processMetGuidelinesNo').onclick = function() {
-                    $("#q2").fadeOut(400, function(){
+                    $("#q2").fadeOut(400, function() {
                         // DO D3 HERE
+                        if (!splitState) {
+                            // push the nodes towards respective spots
+                            simulation.force("x", xTypeForce);
+                            labels.attr("fill", "#fff");
+                            d3.selectAll('circle').transition()
+                        } else {
+                            simulation.force("x", centerXForce);
+                            labels.attr("fill", "rgba(0,0,0,0)");
+                            d3.selectAll('circle').transition()
+                        }
+
+                        // Toggle state
+                        splitState = !splitState;
+
+                        // NOTE: Very important to call both alphaTarget AND restart in conjunction
+                        // Restart by itself will reset alpha (cooling of simulation)
+                        // but won't reset the velocities of the nodes (inertia)
+                        simulation.alpha(1).restart();
                         $("#q2no").fadeIn();
                     });
                 }
-                $(".moveToBmi").each(function(e){
-                    $(this).on('click', function(){
-                        if($("#q2yes").is(":visible"))
-                    {
-                        $("#q2yes").fadeOut(400,function(){
-                            $("#q3").fadeIn();
+                $(".moveToBmi").each(function(e) {
+                    try {
+                        $(this).on('click', function() {
+                        updateData($("#age-bracket").val() + "_bmi");
+                            if ($("#q2yes").is(":visible")) {
+                                $("#q2yes").fadeOut(400, function() {
+                                    $("#q3").fadeIn();
+                                })
+                            }
+                            if ($("#q2no").is(":visible")) {
+                                $("#q2no").fadeOut(400, function() {
+                                    $("#q3").fadeIn();
+                                })
+                            }
                         })
+                    } catch (err) {
+                        console.log(err);
                     }
-                    if($("#q2no").is(":visible"))
-                    {
-                        $("#q2no").fadeOut(400,function(){
-                            $("#q3").fadeIn();
-                        })
-                    }
-                    })
                 })
-                $("#processBmi").on('click', function(){
+                $("#processBmi").on('click', function() {
                     $("#enterHeight").removeClass('is-invalid');
                     $("#enterWeight").removeClass('is-invalid');
                     var validationFlag = 0;
-                    if($.trim($("#enterHeight").val()) == '')
-                    {
+                    if ($.trim($("#enterHeight").val()) == '') {
                         $("#enterHeight").addClass('is-invalid');
                         validationFlag = 1;
                     }
-                    if($.trim($("#enterWeight").val()) == '')
-                    {
+                    if ($.trim($("#enterWeight").val()) == '') {
                         $("#enterWeight").addClass('is-invalid');
                         validationFlag = 1;
                     }
-                    if(validationFlag == 1)
-                    {
+                    if (validationFlag == 1) {
                         return;
                     }
                     var height = parseFloat($("#enterHeight").val()) / 100;
@@ -625,40 +662,55 @@
                         $("#bmiResult").removeClass("text-success");
                         $("#bmiResult").addClass("text-danger");
                         $("#bmiResult").html("Underweight");
-                        $("#bmiMessage").html("A BMI of "+bmi+" is within the underweight category. It is recommended that you visit a health professional to discuss the impacts this may have on your health.");
+                        $("#bmiMessage").html("A BMI of " + bmi + " is within the underweight category. It is recommended that you visit a health professional to discuss the impacts this may have on your health.");
                         $("#bmiContinue").fadeIn();
-                    }
-                    else if (bmi >=18.5 && bmi < 25)
-                    {
+                    } else if (bmi >= 18.5 && bmi < 25) {
                         // Normal
                         $("#bmiResult").removeClass("text-danger");
                         $("#bmiResult").removeClass("text-success");
                         $("#bmiResult").addClass("text-success");
                         $("#bmiResult").html("Normal");
-                        $("#bmiMessage").html("A BMI of "+bmi+" is within the healthy weight category This is generally good for your health. The challenge is to maintain your weight. You might like to explore places and events nearby to maintain a healthy weight.");
+                        $("#bmiMessage").html("A BMI of " + bmi + " is within the healthy weight category This is generally good for your health. The challenge is to maintain your weight. You might like to explore places and events nearby to maintain a healthy weight.");
                         $("#bmiButtons").fadeIn();
                         $("#bmiContinue").fadeIn();
-                    }
-                    else
-                    {
+                    } else {
                         // Overweight / Obese
                         $("#bmiResult").removeClass("text-danger");
                         $("#bmiResult").removeClass("text-success");
                         $("#bmiResult").addClass("text-danger");
                         $("#bmiResult").html("Overweight or Obese");
-                        $("#bmiMessage").html("A BMI of "+bmi+" is within the overweight category. This may not be good for your health. You might like to explore places and events for a more active lifestyle");
+                        $("#bmiMessage").html("A BMI of " + bmi + " is within the overweight category. This may not be good for your health. You might like to explore places and events for a more active lifestyle");
                         $("#bmiButtons").fadeIn();
                         $("#bmiContinue").fadeIn();
                     }
                     $("#bmiCalculated").fadeIn();
-                    
+
                     // DO D3 HERE
+                    if (!splitState) {
+                            // push the nodes towards respective spots
+                            yTypeForce = 
+                            simulation.force("x", xTypeForce);
+                            labels.attr("fill", "#fff");
+                            d3.selectAll('circle').transition()
+                        } else {
+                            simulation.force("x", centerXForce);
+                            labels.attr("fill", "rgba(0,0,0,0)");
+                            d3.selectAll('circle').transition()
+                        }
+
+                        // Toggle state
+                    splitState = !splitState;
+
+                    // NOTE: Very important to call both alphaTarget AND restart in conjunction
+                    // Restart by itself will reset alpha (cooling of simulation)
+                    // but won't reset the velocities of the nodes (inertia)
+                    simulation.alpha(1).restart();
                     console.log(bmi);
 
                 })
-                $(".moveToLongTermIssues").each(function(){
-                    $(this).on('click', function(){
-                        $("#q3").fadeOut(400,function(){
+                $(".moveToLongTermIssues").each(function() {
+                    $(this).on('click', function() {
+                        $("#q3").fadeOut(400, function() {
                             $("#q4").fadeIn();
                             // PROCESS FOR ARTHRITIS HERE
                         });
@@ -670,37 +722,37 @@
                     console.log($(this).val());
                 })
 
-                $("#continueFromLongTerm").on('click', function(){
-                    $("#q4").fadeOut(400, function(){
+                $("#continueFromLongTerm").on('click', function() {
+                    $("#q4").fadeOut(400, function() {
                         $("#q5").fadeIn();
                         // PROCESS NEVER CONSUMED ALCOHOL HERE
                     })
                 })
-                $("#alcoholConsumption").on('change', function(){
+                $("#alcoholConsumption").on('change', function() {
                     // PROCESS OTHER ALCOHOL CONSUMPTIONS HERE
                     console.log($(this).val());
                 })
-                document.getElementById("processMetGuidelines").onclick = function() {
-                    $("#processMetGuidelines").hide();
-                    if (!splitState) {
-                        // push the nodes towards respective spots
-                        simulation.force("x", xTypeForce);
-                        labels.attr("fill", "#fff");
-                        d3.selectAll('circle').transition()
-                    } else {
-                        simulation.force("x", centerXForce);
-                        labels.attr("fill", "rgba(0,0,0,0)");
-                        d3.selectAll('circle').transition()
-                    }
+                // document.getElementById("processMetGuidelines").onclick = function() {
+                //     $("#processMetGuidelines").hide();
+                //     if (!splitState) {
+                //         // push the nodes towards respective spots
+                //         simulation.force("x", xTypeForce);
+                //         labels.attr("fill", "#fff");
+                //         d3.selectAll('circle').transition()
+                //     } else {
+                //         simulation.force("x", centerXForce);
+                //         labels.attr("fill", "rgba(0,0,0,0)");
+                //         d3.selectAll('circle').transition()
+                //     }
 
-                    // Toggle state
-                    splitState = !splitState;
+                //     // Toggle state
+                //     splitState = !splitState;
 
-                    // NOTE: Very important to call both alphaTarget AND restart in conjunction
-                    // Restart by itself will reset alpha (cooling of simulation)
-                    // but won't reset the velocities of the nodes (inertia)
-                    simulation.alpha(1).restart();
-                }
+                //     // NOTE: Very important to call both alphaTarget AND restart in conjunction
+                //     // Restart by itself will reset alpha (cooling of simulation)
+                //     // but won't reset the velocities of the nodes (inertia)
+                //     simulation.alpha(1).restart();
+                // }
             });
         }
     </script>
