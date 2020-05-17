@@ -128,7 +128,15 @@
         <?php } ?>
 
         <?php if ($activePage == 'personalizedHealth') { ?>
-            $("#processMetGuidelines").hide();
+            $("#q2").hide();
+            $("#q2yes").hide();
+            $("#q2no").hide();
+            $("#q3").hide();
+            $("#bmiCalculated").hide();
+            $("#bmiButtons").hide();
+            $("#bmiContinue").hide();
+            $("#q4").hide();
+            $("#q5").hide();
             var navbarHeight = $(".navbar").outerHeight();
             var breadCrumbHeight = $(".breadcrumb").outerHeight();
             var windowHeight = $(window).outerHeight();
@@ -437,7 +445,7 @@
         console.log(centerXForce);
         console.log(centerYForce);
 
-        d3.csv("<?php echo base_url(); ?>assets/dataFiles/55to64.csv", function(error, data) {
+        d3.csv("<?php echo base_url(); ?>assets/dataFiles/18to24.csv", function(error, data) {
             console.log(error);
             var typeScale = d3.scalePoint()
                 .domain(data.map(function(d) {
@@ -492,8 +500,9 @@
             document.getElementById("processAgeButton").onclick = function() {
                 console.log($("#age-bracket").val());
                 // Update the data first 
-                $("#processAgeButton").hide();
-                $("#processMetGuidelines").show();
+                $("#q1").fadeOut(400,function(){
+                    $("#q2").fadeIn();
+                });
                 updateData($("#age-bracket").val());
             };
            
@@ -513,6 +522,8 @@
                     .padding(0.5); // give some space at the outer edges
 
                 var xTypeForce = d3.forceX(d => typeScale(d['type']));
+
+                svg.selectAll('*').remove();
 
                 var node = svg.selectAll("circle")
                     .data(data)
@@ -557,8 +568,120 @@
                     });
 
                 var splitState = false;
+
+                document.getElementById('processMetGuidelinesYes').onclick = function() {
+                    $("#q2").fadeOut(400, function(){
+                        // DO D3 HERE
+                        $("#q2yes").fadeIn();
+                    });    
+                }
+                document.getElementById('processMetGuidelinesNo').onclick = function() {
+                    $("#q2").fadeOut(400, function(){
+                        // DO D3 HERE
+                        $("#q2no").fadeIn();
+                    });
+                }
+                $(".moveToBmi").each(function(e){
+                    $(this).on('click', function(){
+                        if($("#q2yes").is(":visible"))
+                    {
+                        $("#q2yes").fadeOut(400,function(){
+                            $("#q3").fadeIn();
+                        })
+                    }
+                    if($("#q2no").is(":visible"))
+                    {
+                        $("#q2no").fadeOut(400,function(){
+                            $("#q3").fadeIn();
+                        })
+                    }
+                    })
+                })
+                $("#processBmi").on('click', function(){
+                    $("#enterHeight").removeClass('is-invalid');
+                    $("#enterWeight").removeClass('is-invalid');
+                    var validationFlag = 0;
+                    if($.trim($("#enterHeight").val()) == '')
+                    {
+                        $("#enterHeight").addClass('is-invalid');
+                        validationFlag = 1;
+                    }
+                    if($.trim($("#enterWeight").val()) == '')
+                    {
+                        $("#enterWeight").addClass('is-invalid');
+                        validationFlag = 1;
+                    }
+                    if(validationFlag == 1)
+                    {
+                        return;
+                    }
+                    var height = parseFloat($("#enterHeight").val()) / 100;
+                    var weight = parseFloat($("#enterWeight").val());
+                    var bmi = weight / (height * height);
+                    bmi = (Math.round(bmi * 10) / 10).toFixed(1);
+                    if (bmi < 18.5) {
+                        // Underweight
+                        $("#bmiResult").removeClass("text-danger");
+                        $("#bmiResult").removeClass("text-success");
+                        $("#bmiResult").addClass("text-danger");
+                        $("#bmiResult").html("Underweight");
+                        $("#bmiMessage").html("A BMI of "+bmi+" is within the underweight category. It is recommended that you visit a health professional to discuss the impacts this may have on your health.");
+                        $("#bmiContinue").fadeIn();
+                    }
+                    else if (bmi >=18.5 && bmi < 25)
+                    {
+                        // Normal
+                        $("#bmiResult").removeClass("text-danger");
+                        $("#bmiResult").removeClass("text-success");
+                        $("#bmiResult").addClass("text-success");
+                        $("#bmiResult").html("Normal");
+                        $("#bmiMessage").html("A BMI of "+bmi+" is within the healthy weight category This is generally good for your health. The challenge is to maintain your weight. You might like to explore places and events nearby to maintain a healthy weight.");
+                        $("#bmiButtons").fadeIn();
+                        $("#bmiContinue").fadeIn();
+                    }
+                    else
+                    {
+                        // Overweight / Obese
+                        $("#bmiResult").removeClass("text-danger");
+                        $("#bmiResult").removeClass("text-success");
+                        $("#bmiResult").addClass("text-danger");
+                        $("#bmiResult").html("Overweight or Obese");
+                        $("#bmiMessage").html("A BMI of "+bmi+" is within the overweight category. This may not be good for your health. You might like to explore places and events for a more active lifestyle");
+                        $("#bmiButtons").fadeIn();
+                        $("#bmiContinue").fadeIn();
+                    }
+                    $("#bmiCalculated").fadeIn();
+                    
+                    // DO D3 HERE
+                    console.log(bmi);
+
+                })
+                $(".moveToLongTermIssues").each(function(){
+                    $(this).on('click', function(){
+                        $("#q3").fadeOut(400,function(){
+                            $("#q4").fadeIn();
+                            // PROCESS FOR ARTHRITIS HERE
+                        });
+                    })
+                })
+
+                $("#longTermHealthIssues").on('change', function() {
+                    // PROCESS OTHER ISSUES HERE
+                    console.log($(this).val());
+                })
+
+                $("#continueFromLongTerm").on('click', function(){
+                    $("#q4").fadeOut(400, function(){
+                        $("#q5").fadeIn();
+                        // PROCESS NEVER CONSUMED ALCOHOL HERE
+                    })
+                })
+                $("#alcoholConsumption").on('change', function(){
+                    // PROCESS OTHER ALCOHOL CONSUMPTIONS HERE
+                    console.log($(this).val());
+                })
                 document.getElementById("processMetGuidelines").onclick = function() {
-                    console.log("Here");
+                    $("#processMetGuidelines").hide();
                     if (!splitState) {
                         // push the nodes towards respective spots
                         simulation.force("x", xTypeForce);
