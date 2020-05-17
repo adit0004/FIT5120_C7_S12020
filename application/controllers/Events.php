@@ -104,7 +104,8 @@ class Events extends CI_Controller {
         $filters['name'] = empty($this->input->post('name'))?($name==0?0:$name):$this->input->post('name');
         $filters['startDate'] = empty($this->input->post('startDate'))?($startDate == 0?0:$startDate):$this->input->post('startDate');
         $filters['endDate'] = empty($this->input->post('endDate'))?($endDate == 0?0:$endDate):$this->input->post('endDate');
-        
+        $filters['category'] = empty($this->input->post('eventCategory') || $this->input->post('eventCategory') == "All")? "All":$this->input->post('eventCategory');
+
         // Fetch the earliest and latest dates for the default values
         $data['earliestDate'] = $this->model->fetchEarliestDate();
         $data['latestDate'] = $this->model->fetchLatestDate();
@@ -114,14 +115,17 @@ class Events extends CI_Controller {
         $filters['endDate'] = urldecode($filters['endDate']);
 
         // Fetch the events
-        $data['events'] = $this->model->fetchEventsData($page, $filters['name'], $filters['startDate'], $filters['endDate']);
+        $data['events'] = $this->model->fetchEventsData($page, $filters['name'], $filters['startDate'], $filters['endDate'], $filters['category']);
         $data['filters'] = $filters;
         
         // Fetch the total number of events
-        $data['count'] = $this->model->fetchEventsCount($page, $filters['name'], $filters['startDate'], $filters['endDate']);
+        $data['count'] = $this->model->fetchEventsCount($page, $filters['name'], $filters['startDate'], $filters['endDate'], $filters['category']);
         $data['page'] = $page;
         $data['pages'] = ceil($data['count']/10);
         
+        // Fetch the categories
+        $data['categories'] = $this->model->fetchCategories();
+
         $this->load->view('general/header', $headerData);
         $this->load->view('events/events', $data);
         $this->load->view('general/footer', ['activePage' => 'events']);

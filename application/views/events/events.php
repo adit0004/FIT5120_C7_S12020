@@ -1,4 +1,4 @@
-<section class="hero hero-events mt-4">
+<section class="hero hero-events">
     <div class="hero-inner">
         <h1 class='display-1 text-white'>Events</h1>
         <p class='text-white hero-lead'>Stay connected!</p>
@@ -26,7 +26,21 @@
             <label for="endDate">End Date</label>
             <input type="text" name="endDate" id="endDate" value="<?php echo (isset($filters['endDate']) && $filters['endDate'] != 0) ? $filters['endDate'] : $latestDate; ?>" class="form-control">
         </div>
-        <div class="col-6 offset-3 col-md-3 offset-md-0 align-self-bottom">
+        <div class="col-12 col-md-3">
+            <label for="endDate">Tag</label>
+            <select class="form-control" name="eventCategory">
+                <option value="All">All Events</option>
+                <?php
+                    foreach($categories as $category) {
+                        if($filters['category'] == $category['event_category'])
+                            echo "<option value='".$category['event_category']."' selected>".$category['event_category']."</option>";
+                        else
+                            echo "<option value='".$category['event_category']."'>".$category['event_category']."</option>";
+                    }
+                ?>
+            </select>
+        </div>
+        <div class="col-12 col-md-3 offset-md-9 mt-3">
             <button type='submit' class="btn btn-outline-dark btn-block">Refine</a>
         </div>
     </div>
@@ -36,81 +50,87 @@
             <h4>Events</h4>
             <p class="text-muted">Showing results <?php echo $count < 10 ? ($count == 0 ? '0' : "1 to " . $count) : ((($page - 1) * 10) + 1) . " - " . ((($page - 1) * 10) + 10) . " of " . $count; ?></p>
         </div>
+        <?php $iterator = 0;
+        foreach ($events as $event) { ?>
+            <?php if ($iterator == 0) { ?>
+                <div class="card-deck">
+                <?php } ?>
+                <div class="card col-12 col-md-4 mt-4 px-0">
+                    <?php if ($event['event_category'] == "Arts/Cultural") $img = "Arts.jpg";
+                    else if ($event['event_category'] == "Center Geelong") $img = "CenterGeelong.jpg";
+                    else $img = $event['event_category'] . ".jpg";
+                    ?>
+                    <img src="<?php echo base_url(); ?>assets/img/events/<?php echo $img; ?>" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title mb-1"><?php echo $event['title']; ?></h5>
+                        <?php if (!empty($event['dtstart']) && !empty($event['dtend']) && $event['dtstart'] != $event['dtend']) { ?>
+                            <p class='text-muted'><?php echo date('d M Y', strtotime($event['dtstart'])); ?> - <?php echo date('d M Y', strtotime($event['dtend'])); ?></p>
+                        <?php } else if (!empty($event['dtstart']) && !empty($event['dtend']) && $event['dtstart'] == $event['dtend']) { ?>
+                            <p class='text-muted'><?php echo date('d M Y', strtotime($event['dtstart'])); ?></p>
+                        <?php } else if (!empty($event['dtsummary'])) { ?>
+                            <p class='text-muted'><?php echo $event['dtsummary']; ?></p>
+                        <?php } else { ?>
+                            <strong class='d-block mt-3'>Description</strong>
+                        <?php } ?>
+                        <p><?php echo $event['location']; ?></p>
+                        <p class="text-muted"><strong>Tag: </strong><?php echo $event['event_category']; ?></p>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <a href="<?php echo $event['link']; ?>" class="btn btn-dark btn-block"><i class="fa fa-calendar-week"></i> Calendar</a>
+                            </div>
+                            <?php if (isset($event['website'])) { ?>
 
-        <?php foreach ($events as $event) { ?>
-            <div class="col-12 card mt-4 px-0">
-                <div class="card-body px-5 py-5">
-                    <div class="row">
-                        <div class="col-12 col-md-8">
-                            <strong class="card-title"><?php echo $event['title']; ?></strong>
-                            <?php if (!empty($event['dtstart']) && !empty($event['dtend']) && $event['dtstart'] != $event['dtend']) { ?>
-                                <p class='text-muted'><?php echo date('d M Y', strtotime($event['dtstart'])); ?> - <?php echo date('d M Y', strtotime($event['dtend'])); ?></p>
-                                <strong>Description</strong>
-                            <?php } else if (!empty($event['dtstart']) && !empty($event['dtend']) && $event['dtstart'] == $event['dtend']) { ?>
-                                <p class='text-muted'><?php echo date('d M Y', strtotime($event['dtstart'])); ?></p>
-                                <strong>Description</strong>
-                            <?php } else if (!empty($event['dtsummary'])) { ?>
-                                <p class='text-muted'><?php echo $event['dtsummary']; ?></p>
-                                <strong>Description</strong>
-                            <?php } else { ?>
-                                <strong class='d-block mt-3'>Description</strong>
+                                <div class="col-12 col-md-6">
+                                    <a href="<?php echo $event['website']; ?>" class="btn btn-primary btn-block"><i class="fa fa-building"></i> Website</a>
+                                </div>
                             <?php } ?>
-                            <p class="card-text"><?php echo $event['description']; ?></p>
-                            <strong>Location</strong>
-                            <address><?php $location = explode(",", $event['location']);
-                                        echo $location[0]; ?><br> <?php if (isset($location[1])) echo $location[1]; ?></address>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <a href="<?php echo $event['link'];?>" target='_blank' class='btn btn-dark d-block py-3 mt-3'><i class="fa fa-calendar-week"></i> View Calendar Details</a>
-                            <?php if(!empty($event['website'])){?>    
-                                <a href="<?php echo $event['website'];?>" target='_blank' class='btn btn-primary d-block py-3 mt-3'><i class="fa fa-building"></i> View Organization Details</a>
-                            <?php }?>
-                            <?php if(strpos($event['location'], 'Online') !== false && strpos($event['location'], 'Virtual') !== false){?>
-                                <a href="https://www.google.com/maps/dir//<?php echo empty($event['lat'])?$event['location']:$event['lat'].",".$event['lng'];?>" target='_blank' class='btn btn-info d-block py-3 mt-3'><i class="fa fa-directions"></i> Get Directions</a>
-                            <?php }?>
                         </div>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <p><?php if (!empty($event['website'])) { ?><i class="fa fa-globe"></i> <a href="<?php echo $event['website']; ?>" class='text-dark'><u><?php echo $event['website']; ?></u></a> <?php if (!empty($event['phone']) || !empty($event['email'])) echo "|"; ?> <?php }                                                                                                                                                                                                                                                                                                                 if (!empty($event['email'])) { ?><i class="fa fa-envelope"></i> <?php echo $event['email']; ?><?php } ?></p>
-                </div>
-            </div>
-        <?php } ?>
-        <?php
-        if (empty($events)) {
-            echo "<h5>No results found for current search. Try broadening your search!</h5>";
-        }
-        ?>
+                <?php
+                $iterator++;
+                if ($iterator == 3) {
+                    echo "</div>";
+                    $iterator = 0;
+                } ?>
+            <?php } ?>
+            <?php
+            if (empty($events)) {
+                echo "<h5>No results found for current search. Try broadening your search!</h5>";
+            }
+            ?>
 
-        <!-- Pages -->
-        <?php if ($pages > 1) { ?>
-            <div class="col-12 text-center mt-5">
-                <div class='d-flex justify-content-center'>
-                    <nav aria-label="Page Navigation">
-                        <ul class="pagination">
-                            <?php if ($page != 1) { ?>
-                                <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['events', 'showEvents', $page - 1, $filters['name'], $filters['startDate'], $filters['endDate']]); ?>">Previous</a></li>
-                            <?php } ?>
-                            <?php if ($page != 1 && $page != 2) { ?>
-                                <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['events', 'showEvents', $page - 2, $filters['name'], $filters['startDate'], $filters['endDate']]); ?>"><?php echo $page - 2; ?></a></li>
-                            <?php } ?>
-                            <?php if ($page != 1) { ?>
-                                <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['events', 'showEvents', $page - 1, $filters['name'], $filters['startDate'], $filters['endDate']]); ?>"><?php echo $page - 1; ?></a></li>
-                            <?php } ?>
-                            <li class="page-item"><a class="page-link text-light bg-dark" href="#!"><?php echo $page; ?></a></li>
-                            <?php if ($page < $pages) { ?>
-                                <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['events', 'showEvents', $page + 1, $filters['name'], $filters['startDate'], $filters['endDate']]); ?>"><?php echo $page + 1; ?></a></li>
-                            <?php } ?>
-                            <?php if ($page != $pages && $page != ($pages - 1)) { ?>
-                                <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['events', 'showEvents', $page + 2, $filters['name'], $filters['startDate'], $filters['endDate']]); ?>"><?php echo $page + 2; ?></a></li>
-                                <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['events', 'showEvents', $page + 2, $filters['name'], $filters['startDate'], $filters['endDate']]); ?>">Next</a></li>
-                            <?php } ?>
-                        </ul>
-                    </nav>
+            <!-- Pages -->
+            <?php if ($pages > 1) { ?>
+                <div class="col-12 text-center mt-5">
+                    <div class='d-flex justify-content-center'>
+                        <nav aria-label="Page Navigation">
+                            <ul class="pagination">
+                                <?php if ($page != 1) { ?>
+                                    <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['events', 'showEvents', $page - 1, $filters['name'], $filters['startDate'], $filters['endDate']]); ?>">Previous</a></li>
+                                <?php } ?>
+                                <?php if ($page != 1 && $page != 2) { ?>
+                                    <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['events', 'showEvents', $page - 2, $filters['name'], $filters['startDate'], $filters['endDate']]); ?>"><?php echo $page - 2; ?></a></li>
+                                <?php } ?>
+                                <?php if ($page != 1) { ?>
+                                    <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['events', 'showEvents', $page - 1, $filters['name'], $filters['startDate'], $filters['endDate']]); ?>"><?php echo $page - 1; ?></a></li>
+                                <?php } ?>
+                                <li class="page-item"><a class="page-link text-light bg-dark" href="#!"><?php echo $page; ?></a></li>
+                                <?php if ($page < $pages) { ?>
+                                    <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['events', 'showEvents', $page + 1, $filters['name'], $filters['startDate'], $filters['endDate']]); ?>"><?php echo $page + 1; ?></a></li>
+                                <?php } ?>
+                                <?php if ($page != $pages && $page != ($pages - 1)) { ?>
+                                    <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['events', 'showEvents', $page + 2, $filters['name'], $filters['startDate'], $filters['endDate']]); ?>"><?php echo $page + 2; ?></a></li>
+                                    <li class="page-item"><a class="page-link text-dark" href="<?php echo site_url(['events', 'showEvents', $page + 2, $filters['name'], $filters['startDate'], $filters['endDate']]); ?>">Next</a></li>
+                                <?php } ?>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
-            </div>
-        <?php } ?>
+            <?php } ?>
+                </div>
+
+
     </div>
-
-
-</div>

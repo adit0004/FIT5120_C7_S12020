@@ -114,8 +114,6 @@
                             </ul>
                         </nav>
                     </div>
-                <?php } else if ($spaceId == 13) {?>
-                    Button
                 <?php }?>
             </div>
             <div class="col-12 col-md-4 px-5">

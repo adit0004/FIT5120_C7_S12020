@@ -76,7 +76,7 @@ class Events_model extends CI_Model {
         // echo "<pre>".print_r($data, 1);die();
     }
 
-    public function fetchEventsData($page = 1, $name = 0, $startDate = 0, $endDate = 0)
+    public function fetchEventsData($page = 1, $name = 0, $startDate = 0, $endDate = 0, $category="All")
     {
         $nameWhere = ' 1 = 1 ';
         if($name !== 0)
@@ -107,12 +107,19 @@ class Events_model extends CI_Model {
             $dateObj2 = DateTime::createFromFormat($format, $endDate);
             $dateWhere = ' dtstart >= "'.$dateObj->format("Y-m-d").'" AND dtend <= "'.$dateObj2->format("Y-m-d").'" ';
         }
-        $query = $this->db->query("SELECT * FROM events WHERE ".$nameWhere." AND ".$dateWhere." ORDER BY dtstart desc LIMIT ".(($page-1)*10).",10 ");
+
+        $categoryWhere = ' 1 = 1 ';
+        if($category != "All")
+        {
+            $categoryWhere = " event_category = ".$this->db->escape($category)." ";
+        }
+
+        $query = $this->db->query("SELECT * FROM events WHERE ".$nameWhere." AND ".$dateWhere." AND ".$categoryWhere." AND dtend > '".date('Y-m-d',strtotime('yesterday'))."' ORDER BY dtstart asc LIMIT ".(($page-1)*9).",9 ");
         // echo "SELECT * FROM events WHERE ".$nameWhere." AND ".$dateWhere." AND dtend > '".date('Y-m-d',strtotime('yesterday'))."' ORDER BY dtstart desc LIMIT ".(($page-1)*10).",10 ";die();
         return $query->result_array();
     }
 
-    public function fetchEventsCount($page = 1, $name = 0, $startDate = 0, $endDate = 0)
+    public function fetchEventsCount($page = 1, $name = 0, $startDate = 0, $endDate = 0, $category = "All")
     {
         $nameWhere = ' 1 = 1 ';
         if($name !== 0)
@@ -143,7 +150,12 @@ class Events_model extends CI_Model {
             $dateObj2 = DateTime::createFromFormat($format, $endDate);
             $dateWhere = ' dtstart >= "'.$dateObj->format("Y-m-d").'" AND dtend <= "'.$dateObj2->format("Y-m-d").'" ';
         }
-         $query = $this->db->query("SELECT count(*) as count FROM events WHERE ".$nameWhere." AND ".$dateWhere." AND dtend > '".date('Y-m-d',strtotime('yesterday'))."' ORDER BY dtstart desc");
+        $categoryWhere = ' 1= 1 ';
+        if($category != "All")
+        {
+            $categoryWhere = " event_category = ".$this->db->escape($category)." ";
+        }
+         $query = $this->db->query("SELECT count(*) as count FROM events WHERE ".$nameWhere." AND ".$dateWhere." AND ".$categoryWhere." AND dtend > '".date('Y-m-d',strtotime('yesterday'))."' ORDER BY dtstart asc");
         return $query->row_array()['count'];
     }
 
@@ -155,5 +167,10 @@ class Events_model extends CI_Model {
     public function fetchLatestDate()
     {
         return date("d M Y",strtotime($this->db->query("SELECT max(dtend) as dtend FROM events WHERE dtend IS NOT NULL")->row_array()['dtend']));
+    }
+
+    public function fetchCategories()
+    {
+        return $this->db->query("SELECT distinct(event_category) as event_category from events ORDER BY event_category asc")->result_array();
     }
 }

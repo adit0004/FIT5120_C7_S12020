@@ -445,6 +445,7 @@
             width = $(".visualizationContainer").outerWidth(),
             height = $(".visualizationContainer").outerHeight();
 
+            // const forceStrength = 0.03;
         const forceStrength = 0.03;
 
         // "Electric repulsive charge", prevents overlap of nodes
