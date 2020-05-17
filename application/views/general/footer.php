@@ -153,13 +153,22 @@
     <?php if ($activePage == 'placesMap') { ?>
         var map;
 
-        <?php foreach ($spaces as &$space) {
-            $addressJson = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' . $space['lat'] .
-                ',' . $space['long'] . '&key=AIzaSyCrGmHjWjkwhyXqb9HDaiwQ9htOZCrs0Hs';
-            $space['urlString'] = $addressJson;
-        }; ?>
+        <?php
+        if ($spaceId == 13) {
+            foreach ($spaces['results'] as &$space) {
+                $space['lat'] = $space['geometry']['location']['lat'];
+                $space['long'] = $space['geometry']['location']['lng'];
+            }
+        } else {
+            foreach ($spaces as &$space) {
+                $addressJson = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' . $space['lat'] .
+                    ',' . $space['long'] . '&key=AIzaSyCrGmHjWjkwhyXqb9HDaiwQ9htOZCrs0Hs';
+                $space['urlString'] = $addressJson;
+            };
+        }
+        ?>
 
-        spaces = <?php echo json_encode($spaces); ?>;
+        spaces = <?php echo $spaceId == 13 ? json_encode($spaces['results']) : json_encode($spaces); ?>;
 
         // Add addresses to the divs
         console.log(spaces);
@@ -422,7 +431,9 @@
                         $("#locationFilter").val(data.results[0].formatted_address);
                     })
             }
-            getAllAddresses();
+            var spaceId = <?php echo $spaceId; ?>;
+            if (spaceId != 13)
+                getAllAddresses();
         });
     <?php } ?>
 </script>
