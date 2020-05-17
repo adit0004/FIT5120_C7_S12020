@@ -496,10 +496,90 @@
                 $("#processMetGuidelines").show();
                 updateData($("#age-bracket").val());
             };
-            
            
         });
 
+        function updateData(sheetToFetch) {
+
+            console.log("Work damn you!")
+
+            d3.csv("<?php echo base_url(); ?>assets/dataFiles/" + sheetToFetch + ".csv", function(error, data) {
+                console.log(data);
+                var typeScale = d3.scalePoint()
+                    .domain(data.map(function(d) {
+                        return d['type'];
+                    }))
+                    .range([0, width])
+                    .padding(0.5); // give some space at the outer edges
+
+                var xTypeForce = d3.forceX(d => typeScale(d['type']));
+
+                var node = svg.selectAll("circle")
+                    .data(data)
+                    .enter().append("circle")
+                    .attr("r", 5)
+                    .attr("fill", "#eeeeee");
+
+                var labels = svg.selectAll("text")
+                    .data(typeScale.domain()) // heh, scales take care of the unique, so grab from there
+                    .enter().append("text")
+                    .attr("class", "label")
+                    .text(function(d) {
+                        return d;
+                    })
+                    .attr("fill", "rgba(0,0,0,0)")
+                    .attr("text-anchor", "middle")
+                    .attr("x", function(d) {
+                        return typeScale(d) - 40;
+                    })
+                    .attr("y", height / 2.0 - 150);
+
+                var simulation = d3.forceSimulation()
+                    .force("charge", chargeForce.strength(5))
+                    .force("x", centerXForce)
+                    .force("y", centerYForce)
+                    .force('collision', d3.forceCollide().radius(7));
+
+                    var i = 0;
+                // Add the nodes to the simulation, and specify how to draw
+                simulation.nodes(data)
+                    .on("tick", function() {
+                        // The d3 force simulation updates the x & y coordinates
+                        // of each node every tick/frame, based on the various active forces.
+                        // It is up to us to translate these coordinates to the screen.
+                        node.attr("cx", function(d) {
+                                return d.x;
+                            })
+                            .attr("cy", function(d) {
+                                return d.y;
+                            });
+                            // console.log(i++);
+                    });
+
+                var splitState = false;
+                document.getElementById("processMetGuidelines").onclick = function() {
+                    console.log("Here");
+                    if (!splitState) {
+                        // push the nodes towards respective spots
+                        simulation.force("x", xTypeForce);
+                        labels.attr("fill", "#fff");
+                        d3.selectAll('circle').transition()
+                    } else {
+                        simulation.force("x", centerXForce);
+                        labels.attr("fill", "rgba(0,0,0,0)");
+                        d3.selectAll('circle').transition()
+                    }
+
+                    // Toggle state
+                    splitState = !splitState;
+
+                    // NOTE: Very important to call both alphaTarget AND restart in conjunction
+                    // Restart by itself will reset alpha (cooling of simulation)
+                    // but won't reset the velocities of the nodes (inertia)
+                    simulation.alpha(1).restart();
+                }
+            });
+        }
     </script>
 <?php } ?>
 </body>
