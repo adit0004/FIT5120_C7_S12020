@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <button class="btn btn-primary mt-3" id="processBmi">Calculate!</button>
-                <button class="btn btn-outline-danger mt-3">Skip Question<i class="fa fa-forward"></i></button>
+                <button class="btn btn-outline-danger mt-3 moveToLongTermIssues">Skip Question<i class="fa fa-forward"></i></button>
                 <p class="mt-3 larger-text" id="bmiCalculated">Your BMI is considered: <span id="bmiResult"></span></p>
                 <p class="mt-3" id="bmiMessage"></p>
                 <div id="bmiButtons">
@@ -97,14 +97,14 @@
             <div id="q5">
                 <h1>Let's get a bit cheeky</h1>
                 <p>You can know how your alcohol intake fares compared to others in the same age category as you</p>
-                <p>Which category suits you best?</p>
+                <!--<p>Which category suits you best?</p>
                 <select id="alcoholConsumption" class="form-control">
                     <option value="neverConsumedAlcohol">Never Consumed Alcohol</option>
                     <option value="12OrMoreMonths">Consumed Alchol 12 or more months ago</option>
                     <option value="notInLastWeekButUnder12Months">Did not consume alcohol last week but did less than 12 months ago</option>
                     <option value="didNotExceedGuidelines">Alcohol Consumption in the last week - Did not exceed guidelines</option>
                     <option value="exceededGuidelines">Alcohol Consumption in the last week - Exceeded guidelines</option>
-                </select>
+                </select>-->
             </div>
         </div>
         <div class="col-12 col-md-6 p-5 bg-primary visualizationContainer" style="height:100%;">

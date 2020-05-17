@@ -473,6 +473,8 @@
                 .attr("r", 5)
                 .attr("fill", "#eeeeee");
 
+
+
             var labels = svg.selectAll("text")
                 .data(typeScale.domain()) // heh, scales take care of the unique, so grab from there
                 .enter().append("text")
@@ -486,6 +488,8 @@
                     return typeScale(d) - 40;
                 })
                 .attr("y", height / 2.0 - 150);
+
+
 
             var simulation = d3.forceSimulation()
                 .force("charge", chargeForce.strength(-5))
@@ -542,19 +546,55 @@
                     .attr("r", 5)
                     .attr("fill", "#eeeeee");
 
-                var labels = svg.selectAll("text")
-                    .data(typeScale.domain()) // heh, scales take care of the unique, so grab from there
-                    .enter().append("text")
-                    .attr("class", "label")
-                    .text(function(d) {
-                        return d;
-                    })
-                    .attr("fill", "rgba(0,0,0,0)")
-                    .attr("text-anchor", "middle")
-                    .attr("x", function(d) {
-                        return typeScale(d) - 40;
-                    })
-                    .attr("y", height / 2.0 - 150);
+
+
+                if (sheetToFetch.indexOf("bmi") >= 0 ||
+                    sheetToFetch.indexOf("arthritis") >= 0 ||
+                    sheetToFetch.indexOf("asthama") >= 0 ||
+                    sheetToFetch.indexOf("backProblems") >= 0 ||
+                    sheetToFetch.indexOf("alcohol") >= 0) {
+                    console.log('bmiLabels');
+                    var typeScaleY = d3.scalePoint()
+                        .domain(data.map(function(d) {
+                            return d['type'];
+                        }))
+                        .range([0, height])
+                        .padding(0.5); // give some space at the outer edges
+
+                    var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
+
+                    var labels = svg.selectAll("text")
+                        .data(typeScale.domain()) // heh, scales take care of the unique, so grab from there
+                        .enter().append("text")
+                        .attr("class", "label")
+                        .text(function(d) {
+                            return d;
+                        })
+                        .attr("fill", "#DDD")
+                        .attr("text-anchor", "middle")
+                        // .attr("x", function(d) { return typeScale(d); })
+                        // .attr("y", height / 3.0 - 100);
+                        .attr("x", width / 2)
+                        .attr("y", function(d) {
+                            return typeScaleY(d);
+                        });
+
+                } else {
+                    console.log('defaultLabels');
+                    var labels = svg.selectAll("text")
+                        .data(typeScale.domain()) // heh, scales take care of the unique, so grab from there
+                        .enter().append("text")
+                        .attr("class", "label")
+                        .text(function(d) {
+                            return d;
+                        })
+                        .attr("fill", "rgba(0,0,0,0)")
+                        .attr("text-anchor", "middle")
+                        .attr("x", function(d) {
+                            return typeScale(d) - 40;
+                        })
+                        .attr("y", height / 2.0 - 150);
+                }
 
                 var simulation = d3.forceSimulation()
                     .force("charge", chargeForce.strength(-5))
@@ -578,6 +618,54 @@
                             });
                         // console.log(i++);
                     });
+
+
+                if (sheetToFetch.indexOf('arthritis') >= 0 || sheetToFetch.indexOf('asthama') >= 0 || sheetToFetch.indexOf('backProblems') >= 0 ||
+                    sheetToFetch.indexOf('alcohol') >= 0
+                ) {
+                    svgHeight = $(".visualizationContainer").outerHeight();
+                    svgWidth = $(".visualizationContainer").outerWidth();
+
+                    var typeScaleY = d3.scalePoint()
+                        .domain(data.map(function(d) {
+                            return d['type'];
+                        }))
+                        .range([0, svgHeight - 100])
+                        .padding(0.5); // give some space at the outer edges
+
+                    var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
+
+                    simulation.force("charge", chargeForce.strength(-1))
+                    simulation.force("x", centerXForce)
+                    simulation.force("y", centerYForce)
+                    simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 50))
+                    simulation.force('collision', d3.forceCollide(5));
+
+                    console.log("Will this work?");
+
+                    var splitStateLocal = true;
+                    if (splitStateLocal) {
+                        // push the nodes towards respective spots
+                        // yTypeForce = 
+                        // simulation.force("x", xTypeForce);
+                        console.log("Global Boohoo_1");
+                        simulation.force("y", yTypeForce);
+                        labels.attr("fill", "#fff");
+                        d3.selectAll('circle').transition()
+                    } else {
+                        // simulation.force("x", centerXForce);
+                        console.log("Global_Boohoo_2");
+                        simulation.force("y", centerYForce);
+                        labels.attr("fill", "rgba(0,0,0,0)");
+                        d3.selectAll('circle').transition()
+                    }
+
+                    // NOTE: Very important to call both alphaTarget AND restart in conjunction
+                    // Restart by itself will reset alpha (cooling of simulation)
+                    // but won't reset the velocities of the nodes (inertia)
+                    simulation.alpha(1).restart();
+                }
+
 
                 var splitState = false;
 
@@ -605,6 +693,11 @@
                         $("#q2yes").fadeIn();
                     });
                 }
+                $("#skipAge").on('click', function() {
+                    $("#q2").fadeOut(400, function() {
+                        $("#q3").fadeIn();
+                    })
+                })
                 document.getElementById('processMetGuidelinesNo').onclick = function() {
                     $("#q2").fadeOut(400, function() {
                         // DO D3 HERE
@@ -632,7 +725,7 @@
                 $(".moveToBmi").each(function(e) {
                     try {
                         $(this).on('click', function() {
-                        updateData($("#age-bracket").val() + "_bmi");
+                            updateData($("#age-bracket").val() + "_bmi");
                             if ($("#q2yes").is(":visible")) {
                                 $("#q2yes").fadeOut(400, function() {
                                     $("#q3").fadeIn();
@@ -697,19 +790,43 @@
                     $("#bmiCalculated").fadeIn();
 
                     // DO D3 HERE
-                    if (!splitState) {
-                            // push the nodes towards respective spots
-                            yTypeForce = 
-                            simulation.force("x", xTypeForce);
-                            labels.attr("fill", "#fff");
-                            d3.selectAll('circle').transition()
-                        } else {
-                            simulation.force("x", centerXForce);
-                            labels.attr("fill", "rgba(0,0,0,0)");
-                            d3.selectAll('circle').transition()
-                        }
 
-                        // Toggle state
+
+                    svgHeight = $(".visualizationContainer").outerHeight();
+                    svgWidth = $(".visualizationContainer").outerWidth();
+
+                    var typeScaleY = d3.scalePoint()
+                        .domain(data.map(function(d) {
+                            return d['type'];
+                        }))
+                        .range([0, svgHeight - 100])
+                        .padding(0.5); // give some space at the outer edges
+
+                    var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
+
+                    simulation.force("charge", chargeForce.strength(-5))
+                    simulation.force("x", centerXForce)
+                    simulation.force("y", centerYForce)
+                    simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 50))
+                    simulation.force('collision', d3.forceCollide(5));
+
+                    console.log("Will this work?");
+
+                    if (!splitState) {
+                        // push the nodes towards respective spots
+                        // yTypeForce = 
+                        // simulation.force("x", xTypeForce);
+                        simulation.force("y", yTypeForce);
+                        labels.attr("fill", "#fff");
+                        d3.selectAll('circle').transition()
+                    } else {
+                        // simulation.force("x", centerXForce);
+                        simulation.force("y", centerYForce);
+                        labels.attr("fill", "rgba(0,0,0,0)");
+                        d3.selectAll('circle').transition()
+                    }
+
+                    // Toggle state
                     splitState = !splitState;
 
                     // NOTE: Very important to call both alphaTarget AND restart in conjunction
@@ -721,27 +838,124 @@
                 })
                 $(".moveToLongTermIssues").each(function() {
                     $(this).on('click', function() {
-                        $("#q3").fadeOut(400, function() {
-                            $("#q4").fadeIn();
-                            // PROCESS FOR ARTHRITIS HERE
-                        });
+                        try {
+
+                            updateData($("#longTermHealthIssues").val());
+
+
+                            $("#q3").fadeOut(400, function() {
+                                $("#q4").fadeIn();
+                                // PROCESS FOR ARTHRITIS HERE
+
+                                console.log("In Issues");
+                                svgHeight = $(".visualizationContainer").outerHeight();
+                                svgWidth = $(".visualizationContainer").outerWidth();
+
+                                // var typeScaleY = d3.scalePoint()
+                                typeScaleY = d3.scalePoint()
+                                    .domain(data.map(function(d) {
+                                        return d['type'];
+                                    }))
+                                    .range([0, svgHeight - 100])
+                                    .padding(0.5); // give some space at the outer edges
+
+                                var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
+
+                                simulation.force("charge", chargeForce.strength(-5))
+                                simulation.force("x", centerXForce)
+                                simulation.force("y", centerYForce)
+                                simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 50))
+                                simulation.force('collision', d3.forceCollide(5));
+
+                                console.log("Will this work?");
+                                var splitStateLocal = true;
+                                if (splitStateLocal) {
+                                    // push the nodes towards respective spots
+                                    // yTypeForce = 
+                                    // simulation.force("x", xTypeForce);
+                                    console.log("Local Boohoo_1");
+                                    simulation.force("y", yTypeForce);
+                                    labels.attr("fill", "#fff");
+                                    d3.selectAll('circle').transition()
+                                } else {
+                                    // simulation.force("x", centerXForce);
+                                    console.log("Local Boohoo_2");
+                                    simulation.force("y", centerYForce);
+                                    labels.attr("fill", "rgba(0,0,0,0)");
+                                    d3.selectAll('circle').transition()
+                                }
+
+                                // NOTE: Very important to call both alphaTarget AND restart in conjunction
+                                // Restart by itself will reset alpha (cooling of simulation)
+                                // but won't reset the velocities of the nodes (inertia)
+                                simulation.alpha(1).restart();
+                                // console.log("Arthritis");
+                            });
+                        } catch (err) {
+                            console.log(err);
+                        }
                     })
                 })
 
                 $("#longTermHealthIssues").on('change', function() {
-                    // PROCESS OTHER ISSUES HERE
-                    console.log($(this).val());
+                    updateData($("#longTermHealthIssues").val());
+                    // console.log("In Issues on change");
+                    // svgHeight = $(".visualizationContainer").outerHeight();
+                    // svgWidth = $(".visualizationContainer").outerWidth();
+
+                    // // var typeScaleY = d3.scalePoint()
+                    // typeScaleY = d3.scalePoint()
+                    //     .domain(data.map(function(d) {
+                    //         return d['type'];
+                    //     }))
+                    //     .range([0, svgHeight - 100])
+                    //     .padding(0.5); // give some space at the outer edges
+
+                    // var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
+
+                    // simulation.force("charge", chargeForce.strength(-5))
+                    // simulation.force("x", centerXForce)
+                    // simulation.force("y", centerYForce)
+                    // simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 50))
+                    // simulation.force('collision', d3.forceCollide(5));
+
+                    // console.log("Will this work?");
+
+                    // var splitStateLocal = true;
+                    // if (splitStateLocal) {
+                    //     // push the nodes towards respective spots
+                    //     // yTypeForce = 
+                    //     // simulation.force("x", xTypeForce);
+                    //     console.log("Change");
+                    //     simulation.force("y", yTypeForce);
+                    //     labels.attr("fill", "#fff");
+                    //     d3.selectAll('circle').transition()
+                    // } else {
+                    //     // simulation.force("x", centerXForce);
+                    //     console.log("Change_Else");
+                    //     simulation.force("y", centerYForce);
+                    //     labels.attr("fill", "rgba(0,0,0,0)");
+                    //     d3.selectAll('circle').transition()
+                    // }
+
+                    // // NOTE: Very important to call both alphaTarget AND restart in conjunction
+                    // // Restart by itself will reset alpha (cooling of simulation)
+                    // // but won't reset the velocities of the nodes (inertia)
+                    // simulation.alpha(1).restart();
+                    // console.log("Arthritis");
+                    // console.log($(this).val());
                 })
 
                 $("#continueFromLongTerm").on('click', function() {
                     $("#q4").fadeOut(400, function() {
                         $("#q5").fadeIn();
-                        // PROCESS NEVER CONSUMED ALCOHOL HERE
+                        updateData($("#age-bracket").val()+"alcohol");
                     })
                 })
                 $("#alcoholConsumption").on('change', function() {
                     // PROCESS OTHER ALCOHOL CONSUMPTIONS HERE
                     console.log($(this).val());
+                    
                 })
                 // document.getElementById("processMetGuidelines").onclick = function() {
                 //     $("#processMetGuidelines").hide();
