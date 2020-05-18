@@ -18,15 +18,23 @@
                 <button class="btn btn-primary mt-3" id="processAgeButton">Continue &rarr;</button>
             </div>
             <div id="q2">
-                <h1>Do you meet recommended guidelines?</h2>
-                    <p>Some description here</p>
+                <h1>Physical activity guidelines for Australians</h1>
+                    <ul>
+                        <li>150 to 300 minutes (2 &frac12; to 5 hours) of moderate-intensity physical activity, or </li>
+                        <li>75 to 150 minutes (1 &frac14; to 2 &frac12; hours) of vigorous-intensity physical activity, or</li>
+                        <li>an equivalent combination of both moderate and vigorous activities, each week.</li>
+                    </ul>
+                    <p class="mt-2">
+                        For more details, please visit <a href="https://www1.health.gov.au/internet/main/publishing.nsf/Content/health-pubhlth-strateg-phys-act-guidelines">this link.</a>
+                    </p>
+                    <p class="mt-2">Do you meet recommended guidelines for physical activity last week?</p>
                     <button class="btn btn-outline-success mt-3" id="processMetGuidelinesYes">Yes <i class="fa fa-check"></i></button>
                     <button class="btn btn-outline-primary mt-3" id="processMetGuidelinesNo">No <i class="fa fa-times"></i></button>
                     <button class="btn btn-outline-danger mt-3" id="skipAge">Skip Question <i class="fa fa-forward"></i></button>
             </div>
             <div id="q2yes">
                 <h1>You are doing great!</h2>
-                    <p>Continue meeting the guidelines for physical activity for a healthy life</p>
+                    <p>You are among the <span id="metGuidelinesPercentage"></span>% of people meeting the guidelines! Continue meeting the guidelines for physical activity for a healthy life</p>
                     <a href="<?php echo site_url(['general', 'showCharts']); ?>" class="btn btn-sm btn-outline-primary">All Health Statistics</a>
                     <a href="<?php echo site_url(['spaces', 'showSpaces']); ?>" class="btn btn-sm btn-outline-primary">Explore the Outdoors</a>
                     <a href="<?php echo site_url(['events', 'showEvents']); ?>" class="btn btn-sm btn-outline-primary">Explore Events Around</a>
@@ -34,7 +42,7 @@
             </div>
             <div id="q2no">
                 <h1>You can do wonders for your health by exercising!</h2>
-                    <p>You can explore options to explore open spaces nearby and get started with a healthier way of living</p>
+                    <p>You are among the <span id="didNotMeet"></span>% of people not meeting the guidelines. You can explore options to explore open spaces nearby and get started with a healthier way of living</p>
                     <a href="<?php echo site_url(['general', 'showCharts']); ?>" class="btn btn-sm btn-outline-primary">All Health Statistics</a>
                     <a href="<?php echo site_url(['spaces', 'showSpaces']); ?>" class="btn btn-sm btn-outline-primary">Explore the Outdoors</a>
                     <a href="<?php echo site_url(['events', 'showEvents']); ?>" class="btn btn-sm btn-outline-primary">Explore Events Around</a>
@@ -100,20 +108,25 @@
             </div>
             <div id="q5">
                 <h1>Let's get a bit cheeky</h1>
-                <p>You can know how your alcohol intake fares compared to others in the same age category as you</p>
-                <p class="mt-3">For some of us, alcohol may become hindrance to healthy lifestyle. EldVisor might be able to help you to explore places and events nearby to maintain a physically active lifestyle.</p>
-                <a href="<?php echo site_url(['general', 'showCharts']); ?>" class="btn btn-sm btn-outline-primary">All Health Statistics</a>
-                <a href="<?php echo site_url(['spaces', 'showSpaces']); ?>" class="btn btn-sm btn-outline-primary">Explore the Outdoors</a>
-                <a href="<?php echo site_url(['events', 'showEvents']); ?>" class="btn btn-sm btn-outline-primary">Explore Events Around</a>
-                
-                <!--<p>Which category suits you best?</p>
+                <p class="mt-3">Alcohol consumption guidelines for Australian adults - </p>
+                <p>If you’re a healthy adult:</p>
+                <p>Guidelines -To reduce the risk of harm from alcohol-related disease or injury for healthy men and women, drink no more than 10 standard drinks per week and no more than 4 standard drinks on any one day.</p>
+                <p>A standard drink contains 10g of alcohol. Many drinks have more than 1 standard drink in them. Check the label on your bottle or container to see how many standard drinks are in it.</p>
+                <p class="mt-3">Which category do you fall under?</p>
                 <select id="alcoholConsumption" class="form-control">
                     <option value="neverConsumedAlcohol">Never Consumed Alcohol</option>
                     <option value="12OrMoreMonths">Consumed Alchol 12 or more months ago</option>
                     <option value="notInLastWeekButUnder12Months">Did not consume alcohol last week but did less than 12 months ago</option>
                     <option value="didNotExceedGuidelines">Alcohol Consumption in the last week - Did not exceed guidelines</option>
                     <option value="exceededGuidelines">Alcohol Consumption in the last week - Exceeded guidelines</option>
-                </select>-->
+                </select>
+                <button class="btn btn-outline-primary" id="compareAlcohol">Compare</button>
+                <p class="my-2" id="alcoholPercentage"></p>
+                <p class="my-2">For some of us, alcohol may become hindrance to healthy lifestyle. EldVisor might be able to help you to explore places and events nearby to maintain a physically active lifestyle.</p>
+                <a href="<?php echo site_url(['general', 'showCharts']); ?>" class="btn btn-sm btn-outline-primary">All Health Statistics</a>
+                <a href="<?php echo site_url(['spaces', 'showSpaces']); ?>" class="btn btn-sm btn-outline-primary">Explore the Outdoors</a>
+                <a href="<?php echo site_url(['events', 'showEvents']); ?>" class="btn btn-sm btn-outline-primary">Explore Events Around</a>
+                
             </div>
         </div>
         <div class="col-12 col-md-6 p-0 bg-primary visualizationContainer" style="height:100%;">
