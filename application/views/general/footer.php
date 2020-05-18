@@ -795,7 +795,7 @@
                     // Restart by itself will reset alpha (cooling of simulation)
                     // but won't reset the velocities of the nodes (inertia)
                     simulation.alpha(1).restart();
-                    // console.log(bmi);
+                    console.log(bmi);
 
 
 
@@ -989,6 +989,7 @@
                             updateData($("#longTermHealthIssues").val());
                             $("#q3").fadeOut(400, function() {
                                 $("#q4").fadeIn();
+                                $("#percentageForIssues").html("For " +$("#longTermHealthIssues").find("option:selected").html()+ ", "+$("circle[data-type='Underweight/Normal']").length +"% of the people fall under Underweight/Normal category and " +$("circle[data-type='Overweight/Obese']").length+ "% of the people fall in the Overweight/Obese category.");
                             });
                         } catch (err) {
                             console.log(err);
@@ -998,6 +999,7 @@
 
                 $("#longTermHealthIssues").on('change', function() {
                     updateData($("#longTermHealthIssues").val());
+                    $("#percentageForIssues").html("For " +$("#longTermHealthIssues").find("option:selected").html()+ ", "+$("circle[data-type='Underweight/Normal']").length +"% of the people fall under Underweight/Normal category and " +$("circle[data-type='Overweight/Obese']").length+ "% of the people fall in the Overweight/Obese category.");
                 })
 
                 $("#continueFromLongTerm").on('click', function() {
@@ -1006,11 +1008,10 @@
                         updateData($("#age-bracket").val() + "alcohol");
                     })
                 })
-                $("#alcoholConsumption").on('change', function() {
-                    // PROCESS OTHER ALCOHOL CONSUMPTIONS HERE
-                    console.log($(this).val());
-                })
                 $("#compareAlcohol").on('click', function(){
+                    $("circle").each(function(){
+                        $(this).attr('fill', "#eeeeee");
+                    })
                     if($("#alcoholConsumption").val() == "neverConsumedAlcohol"){
                         $("circle[data-type='Never consumed alcohol']").first().attr('fill','#000');
                         $("#alcoholPercentage").html("You are among the "+$("circle[data-type='Never consumed alcohol']").length+"% people who have never consumed alcohol");

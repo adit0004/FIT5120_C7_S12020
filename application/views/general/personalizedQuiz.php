@@ -100,6 +100,7 @@
                     <option value="mentalbehavioural">Mental and Behavioural Issues</option>
                     <option value="osteoporosis">Osteoporosis</option>
                 </select>
+                <p class="mt-3" id="percentageForIssues"></p>
                 <p class="mt-3">Healthy lifestyle with moderate physical activity is always the way to go and EldVisor might be able to help you to explore places and events nearby to maintain a physically active lifestyle.</p>
                 <a href="<?php echo site_url(['general', 'showCharts']); ?>" class="btn btn-sm btn-outline-primary">All Health Statistics</a>
                 <a href="<?php echo site_url(['spaces', 'showSpaces']); ?>" class="btn btn-sm btn-outline-primary">Explore the Outdoors</a>
