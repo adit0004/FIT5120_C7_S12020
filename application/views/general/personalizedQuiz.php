@@ -107,7 +107,7 @@
                 </select>-->
             </div>
         </div>
-        <div class="col-12 col-md-6 p-5 bg-primary visualizationContainer" style="height:100%;">
+        <div class="col-12 col-md-6 p-0 bg-primary visualizationContainer" style="height:100%;">
             <svg width="500" height="500"></svg>
         </div>
     </div>

@@ -441,24 +441,25 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrGmHjWjkwhyXqb9HDaiwQ9htOZCrs0Hs&callback=initMap&libraries=places" async defer></script><?php } ?>
 <?php if ($activePage == 'personalizedHealth') { ?>
     <script>
-        var svg = d3.select("svg"),
-            width = $(".visualizationContainer").outerWidth(),
-            height = $(".visualizationContainer").outerHeight();
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
 
-            // const forceStrength = 0.03;
+        var svg = d3.select("svg");
+        width = $(".visualizationContainer").outerWidth();
+        height = $(".visualizationContainer").outerHeight();
+
+        // const forceStrength = 0.03;
         const forceStrength = 0.03;
 
         // "Electric repulsive charge", prevents overlap of nodes
         var chargeForce = d3.forceManyBody();
 
         // Keep nodes centered on screen
-        var centerXForce = d3.forceX().x(width / 2).strength(forceStrength);
-        var centerYForce = d3.forceY().y(height / 2).strength(forceStrength);
-        console.log(centerXForce);
-        console.log(centerYForce);
 
-        d3.csv("<?php echo base_url(); ?>assets/dataFiles/18to24.csv", function(error, data) {
-            console.log(error);
+
+
+        d3.csv("<?php echo base_url(); ?>assets/dataFiles/18to24.csv", async function(error, data) {
             var typeScale = d3.scalePoint()
                 .domain(data.map(function(d) {
                     return d['type'];
@@ -490,8 +491,16 @@
                 })
                 .attr("y", height / 2.0 - 150);
 
-
-
+            width = $(".visualizationContainer").outerWidth();
+            height = $(".visualizationContainer").outerHeight();
+            if (height == 500) {
+                setTimeout(function() {
+                    height = $(".visualizationContainer").outerHeight();
+                }, 1000)
+            }
+            await sleep(1000);
+            var centerXForce = d3.forceX().x(width / 2).strength(forceStrength);
+            var centerYForce = d3.forceY().y(height / 2).strength(forceStrength);
             var simulation = d3.forceSimulation()
                 .force("charge", chargeForce.strength(-5))
                 .force("x", centerXForce)
@@ -528,13 +537,20 @@
         function updateData(sheetToFetch) {
 
             console.log("Work damn you!")
+            const forceStrength = 0.03;
+
+            width = $(".visualizationContainer").outerWidth();
+            height = $(".visualizationContainer").outerHeight();
+
+            var centerXForce = d3.forceX().x(width / 2).strength(forceStrength);
+            var centerYForce = d3.forceY().y(height / 2).strength(forceStrength);
 
             d3.csv("<?php echo base_url(); ?>assets/dataFiles/" + sheetToFetch + ".csv", function(error, data) {
                 var typeScale = d3.scalePoint()
                     .domain(data.map(function(d) {
                         return d['type'];
                     }))
-                    .range([0, width])
+                    .range([20, width])
                     .padding(0.5); // give some space at the outer edges
 
                 var xTypeForce = d3.forceX(d => typeScale(d['type']));
@@ -553,13 +569,25 @@
                     sheetToFetch.indexOf("arthritis") >= 0 ||
                     sheetToFetch.indexOf("asthama") >= 0 ||
                     sheetToFetch.indexOf("backProblems") >= 0 ||
+                    sheetToFetch.indexOf("cancer") >= 0 ||
+                    sheetToFetch.indexOf("copd") >= 0 ||
+                    sheetToFetch.indexOf("diabetes") >= 0 ||
+                    sheetToFetch.indexOf("hayfever") >= 0 ||
+                    sheetToFetch.indexOf("heartstrokevascular") >= 0 ||
+                    sheetToFetch.indexOf("hypertension") >= 0 ||
+                    sheetToFetch.indexOf("kidneyissue") >= 0 ||
+                    sheetToFetch.indexOf("mentalbehavioural") >= 0 ||
+                    sheetToFetch.indexOf("osteoporosis") >= 0 ||
                     sheetToFetch.indexOf("alcohol") >= 0) {
                     console.log('bmiLabels');
+
+                    var svgHeight = $(".visualizationContainer").outerHeight();
+                    var svgWidth = $(".visualizationContainer").outerWidth();
                     var typeScaleY = d3.scalePoint()
                         .domain(data.map(function(d) {
                             return d['type'];
                         }))
-                        .range([0, height])
+                        .range([0, svgHeight - 200])
                         .padding(0.5); // give some space at the outer edges
 
                     var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
@@ -571,11 +599,11 @@
                         .text(function(d) {
                             return d;
                         })
-                        .attr("fill", "#DDD")
+                        .attr("fill", "rgba(0,0,0,0")
                         .attr("text-anchor", "middle")
                         // .attr("x", function(d) { return typeScale(d); })
                         // .attr("y", height / 3.0 - 100);
-                        .attr("x", width / 2)
+                        .attr("x", svgWidth / 2)
                         .attr("y", function(d) {
                             return typeScaleY(d);
                         });
@@ -612,6 +640,7 @@
                         // of each node every tick/frame, based on the various active forces.
                         // It is up to us to translate these coordinates to the screen.
                         node.attr("cx", function(d) {
+
                                 return d.x;
                             })
                             .attr("cy", function(d) {
@@ -621,20 +650,32 @@
                     });
 
 
-                if (sheetToFetch.indexOf('arthritis') >= 0 || sheetToFetch.indexOf('asthama') >= 0 || sheetToFetch.indexOf('backProblems') >= 0 ||
-                    sheetToFetch.indexOf('alcohol') >= 0
+                if (
+                    sheetToFetch.indexOf("arthritis") >= 0 ||
+                    sheetToFetch.indexOf("asthama") >= 0 ||
+                    sheetToFetch.indexOf("backProblems") >= 0 ||
+                    sheetToFetch.indexOf("cancer") >= 0 ||
+                    sheetToFetch.indexOf("copd") >= 0 ||
+                    sheetToFetch.indexOf("diabetes") >= 0 ||
+                    sheetToFetch.indexOf("hayfever") >= 0 ||
+                    sheetToFetch.indexOf("heartstrokevascular") >= 0 ||
+                    sheetToFetch.indexOf("hypertension") >= 0 ||
+                    sheetToFetch.indexOf("kidneyissue") >= 0 ||
+                    sheetToFetch.indexOf("mentalbehavioural") >= 0 ||
+                    sheetToFetch.indexOf("osteoporosis") >= 0 ||
+                    sheetToFetch.indexOf("alcohol") >= 0
                 ) {
                     svgHeight = $(".visualizationContainer").outerHeight();
                     svgWidth = $(".visualizationContainer").outerWidth();
 
-                    var typeScaleY = d3.scalePoint()
+                    var typeScaleYLocal = d3.scalePoint()
                         .domain(data.map(function(d) {
                             return d['type'];
                         }))
-                        .range([0, svgHeight - 100])
+                        .range([0, svgHeight])
                         .padding(0.5); // give some space at the outer edges
 
-                    var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
+                    var yTypeForceLocal = d3.forceY(d => typeScaleYLocal(d['type']));
 
                     simulation.force("charge", chargeForce.strength(-1))
                     simulation.force("x", centerXForce)
@@ -650,7 +691,7 @@
                         // yTypeForce = 
                         // simulation.force("x", xTypeForce);
                         console.log("Global Boohoo_1");
-                        simulation.force("y", yTypeForce);
+                        simulation.force("y", yTypeForceLocal);
                         labels.attr("fill", "#fff");
                         d3.selectAll('circle').transition()
                     } else {
@@ -840,57 +881,9 @@
                 $(".moveToLongTermIssues").each(function() {
                     $(this).on('click', function() {
                         try {
-
                             updateData($("#longTermHealthIssues").val());
-
-
                             $("#q3").fadeOut(400, function() {
                                 $("#q4").fadeIn();
-                                // PROCESS FOR ARTHRITIS HERE
-
-                                console.log("In Issues");
-                                svgHeight = $(".visualizationContainer").outerHeight();
-                                svgWidth = $(".visualizationContainer").outerWidth();
-
-                                // var typeScaleY = d3.scalePoint()
-                                typeScaleY = d3.scalePoint()
-                                    .domain(data.map(function(d) {
-                                        return d['type'];
-                                    }))
-                                    .range([0, svgHeight - 100])
-                                    .padding(0.5); // give some space at the outer edges
-
-                                var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
-
-                                simulation.force("charge", chargeForce.strength(-5))
-                                simulation.force("x", centerXForce)
-                                simulation.force("y", centerYForce)
-                                simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 50))
-                                simulation.force('collision', d3.forceCollide(5));
-
-                                console.log("Will this work?");
-                                var splitStateLocal = true;
-                                if (splitStateLocal) {
-                                    // push the nodes towards respective spots
-                                    // yTypeForce = 
-                                    // simulation.force("x", xTypeForce);
-                                    console.log("Local Boohoo_1");
-                                    simulation.force("y", yTypeForce);
-                                    labels.attr("fill", "#fff");
-                                    d3.selectAll('circle').transition()
-                                } else {
-                                    // simulation.force("x", centerXForce);
-                                    console.log("Local Boohoo_2");
-                                    simulation.force("y", centerYForce);
-                                    labels.attr("fill", "rgba(0,0,0,0)");
-                                    d3.selectAll('circle').transition()
-                                }
-
-                                // NOTE: Very important to call both alphaTarget AND restart in conjunction
-                                // Restart by itself will reset alpha (cooling of simulation)
-                                // but won't reset the velocities of the nodes (inertia)
-                                simulation.alpha(1).restart();
-                                // console.log("Arthritis");
                             });
                         } catch (err) {
                             console.log(err);
@@ -900,85 +893,18 @@
 
                 $("#longTermHealthIssues").on('change', function() {
                     updateData($("#longTermHealthIssues").val());
-                    // console.log("In Issues on change");
-                    // svgHeight = $(".visualizationContainer").outerHeight();
-                    // svgWidth = $(".visualizationContainer").outerWidth();
-
-                    // // var typeScaleY = d3.scalePoint()
-                    // typeScaleY = d3.scalePoint()
-                    //     .domain(data.map(function(d) {
-                    //         return d['type'];
-                    //     }))
-                    //     .range([0, svgHeight - 100])
-                    //     .padding(0.5); // give some space at the outer edges
-
-                    // var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
-
-                    // simulation.force("charge", chargeForce.strength(-5))
-                    // simulation.force("x", centerXForce)
-                    // simulation.force("y", centerYForce)
-                    // simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 50))
-                    // simulation.force('collision', d3.forceCollide(5));
-
-                    // console.log("Will this work?");
-
-                    // var splitStateLocal = true;
-                    // if (splitStateLocal) {
-                    //     // push the nodes towards respective spots
-                    //     // yTypeForce = 
-                    //     // simulation.force("x", xTypeForce);
-                    //     console.log("Change");
-                    //     simulation.force("y", yTypeForce);
-                    //     labels.attr("fill", "#fff");
-                    //     d3.selectAll('circle').transition()
-                    // } else {
-                    //     // simulation.force("x", centerXForce);
-                    //     console.log("Change_Else");
-                    //     simulation.force("y", centerYForce);
-                    //     labels.attr("fill", "rgba(0,0,0,0)");
-                    //     d3.selectAll('circle').transition()
-                    // }
-
-                    // // NOTE: Very important to call both alphaTarget AND restart in conjunction
-                    // // Restart by itself will reset alpha (cooling of simulation)
-                    // // but won't reset the velocities of the nodes (inertia)
-                    // simulation.alpha(1).restart();
-                    // console.log("Arthritis");
-                    // console.log($(this).val());
                 })
 
                 $("#continueFromLongTerm").on('click', function() {
                     $("#q4").fadeOut(400, function() {
                         $("#q5").fadeIn();
-                        updateData($("#age-bracket").val()+"alcohol");
+                        updateData($("#age-bracket").val() + "alcohol");
                     })
                 })
                 $("#alcoholConsumption").on('change', function() {
                     // PROCESS OTHER ALCOHOL CONSUMPTIONS HERE
                     console.log($(this).val());
-                    
                 })
-                // document.getElementById("processMetGuidelines").onclick = function() {
-                //     $("#processMetGuidelines").hide();
-                //     if (!splitState) {
-                //         // push the nodes towards respective spots
-                //         simulation.force("x", xTypeForce);
-                //         labels.attr("fill", "#fff");
-                //         d3.selectAll('circle').transition()
-                //     } else {
-                //         simulation.force("x", centerXForce);
-                //         labels.attr("fill", "rgba(0,0,0,0)");
-                //         d3.selectAll('circle').transition()
-                //     }
-
-                //     // Toggle state
-                //     splitState = !splitState;
-
-                //     // NOTE: Very important to call both alphaTarget AND restart in conjunction
-                //     // Restart by itself will reset alpha (cooling of simulation)
-                //     // but won't reset the velocities of the nodes (inertia)
-                //     simulation.alpha(1).restart();
-                // }
             });
         }
     </script>

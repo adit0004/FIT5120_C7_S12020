@@ -78,12 +78,12 @@
                     <div class="card-footer bg-white">
                         <div class="row">
                             <div class="col-12 col-md-6">
-                                <a href="<?php echo $event['link']; ?>" class="btn btn-dark btn-block"><i class="fa fa-calendar-week"></i> Calendar</a>
+                                <a href="<?php echo $event['link']; ?>" class="btn btn-dark btn-block" target="_blank"><i class="fa fa-calendar-week"></i> Calendar</a>
                             </div>
                             <?php if (isset($event['website'])) { ?>
 
                                 <div class="col-12 col-md-6">
-                                    <a href="<?php echo $event['website']; ?>" class="btn btn-primary btn-block"><i class="fa fa-building"></i> Website</a>
+                                    <a href="<?php if(substr($event['website'],0,4) == "http") echo $event['website']; else echo "http://".$event['website'] ?>" class="btn btn-primary btn-block" target="_blank"><i class="fa fa-building"></i> Website</a>
                                 </div>
                             <?php } ?>
                         </div>
