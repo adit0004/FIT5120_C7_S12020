@@ -177,7 +177,7 @@
             </div>
             <?php if (!empty($spaces)) { ?>
                 <div class="col-12 mt-3 text-center mb-4">
-                    <div id="map" class='h-100' style="min-height:600px!important;"></div>
+                    <div id="map" class='h-100' style="min-height:600px!important;width:100%;"></div>
                     <a href="#displayTable" class='btn btn-outline-dark mt-4'>Back to table</a>
                 </div>
             <?php } ?>

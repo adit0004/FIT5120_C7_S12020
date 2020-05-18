@@ -1,3 +1,5 @@
+<a href="tel:000" class="btn btn-primary p-3 emergency-button"><i class="fa fa-ambulance"></i></a>
+
 <?php if ($activePage != 'personalizedHealth') { ?>
     <footer class="bg-light text-dark py-5 border-top mt-5">
         <p class="text-center">
@@ -626,15 +628,42 @@
                         .attr("x", function(d) {
                             return typeScale(d) - 40;
                         })
-                        .attr("y", height / 2.0 - 10);
+                        .attr("y", height / 2.0 - 100);
                 }
 
-                var simulation = d3.forceSimulation()
+
+                if(
+                    sheetToFetch.indexOf("bmi") < 0 ||
+                    sheetToFetch.indexOf("arthritis") < 0 ||
+                    sheetToFetch.indexOf("asthama") < 0 ||
+                    sheetToFetch.indexOf("backProblems") < 0 ||
+                    sheetToFetch.indexOf("cancer") < 0 ||
+                    sheetToFetch.indexOf("copd") < 0 ||
+                    sheetToFetch.indexOf("diabetes") < 0 ||
+                    sheetToFetch.indexOf("hayfever") < 0 ||
+                    sheetToFetch.indexOf("heartstrokevascular") < 0 ||
+                    sheetToFetch.indexOf("hypertension") < 0 ||
+                    sheetToFetch.indexOf("kidneyissue") < 0 ||
+                    sheetToFetch.indexOf("mentalbehavioural") < 0 ||
+                    sheetToFetch.indexOf("osteoporosis") < 0 ||
+                    sheetToFetch.indexOf("alcohol") < 0){
+                        var simulation = d3.forceSimulation()
+                    .force("charge", chargeForce.strength(-5))
+                    .force("x", centerXForce)
+                    .force("y", centerYForce)
+                    .force("center", d3.forceCenter(width / 2 + 30, height / 2))
+                    .force('collision', d3.forceCollide(5));
+                    }
+                    else {
+                        var simulation = d3.forceSimulation()
                     .force("charge", chargeForce.strength(-5))
                     .force("x", centerXForce)
                     .force("y", centerYForce)
                     .force("center", d3.forceCenter(width / 2, height / 2))
                     .force('collision', d3.forceCollide(5));
+                    }
+
+               
 
                 var i = 0;
                 // Add the nodes to the simulation, and specify how to draw
@@ -805,6 +834,7 @@
                 $("#skipAge").on('click', function() {
                     $("#q2").fadeOut(400, function() {
                         $("#q3").fadeIn();
+                        updateData($("#age-bracket").val() + "_bmi");
                     })
                 })
                 document.getElementById('processMetGuidelinesNo').onclick = function() {
@@ -901,14 +931,14 @@
                     // DO D3 HERE
 
 
-                    svgHeight = $(".visualizationContainer").outerHeight();
-                    svgWidth = $(".visualizationContainer").outerWidth();
+                    svgHeightLocal = $(".visualizationContainer").outerHeight()-50;
+                    svgWidthLocal = $(".visualizationContainer").outerWidth();
 
                     var typeScaleY = d3.scalePoint()
                         .domain(data.map(function(d) {
                             return d['type'];
                         }))
-                        .range([0, svgHeight - 100])
+                        .range([0, svgHeightLocal - 100])
                         .padding(0.5); // give some space at the outer edges
 
                     var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
@@ -916,7 +946,7 @@
                     simulation.force("charge", chargeForce.strength(-5))
                     simulation.force("x", centerXForce)
                     simulation.force("y", centerYForce)
-                    simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 50))
+                    simulation.force("center", d3.forceCenter((svgWidthLocal / 2), (svgHeightLocal / 2) + 60))
                     simulation.force('collision', d3.forceCollide(5));
 
                     console.log("Will this work?");
@@ -928,12 +958,8 @@
                         simulation.force("y", yTypeForce);
                         labels.attr("fill", "#fff");
                         d3.selectAll('circle').transition()
-                    } else {
-                        // simulation.force("x", centerXForce);
-                        simulation.force("y", centerYForce);
-                        labels.attr("fill", "rgba(0,0,0,0)");
-                        d3.selectAll('circle').transition()
-                    }
+                        simulation.alpha(1).restart();
+                    } 
 
                     // Toggle state
                     splitState = !splitState;
@@ -941,7 +967,6 @@
                     // NOTE: Very important to call both alphaTarget AND restart in conjunction
                     // Restart by itself will reset alpha (cooling of simulation)
                     // but won't reset the velocities of the nodes (inertia)
-                    simulation.alpha(1).restart();
                     console.log(bmi);
 
                 })

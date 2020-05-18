@@ -27,17 +27,17 @@
             <div id="q2yes">
                 <h1>You are doing great!</h2>
                     <p>Continue meeting the guidelines for physical activity for a healthy life</p>
-                    <a href="#!" class="btn btn-sm btn-outline-primary">All Health Statistics</a>
-                    <a href="#!" class="btn btn-sm btn-outline-primary">Explore the Outdoors</a>
-                    <a href="#!" class="btn btn-sm btn-outline-primary">Explore Events Around</a>
+                    <a href="<?php echo site_url(['general', 'showCharts']); ?>" class="btn btn-sm btn-outline-primary">All Health Statistics</a>
+                    <a href="<?php echo site_url(['spaces', 'showSpaces']); ?>" class="btn btn-sm btn-outline-primary">Explore the Outdoors</a>
+                    <a href="<?php echo site_url(['events', 'showEvents']); ?>" class="btn btn-sm btn-outline-primary">Explore Events Around</a>
                     <button class="btn btn-primary d-block mt-3 moveToBmi">Continue &rarr;</button>
             </div>
             <div id="q2no">
                 <h1>You can do wonders for your health by exercising!</h2>
                     <p>You can explore options to explore open spaces nearby and get started with a healthier way of living</p>
-                    <a href="#!" class="btn btn-sm btn-outline-primary">All Health Statistics</a>
-                    <a href="#!" class="btn btn-sm btn-outline-primary">Explore the Outdoors</a>
-                    <a href="#!" class="btn btn-sm btn-outline-primary">Explore Events Around</a>
+                    <a href="<?php echo site_url(['general', 'showCharts']); ?>" class="btn btn-sm btn-outline-primary">All Health Statistics</a>
+                    <a href="<?php echo site_url(['spaces', 'showSpaces']); ?>" class="btn btn-sm btn-outline-primary">Explore the Outdoors</a>
+                    <a href="<?php echo site_url(['events', 'showEvents']); ?>" class="btn btn-sm btn-outline-primary">Explore Events Around</a>
                     <button class="btn btn-primary d-block mt-3 moveToBmi">Continue &rarr;</button>
             </div>
             <div id="q3">
@@ -63,13 +63,13 @@
                     </div>
                 </div>
                 <button class="btn btn-primary mt-3" id="processBmi">Calculate!</button>
-                <button class="btn btn-outline-danger mt-3 moveToLongTermIssues">Skip Question<i class="fa fa-forward"></i></button>
+                <button class="btn btn-outline-danger mt-3 moveToLongTermIssues" id="skipBmi">Skip Question<i class="fa fa-forward"></i></button>
                 <p class="mt-3 larger-text" id="bmiCalculated">Your BMI is considered: <span id="bmiResult"></span></p>
                 <p class="mt-3" id="bmiMessage"></p>
                 <div id="bmiButtons">
-                    <a href="#!" class="btn btn-sm btn-outline-primary">All Health Statistics</a>
-                    <a href="#!" class="btn btn-sm btn-outline-primary">Explore the Outdoors</a>
-                    <a href="#!" class="btn btn-sm btn-outline-primary">Explore Events Around</a>
+                    <a href="<?php echo site_url(['general', 'showCharts']); ?>" class="btn btn-sm btn-outline-primary">All Health Statistics</a>
+                    <a href="<?php echo site_url(['spaces', 'showSpaces']); ?>" class="btn btn-sm btn-outline-primary">Explore the Outdoors</a>
+                    <a href="<?php echo site_url(['events', 'showEvents']); ?>" class="btn btn-sm btn-outline-primary">Explore Events Around</a>
                 </div>
                 <div id="bmiContinue">
                     <button class="btn btn-primary d-block mt-3 moveToLongTermIssues">Continue &rarr;</button>
@@ -87,16 +87,25 @@
                     <option value="diabetes">Diabetes</option>
                     <option value="hayfever">Hayfever</option>
                     <option value="heartstrokevascular">Heart Stroke / Vascular Diseases</option>
-                    <option value="hyptertension">Hypertension</option>
+                    <option value="hypertension">Hypertension</option>
                     <option value="kidneyissue">Kidney Issues</option>
                     <option value="mentalbehavioural">Mental and Behavioural Issues</option>
                     <option value="osteoporosis">Osteoporosis</option>
                 </select>
-                <button class="btn btn-outline-primary" id="continueFromLongTerm">Continue &rarr;</button>
+                <p class="mt-3">Healthy lifestyle with moderate physical activity is always the way to go and EldVisor might be able to help you to explore places and events nearby to maintain a physically active lifestyle.</p>
+                <a href="<?php echo site_url(['general', 'showCharts']); ?>" class="btn btn-sm btn-outline-primary">All Health Statistics</a>
+                <a href="<?php echo site_url(['spaces', 'showSpaces']); ?>" class="btn btn-sm btn-outline-primary">Explore the Outdoors</a>
+                <a href="<?php echo site_url(['events', 'showEvents']); ?>" class="btn btn-sm btn-outline-primary">Explore Events Around</a>
+                <button class="btn btn-primary mt-3" id="continueFromLongTerm">Continue &rarr;</button>
             </div>
             <div id="q5">
                 <h1>Let's get a bit cheeky</h1>
                 <p>You can know how your alcohol intake fares compared to others in the same age category as you</p>
+                <p class="mt-3">For some of us, alcohol may become hindrance to healthy lifestyle. EldVisor might be able to help you to explore places and events nearby to maintain a physically active lifestyle.</p>
+                <a href="<?php echo site_url(['general', 'showCharts']); ?>" class="btn btn-sm btn-outline-primary">All Health Statistics</a>
+                <a href="<?php echo site_url(['spaces', 'showSpaces']); ?>" class="btn btn-sm btn-outline-primary">Explore the Outdoors</a>
+                <a href="<?php echo site_url(['events', 'showEvents']); ?>" class="btn btn-sm btn-outline-primary">Explore Events Around</a>
+                
                 <!--<p>Which category suits you best?</p>
                 <select id="alcoholConsumption" class="form-control">
                     <option value="neverConsumedAlcohol">Never Consumed Alcohol</option>
