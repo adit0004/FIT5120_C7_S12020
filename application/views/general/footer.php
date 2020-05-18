@@ -638,13 +638,13 @@
 
                 var i = 0;
                 // Add the nodes to the simulation, and specify how to draw
+                simulation.nodes({})
                 simulation.nodes(data)
                     .on("tick", function() {
                         // The d3 force simulation updates the x & y coordinates
                         // of each node every tick/frame, based on the various active forces.
                         // It is up to us to translate these coordinates to the screen.
                         node.attr("cx", function(d) {
-
                                 return d.x;
                             })
                             .attr("cy", function(d) {
@@ -669,53 +669,110 @@
                     sheetToFetch.indexOf("osteoporosis") >= 0 ||
                     sheetToFetch.indexOf("alcohol") >= 0
                 ) {
-                    var svgHeight = $(".visualizationContainer").outerHeight();
-                    var svgWidth = $(".visualizationContainer").outerWidth();
+                    // var svgHeight = $(".visualizationContainer").outerHeight();
+                    // var svgWidth = $(".visualizationContainer").outerWidth();
                     
+                    // simulation.force("charge", chargeForce.strength(-5))
+                    // simulation.force("x", centerXForce)
+                    // simulation.force("y", centerYForce)
+                    // simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 50))
+                    // simulation.force('collision', d3.forceCollide(5));
+                    // console.log("Will this work?");
+
+                    // var splitStateLocal = true;
+                    // if (splitStateLocal) {
+                    //     var typeScaleYLocalForThis = d3.scalePoint()
+                    //         .domain(data.map(function(d) {
+                    //             return d['type'];
+                    //         }))
+                    //         .range([0, svgHeight - 100])
+                    //         .padding(0.5); // give some space at the outer edges
+                    //     var yTypeForceLocalForThis = d3.forceY(d => typeScaleYLocalForThis(d['type']));
+                    //     // push the nodes towards respective spots
+                    //     // yTypeForce = 
+                    //     // simulation.force("x", xTypeForce);
+                    //     console.log("Global Boohoo_1");
+                    //     simulation.force("y", yTypeForceLocalForThis);
+                    //     simulation.force("x", centerXForce)
+                    //     simulation.force("charge", chargeForce.strength(-5));
+                    //     simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 50))
+                    //     simulation.force('collision', d3.forceCollide(5));
+                    //     labels.attr("fill", "#fff");
+                    //     d3.selectAll('circle').transition()
+                    // } else {
+                    //     // simulation.force("x", centerXForce);
+                    //     simulation.force("x", centerXForce)
+                    //     simulation.force("charge", chargeForce.strength(-5));
+                    //     simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 50))
+                    //     simulation.force('collision', d3.forceCollide(5));
+                    //     console.log("Global_Boohoo_2");
+                    //     simulation.force("y", centerYForce);
+                    //     labels.attr("fill", "rgba(0,0,0,0)");
+                    //     d3.selectAll('circle').transition()
+                    // }
+
+                    // // NOTE: Very important to call both alphaTarget AND restart in conjunction
+                    // // Restart by itself will reset alpha (cooling of simulation)
+                    // // but won't reset the velocities of the nodes (inertia)
+                    // simulation.alpha(1).restart();
+                    // simulation = null;
+
+
+
+
+
+                    svgHeight = $(".visualizationContainer").outerHeight();
+                    svgWidth = $(".visualizationContainer").outerWidth();
+
+                    var typeScaleY = d3.scalePoint()
+                        .domain(data.map(function(d) {
+                            return d['type'];
+                        }))
+                        .range([0, svgHeight - 100])
+                        .padding(0.5); // give some space at the outer edges
+
+                    var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
+
                     simulation.force("charge", chargeForce.strength(-5))
                     simulation.force("x", centerXForce)
                     simulation.force("y", centerYForce)
                     simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 50))
                     simulation.force('collision', d3.forceCollide(5));
+
                     console.log("Will this work?");
 
-                    simulation.force("y", centerYForce);
-                    labels.attr("fill", "rgba(0,0,0,0)");
-                    d3.selectAll('circle').transition()
-
-                    var splitStateLocal = true;
-                    if (splitStateLocal) {
-                        var typeScaleYLocalForThis = d3.scalePoint()
-                            .domain(data.map(function(d) {
-                                return d['type'];
-                            }))
-                            .range([0, svgHeight - 100])
-                            .padding(0.5); // give some space at the outer edges
-                        var yTypeForceLocalForThis = d3.forceY(d => typeScaleYLocalForThis(d['type']));
+                    if (!splitState) {
                         // push the nodes towards respective spots
                         // yTypeForce = 
                         // simulation.force("x", xTypeForce);
-                        console.log("Global Boohoo_1");
-                        simulation.force("y", yTypeForceLocalForThis);
-                        simulation.force("x", centerXForce)
-                        simulation.force("charge", chargeForce)
-                        simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 50))
-                        simulation.force('collision', d3.forceCollide(5));
+                        simulation.force("y", yTypeForce);
                         labels.attr("fill", "#fff");
                         d3.selectAll('circle').transition()
                     } else {
                         // simulation.force("x", centerXForce);
-                        console.log("Global_Boohoo_2");
                         simulation.force("y", centerYForce);
                         labels.attr("fill", "rgba(0,0,0,0)");
                         d3.selectAll('circle').transition()
                     }
 
+                    // Toggle state
+                    splitState = !splitState;
+
                     // NOTE: Very important to call both alphaTarget AND restart in conjunction
                     // Restart by itself will reset alpha (cooling of simulation)
                     // but won't reset the velocities of the nodes (inertia)
                     simulation.alpha(1).restart();
-                    simulation = null;
+                    console.log(bmi);
+
+
+
+
+
+
+
+
+
+
                 }
 
 
