@@ -795,7 +795,7 @@
                     // Restart by itself will reset alpha (cooling of simulation)
                     // but won't reset the velocities of the nodes (inertia)
                     simulation.alpha(1).restart();
-                    console.log(bmi);
+                    // console.log(bmi);
 
 
 
