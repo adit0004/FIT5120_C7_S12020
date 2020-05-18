@@ -499,8 +499,10 @@
                 }, 1000)
             }
             await sleep(1000);
-            var centerXForce = d3.forceX().x(width / 2).strength(forceStrength);
-            var centerYForce = d3.forceY().y(height / 2).strength(forceStrength);
+            // var centerXForce = d3.forceX().x(width / 2).strength(forceStrength);
+            // var centerYForce = d3.forceY().y(height / 2).strength(forceStrength);
+            var centerXForce = d3.forceX(100);
+            var centerYForce = d3.forceY(100);
             var simulation = d3.forceSimulation()
                 .force("charge", chargeForce.strength(-5))
                 .force("x", centerXForce)
@@ -542,8 +544,10 @@
             width = $(".visualizationContainer").outerWidth();
             height = $(".visualizationContainer").outerHeight();
 
-            var centerXForce = d3.forceX().x(width / 2).strength(forceStrength);
-            var centerYForce = d3.forceY().y(height / 2).strength(forceStrength);
+            // var centerXForce = d3.forceX().x(width / 2).strength(forceStrength);
+            // var centerYForce = d3.forceY().y(height / 2).strength(forceStrength);
+            var centerXForce = d3.forceX(100);
+            var centerYForce = d3.forceY(100);
 
             d3.csv("<?php echo base_url(); ?>assets/dataFiles/" + sheetToFetch + ".csv", function(error, data) {
                 var typeScale = d3.scalePoint()
@@ -587,7 +591,7 @@
                         .domain(data.map(function(d) {
                             return d['type'];
                         }))
-                        .range([0, svgHeight - 200])
+                        .range([0, svgHeight - 100])
                         .padding(0.5); // give some space at the outer edges
 
                     var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
@@ -622,7 +626,7 @@
                         .attr("x", function(d) {
                             return typeScale(d) - 40;
                         })
-                        .attr("y", height / 2.0 - 150);
+                        .attr("y", height / 2.0 - 10);
                 }
 
                 var simulation = d3.forceSimulation()
@@ -665,33 +669,38 @@
                     sheetToFetch.indexOf("osteoporosis") >= 0 ||
                     sheetToFetch.indexOf("alcohol") >= 0
                 ) {
-                    svgHeight = $(".visualizationContainer").outerHeight();
-                    svgWidth = $(".visualizationContainer").outerWidth();
-
-                    var typeScaleYLocal = d3.scalePoint()
-                        .domain(data.map(function(d) {
-                            return d['type'];
-                        }))
-                        .range([0, svgHeight])
-                        .padding(0.5); // give some space at the outer edges
-
-                    var yTypeForceLocal = d3.forceY(d => typeScaleYLocal(d['type']));
-
-                    simulation.force("charge", chargeForce.strength(-1))
+                    var svgHeight = $(".visualizationContainer").outerHeight();
+                    var svgWidth = $(".visualizationContainer").outerWidth();
+                    
+                    simulation.force("charge", chargeForce.strength(-5))
                     simulation.force("x", centerXForce)
                     simulation.force("y", centerYForce)
                     simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 50))
                     simulation.force('collision', d3.forceCollide(5));
-
                     console.log("Will this work?");
+
+                    simulation.force("y", centerYForce);
+                    labels.attr("fill", "rgba(0,0,0,0)");
+                    d3.selectAll('circle').transition()
 
                     var splitStateLocal = true;
                     if (splitStateLocal) {
+                        var typeScaleYLocalForThis = d3.scalePoint()
+                            .domain(data.map(function(d) {
+                                return d['type'];
+                            }))
+                            .range([0, svgHeight - 100])
+                            .padding(0.5); // give some space at the outer edges
+                        var yTypeForceLocalForThis = d3.forceY(d => typeScaleYLocalForThis(d['type']));
                         // push the nodes towards respective spots
                         // yTypeForce = 
                         // simulation.force("x", xTypeForce);
                         console.log("Global Boohoo_1");
-                        simulation.force("y", yTypeForceLocal);
+                        simulation.force("y", yTypeForceLocalForThis);
+                        simulation.force("x", centerXForce)
+                        simulation.force("charge", chargeForce)
+                        simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 50))
+                        simulation.force('collision', d3.forceCollide(5));
                         labels.attr("fill", "#fff");
                         d3.selectAll('circle').transition()
                     } else {
@@ -706,6 +715,7 @@
                     // Restart by itself will reset alpha (cooling of simulation)
                     // but won't reset the velocities of the nodes (inertia)
                     simulation.alpha(1).restart();
+                    simulation = null;
                 }
 
 
