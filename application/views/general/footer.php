@@ -173,7 +173,7 @@
         spaces = <?php echo $spaceId == 13 ? json_encode($spaces['results']) : json_encode($spaces); ?>;
 
         // Add addresses to the divs
-        console.log(spaces);
+        // console.log(spaces);
         // Calculate average lat, lng
         var latSum = 0;
         var lngSum = 0;
@@ -316,7 +316,7 @@
                     });
                 } else {
                     // Bind only on first change
-                    console.log(typeof autocomplete === 'undefined');
+                    // console.log(typeof autocomplete === 'undefined');
                     if (typeof autocomplete === 'undefined') {
                         $("#locationFilter").on('keydown', function() {
                             var input = document.getElementById('locationFilter');
@@ -584,7 +584,7 @@
 
             var splitState = false;
             document.getElementById("processAgeButton").onclick = function() {
-                console.log($("#age-bracket").val());
+                // console.log($("#age-bracket").val());
                 // Update the data first 
                 $("#q1").fadeOut(400, function() {
                     $("#q2").fadeIn();
@@ -596,7 +596,7 @@
 
         function updateData(sheetToFetch) {
 
-            console.log("Work damn you!")
+            // console.log("Work damn you!")
             const forceStrength = 0.03;
 
             width = $(".visualizationContainer").outerWidth();
@@ -608,7 +608,7 @@
             var centerYForce = d3.forceY(100);
 
             d3.csv("<?php echo base_url(); ?>assets/dataFiles/" + sheetToFetch + ".csv", function(error, data) {
-                console.log("<?php echo base_url(); ?>assets/dataFiles/" + sheetToFetch + ".csv");
+                // console.log("<?php echo base_url(); ?>assets/dataFiles/" + sheetToFetch + ".csv");
                 var typeScale = d3.scalePoint()
                     .domain(data.map(function(d) {
                         return d['type'];
@@ -628,68 +628,6 @@
                         return d.type
                     })
                     .attr("fill", "#eeeeee");
-
-
-
-                // if (sheetToFetch.indexOf("bmi") >= 0 ||
-                //     sheetToFetch.indexOf("arthritis") >= 0 ||
-                //     sheetToFetch.indexOf("asthama") >= 0 ||
-                //     sheetToFetch.indexOf("backProblems") >= 0 ||
-                //     sheetToFetch.indexOf("cancer") >= 0 ||
-                //     sheetToFetch.indexOf("copd") >= 0 ||
-                //     sheetToFetch.indexOf("diabetes") >= 0 ||
-                //     sheetToFetch.indexOf("hayfever") >= 0 ||
-                //     sheetToFetch.indexOf("heartstrokevascular") >= 0 ||
-                //     sheetToFetch.indexOf("hypertension") >= 0 ||
-                //     sheetToFetch.indexOf("kidneyissue") >= 0 ||
-                //     sheetToFetch.indexOf("mentalbehavioural") >= 0 ||
-                //     sheetToFetch.indexOf("osteoporosis") >= 0 ||
-                //     sheetToFetch.indexOf("alcohol") >= 0) {
-                //     console.log('bmiLabels');
-
-                //     var svgHeight = $(".visualizationContainer").outerHeight();
-                //     var svgWidth = $(".visualizationContainer").outerWidth();
-                //     var typeScaleY = d3.scalePoint()
-                //         .domain(data.map(function(d) {
-                //             return d['type'];
-                //         }))
-                //         .range([0, svgHeight])
-                //         .padding(0.5); // give some space at the outer edges
-
-                //     var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
-
-                //     var labels = svg.selectAll("text")
-                //         .data(typeScale.domain()) // heh, scales take care of the unique, so grab from there
-                //         .enter().append("text")
-                //         .attr("class", "label")
-                //         .text(function(d) {
-                //             return d;
-                //         })
-                //         .attr("fill", "rgba(0,0,0,0")
-                //         .attr("text-anchor", "middle")
-                //         // .attr("x", function(d) { return typeScale(d); })
-                //         // .attr("y", height / 3.0 - 100);
-                //         .attr("x", svgWidth / 2)
-                //         .attr("y", function(d) {
-                //             return typeScaleY(d) - 30;
-                //         });
-
-                // } else {
-                //     console.log('defaultLabels');
-                //     var labels = svg.selectAll("text")
-                //         .data(typeScale.domain()) // heh, scales take care of the unique, so grab from there
-                //         .enter().append("text")
-                //         .attr("class", "label")
-                //         .text(function(d) {
-                //             return d;
-                //         })
-                //         .attr("fill", "rgba(0,0,0,0)")
-                //         .attr("text-anchor", "middle")
-                //         .attr("x", function(d) {
-                //             return typeScale(d) - 40;
-                //         })
-                //         .attr("y", height / 2.0 - 100);
-                // }
 
 
                 if (
@@ -937,12 +875,12 @@
                                 // Draw the arc. Keep a 10 px margin
                                 xCenter = (xMin + xMax) / 2;
                                 yCenter = (yMin + yMax) / 2;
-                                xMin -= 5;
+                                xMin -= 10;
                                 if (radius > 20)
                                     yMin += 20;
-                                else yMin -= 5;
-                                xMax += 5;
-                                yMax += 5;
+                                else yMin -= 10;
+                                xMax += 10;
+                                yMax += 10;
                                 radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
                                 if (radius < 20) radius = 20;
                                 d3.select('svg').append('path')
@@ -1063,9 +1001,421 @@
                                     .attr("text-anchor", "middle")
                                     .attr("x", xCenter)
                                     .attr("y", yCenter - radius - 15)
+                            } else {
+                                var xMin = 9999,
+                                    yMin = 9999,
+                                    xMax = 0,
+                                    yMax = 0,
+                                    radius = 0;
+                                $("circle").each(function() {
+                                    if (parseFloat($(this).attr('cx')) < xMin)
+                                        xMin = parseFloat($(this).attr('cx'));
+                                    if (parseFloat($(this).attr('cy')) < yMin)
+                                        yMin = parseFloat($(this).attr('cy'));
+                                    if (parseFloat($(this).attr('cx')) > xMax)
+                                        xMax = parseFloat($(this).attr('cx'));
+                                    if (parseFloat($(this).attr('cy')) > yMax)
+                                        yMax = parseFloat($(this).attr('cy'));
+                                })
 
+                                // Draw the arc. Keep a 10 px margin
+                                xCenter = (xMin + xMax) / 2;
+                                yCenter = (yMin + yMax) / 2;
+                                radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
+                                if (radius < 20) radius = 20;
+                                xMin -= 10;
+                                if (radius > 20)
+                                    yMin += 20;
+                                else yMin -= 10;
+                                xMax += 10;
+                                yMax += 10;
+                                d3.select('svg').append('path')
+                                    .attr('d', "M " + xMin + " " + yMin + " A " + radius + " " + radius + " 0 0 1 " + xMax + " " + yMin)
+                                    .attr('fill', 'none')
+                                    .attr('stroke', '#fff')
+
+                                // Draw a line
+                                d3.select('svg').append('line')
+                                    .attr('x1', xCenter)
+                                    .attr('y1', yCenter - radius + 8)
+                                    .attr('x2', xCenter)
+                                    .attr('y2', yCenter - radius - 2)
+                                    .attr('stroke', '#fff')
+
+                                // Add the label
+                                d3.select('svg')
+                                    .append("text")
+                                    .attr("class", "label")
+                                    .text('100 Australians')
+                                    .attr("fill", "#fff")
+                                    .attr("text-anchor", "middle")
+                                    .attr("x", xCenter)
+                                    .attr("y", yCenter - radius - 10)
                             }
-                            // REDUCE RADIUS
+                        }
+                        if (sheetToFetch.indexOf("arthritis") >= 0 ||
+                            sheetToFetch.indexOf("asthama") >= 0 ||
+                            sheetToFetch.indexOf("backProblems") >= 0 ||
+                            sheetToFetch.indexOf("cancer") >= 0 ||
+                            sheetToFetch.indexOf("copd") >= 0 ||
+                            sheetToFetch.indexOf("diabetes") >= 0 ||
+                            sheetToFetch.indexOf("hayfever") >= 0 ||
+                            sheetToFetch.indexOf("heartstrokevascular") >= 0 ||
+                            sheetToFetch.indexOf("hypertension") >= 0 ||
+                            sheetToFetch.indexOf("kidneyissue") >= 0 ||
+                            sheetToFetch.indexOf("mentalbehavioural") >= 0 ||
+                            sheetToFetch.indexOf("osteoporosis") >= 0) {
+                            // These are split by default;
+                            var xMin = 9999,
+                                yMin = 9999,
+                                xMax = 0,
+                                yMax = 0,
+                                radius = 0,
+                                count = 0;
+                            $("circle[data-type='Underweight/Normal']").each(function() {
+                                if (parseFloat($(this).attr('cx')) < xMin)
+                                    xMin = parseFloat($(this).attr('cx'));
+                                if (parseFloat($(this).attr('cy')) < yMin)
+                                    yMin = parseFloat($(this).attr('cy'));
+                                if (parseFloat($(this).attr('cx')) > xMax)
+                                    xMax = parseFloat($(this).attr('cx'));
+                                if (parseFloat($(this).attr('cy')) > yMax)
+                                    yMax = parseFloat($(this).attr('cy'));
+                                count += 1;
+                            })
+
+                            // Draw the arc. Keep a 10 px margin
+                            xCenter = (xMin + xMax) / 2;
+                            yCenter = (yMin + yMax) / 2;
+                            xMin -= 10;
+                            yMin -= 10;
+                            xMax += 10;
+                            yMax += 10;
+                            radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
+                            d3.select('svg').append('path')
+                                .attr('d', "M " + xMin + " " + yMin + " A " + radius + " " + radius + " 0 0 1 " + xMax + " " + yMin)
+                                .attr('fill', 'none')
+                                .attr('stroke', '#fff')
+
+                            // Draw a line
+                            d3.select('svg').append('line')
+                                .attr('x1', xCenter)
+                                .attr('y1', yCenter - radius)
+                                .attr('x2', xCenter)
+                                .attr('y2', yCenter - radius - 10)
+                                .attr('stroke', '#fff')
+
+                            // Add the label
+                            d3.select('svg')
+                                .append("text")
+                                .attr("class", "label")
+                                .text('Underweight/Normal (' + count + '%)')
+                                .attr("fill", "#fff")
+                                .attr("text-anchor", "middle")
+                                .attr("x", xCenter)
+                                .attr("y", yCenter - radius - 15)
+
+
+                            xMin = 9999,
+                                yMin = 9999,
+                                xMax = 0,
+                                yMax = 0,
+                                radius = 0,
+                                count = 0;
+                            $("circle[data-type='Overweight/Obese']").each(function() {
+                                if (parseFloat($(this).attr('cx')) < xMin)
+                                    xMin = parseFloat($(this).attr('cx'));
+                                if (parseFloat($(this).attr('cy')) < yMin)
+                                    yMin = parseFloat($(this).attr('cy'));
+                                if (parseFloat($(this).attr('cx')) > xMax)
+                                    xMax = parseFloat($(this).attr('cx'));
+                                if (parseFloat($(this).attr('cy')) > yMax)
+                                    yMax = parseFloat($(this).attr('cy'));
+                                count += 1;
+                            })
+
+                            // Draw the arc. Keep a 10 px margin
+                            xCenter = (xMin + xMax) / 2;
+                            yCenter = (yMin + yMax) / 2;
+                            xMin -= 10;
+                            yMin -= 10;
+                            xMax += 10;
+                            yMax += 10;
+                            radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
+                            d3.select('svg').append('path')
+                                .attr('d', "M " + xMin + " " + yMin + " A " + radius + " " + radius + " 0 0 1 " + xMax + " " + yMin)
+                                .attr('fill', 'none')
+                                .attr('stroke', '#fff')
+
+                            // Draw a line
+                            d3.select('svg').append('line')
+                                .attr('x1', xCenter)
+                                .attr('y1', yCenter - radius)
+                                .attr('x2', xCenter)
+                                .attr('y2', yCenter - radius - 10)
+                                .attr('stroke', '#fff')
+
+                            // Add the label
+                            d3.select('svg')
+                                .append("text")
+                                .attr("class", "label")
+                                .text('Overweight/Obese (' + count + '%)')
+                                .attr("fill", "#fff")
+                                .attr("text-anchor", "middle")
+                                .attr("x", xCenter)
+                                .attr("y", yCenter - radius - 15)
+                        }
+
+                        if (sheetToFetch.indexOf("alcohol") >= 0) {
+                            // These are split by default;
+                            var xMin = 9999,
+                                yMin = 9999,
+                                xMax = 0,
+                                yMax = 0,
+                                radius = 0,
+                                count = 0;
+                            $("circle[data-type='Alcohol consumption in the last week - Exceeded guidelines']").each(function() {
+                                if (parseFloat($(this).attr('cx')) < xMin)
+                                    xMin = parseFloat($(this).attr('cx'));
+                                if (parseFloat($(this).attr('cy')) < yMin)
+                                    yMin = parseFloat($(this).attr('cy'));
+                                if (parseFloat($(this).attr('cx')) > xMax)
+                                    xMax = parseFloat($(this).attr('cx'));
+                                if (parseFloat($(this).attr('cy')) > yMax)
+                                    yMax = parseFloat($(this).attr('cy'));
+                                count += 1;
+                            })
+
+                            // Draw the arc. Keep a 10 px margin
+                            xCenter = (xMin + xMax) / 2;
+                            yCenter = (yMin + yMax) / 2;
+                            xMin -= 10;
+                            yMin -= 10;
+                            xMax += 10;
+                            yMax += 10;
+                            radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
+                            d3.select('svg').append('path')
+                                .attr('d', "M " + xMin + " " + yMin + " A " + radius + " " + radius + " 0 0 1 " + xMax + " " + yMin)
+                                .attr('fill', 'none')
+                                .attr('stroke', '#fff')
+
+                            // Draw a line
+                            d3.select('svg').append('line')
+                                .attr('x1', xCenter)
+                                .attr('y1', yCenter - radius)
+                                .attr('x2', xCenter)
+                                .attr('y2', yCenter - radius - 10)
+                                .attr('stroke', '#fff')
+
+                            // Add the label
+                            d3.select('svg')
+                                .append("text")
+                                .attr("class", "label")
+                                .text('Exceeded guidelines last week (' + count + '%)')
+                                .attr("fill", "#fff")
+                                .attr("text-anchor", "middle")
+                                .attr("x", xCenter)
+                                .attr("y", yCenter - radius - 15)
+
+
+                            xMin = 9999,
+                                yMin = 9999,
+                                xMax = 0,
+                                yMax = 0,
+                                radius = 0,
+                                count = 0;
+                            $("circle[data-type='Alcohol consumption in the last week - Did not exceed guidelines']").each(function() {
+                                if (parseFloat($(this).attr('cx')) < xMin)
+                                    xMin = parseFloat($(this).attr('cx'));
+                                if (parseFloat($(this).attr('cy')) < yMin)
+                                    yMin = parseFloat($(this).attr('cy'));
+                                if (parseFloat($(this).attr('cx')) > xMax)
+                                    xMax = parseFloat($(this).attr('cx'));
+                                if (parseFloat($(this).attr('cy')) > yMax)
+                                    yMax = parseFloat($(this).attr('cy'));
+                                count += 1;
+                            })
+
+                            // Draw the arc. Keep a 10 px margin
+                            xCenter = (xMin + xMax) / 2;
+                            yCenter = (yMin + yMax) / 2;
+                            xMin -= 10;
+                            yMin -= 10;
+                            xMax += 10;
+                            yMax += 10;
+                            radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
+                            d3.select('svg').append('path')
+                                .attr('d', "M " + xMin + " " + yMin + " A " + radius + " " + radius + " 0 0 1 " + xMax + " " + yMin)
+                                .attr('fill', 'none')
+                                .attr('stroke', '#fff')
+
+                            // Draw a line
+                            d3.select('svg').append('line')
+                                .attr('x1', xCenter)
+                                .attr('y1', yCenter - radius)
+                                .attr('x2', xCenter)
+                                .attr('y2', yCenter - radius - 10)
+                                .attr('stroke', '#fff')
+
+                            // Add the label
+                            d3.select('svg')
+                                .append("text")
+                                .attr("class", "label")
+                                .text('Did not exceed guidelines last week (' + count + '%)')
+                                .attr("fill", "#fff")
+                                .attr("text-anchor", "middle")
+                                .attr("x", xCenter)
+                                .attr("y", yCenter - radius - 15)
+
+
+                            xMin = 9999,
+                                yMin = 9999,
+                                xMax = 0,
+                                yMax = 0,
+                                radius = 0,
+                                count = 0;
+                            $("circle[data-type='Did not consume alcohol in the last week but did less than 12 months ago']").each(function() {
+                                if (parseFloat($(this).attr('cx')) < xMin)
+                                    xMin = parseFloat($(this).attr('cx'));
+                                if (parseFloat($(this).attr('cy')) < yMin)
+                                    yMin = parseFloat($(this).attr('cy'));
+                                if (parseFloat($(this).attr('cx')) > xMax)
+                                    xMax = parseFloat($(this).attr('cx'));
+                                if (parseFloat($(this).attr('cy')) > yMax)
+                                    yMax = parseFloat($(this).attr('cy'));
+                                count += 1;
+                            })
+
+                            // Draw the arc. Keep a 10 px margin
+                            xCenter = (xMin + xMax) / 2;
+                            yCenter = (yMin + yMax) / 2;
+                            xMin -= 10;
+                            yMin -= 10;
+                            xMax += 10;
+                            yMax += 10;
+                            radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
+                            d3.select('svg').append('path')
+                                .attr('d', "M " + xMin + " " + yMin + " A " + radius + " " + radius + " 0 0 1 " + xMax + " " + yMin)
+                                .attr('fill', 'none')
+                                .attr('stroke', '#fff')
+
+                            // Draw a line
+                            d3.select('svg').append('line')
+                                .attr('x1', xCenter)
+                                .attr('y1', yCenter - radius)
+                                .attr('x2', xCenter)
+                                .attr('y2', yCenter - radius - 10)
+                                .attr('stroke', '#fff')
+
+                            // Add the label
+                            d3.select('svg')
+                                .append("text")
+                                .attr("class", "label")
+                                .text('Didn\'t consume alcohol last week, but did this year (' + count + '%)')
+                                .attr("fill", "#fff")
+                                .attr("text-anchor", "middle")
+                                .attr("x", xCenter)
+                                .attr("y", yCenter - radius - 15)
+
+
+                            xMin = 9999,
+                                yMin = 9999,
+                                xMax = 0,
+                                yMax = 0,
+                                radius = 0,
+                                count = 0;
+                            $("circle[data-type='Consumed alcohol 12 or more months ago']").each(function() {
+                                if (parseFloat($(this).attr('cx')) < xMin)
+                                    xMin = parseFloat($(this).attr('cx'));
+                                if (parseFloat($(this).attr('cy')) < yMin)
+                                    yMin = parseFloat($(this).attr('cy'));
+                                if (parseFloat($(this).attr('cx')) > xMax)
+                                    xMax = parseFloat($(this).attr('cx'));
+                                if (parseFloat($(this).attr('cy')) > yMax)
+                                    yMax = parseFloat($(this).attr('cy'));
+                                count += 1;
+                            })
+
+                            // Draw the arc. Keep a 10 px margin
+                            xCenter = (xMin + xMax) / 2;
+                            yCenter = (yMin + yMax) / 2;
+                            xMin -= 10;
+                            yMin -= 10;
+                            xMax += 10;
+                            yMax += 10;
+                            radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
+                            d3.select('svg').append('path')
+                                .attr('d', "M " + xMin + " " + yMin + " A " + radius + " " + radius + " 0 0 1 " + xMax + " " + yMin)
+                                .attr('fill', 'none')
+                                .attr('stroke', '#fff')
+
+                            // Draw a line
+                            d3.select('svg').append('line')
+                                .attr('x1', xCenter)
+                                .attr('y1', yCenter - radius)
+                                .attr('x2', xCenter)
+                                .attr('y2', yCenter - radius - 10)
+                                .attr('stroke', '#fff')
+
+                            // Add the label
+                            d3.select('svg')
+                                .append("text")
+                                .attr("class", "label")
+                                .text('Consumed alcohol 12 or more months ago (' + count + '%)')
+                                .attr("fill", "#fff")
+                                .attr("text-anchor", "middle")
+                                .attr("x", xCenter)
+                                .attr("y", yCenter - radius - 15)
+
+
+                            xMin = 9999,
+                                yMin = 9999,
+                                xMax = 0,
+                                yMax = 0,
+                                radius = 0,
+                                count = 0;
+                            $("circle[data-type='Never consumed alcohol']").each(function() {
+                                if (parseFloat($(this).attr('cx')) < xMin)
+                                    xMin = parseFloat($(this).attr('cx'));
+                                if (parseFloat($(this).attr('cy')) < yMin)
+                                    yMin = parseFloat($(this).attr('cy'));
+                                if (parseFloat($(this).attr('cx')) > xMax)
+                                    xMax = parseFloat($(this).attr('cx'));
+                                if (parseFloat($(this).attr('cy')) > yMax)
+                                    yMax = parseFloat($(this).attr('cy'));
+                                count += 1;
+                            })
+
+                            // Draw the arc. Keep a 10 px margin
+                            xCenter = (xMin + xMax) / 2;
+                            yCenter = (yMin + yMax) / 2;
+                            xMin -= 10;
+                            yMin -= 10;
+                            xMax += 10;
+                            yMax += 10;
+                            radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
+                            d3.select('svg').append('path')
+                                .attr('d', "M " + xMin + " " + yMin + " A " + radius + " " + radius + " 0 0 1 " + xMax + " " + yMin)
+                                .attr('fill', 'none')
+                                .attr('stroke', '#fff')
+
+                            // Draw a line
+                            d3.select('svg').append('line')
+                                .attr('x1', xCenter)
+                                .attr('y1', yCenter - radius)
+                                .attr('x2', xCenter)
+                                .attr('y2', yCenter - radius - 10)
+                                .attr('stroke', '#fff')
+
+                            // Add the label
+                            d3.select('svg')
+                                .append("text")
+                                .attr("class", "label")
+                                .text('Never consumed alcohol (' + count + '%)')
+                                .attr("fill", "#fff")
+                                .attr("text-anchor", "middle")
+                                .attr("x", xCenter)
+                                .attr("y", yCenter - radius - 15)
                         }
                     });
 
@@ -1105,7 +1455,7 @@
                     else simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) + 100));
                     simulation.force('collision', d3.forceCollide(5));
 
-                    console.log("Will this work?");
+                    // console.log("Will this work?");
 
                     if (!splitState) {
                         // push the nodes towards respective spots
@@ -1126,7 +1476,7 @@
                     // Restart by itself will reset alpha (cooling of simulation)
                     // but won't reset the velocities of the nodes (inertia)
                     simulation.alpha(1).restart();
-                    console.log(bmi);
+                    // console.log(bmi);
 
                 }
 
@@ -1179,6 +1529,18 @@
                     })
                 })
                 document.getElementById('processMetGuidelinesNo').onclick = function() {
+                    svgHeight = $(".visualizationContainer").outerHeight();
+                    svgWidth = $(".visualizationContainer").outerWidth();
+
+                    var typeScaleY = d3.scalePoint()
+                        .domain(data.map(function(d) {
+                            return d['type'];
+                        }))
+                        .range([0, svgHeight - 100])
+                        .padding(0.5); // give some space at the outer edges
+
+                    var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
+
                     $("#q2").fadeOut(400, function() {
                         // DO D3 HERE
                         if (!splitState) {
@@ -1297,7 +1659,7 @@
                     simulation.force("center", d3.forceCenter((svgWidthLocal / 2), (svgHeightLocal / 2) + 70))
                     simulation.force('collision', d3.forceCollide(5));
 
-                    console.log("Will this work?");
+                    // console.log("Will this work?");
 
                     if (!splitState) {
                         // push the nodes towards respective spots
@@ -1316,7 +1678,7 @@
                     // NOTE: Very important to call both alphaTarget AND restart in conjunction
                     // Restart by itself will reset alpha (cooling of simulation)
                     // but won't reset the velocities of the nodes (inertia)
-                    console.log(bmi);
+                    // console.log(bmi);
 
                 })
                 $(".moveToLongTermIssues").each(function() {
