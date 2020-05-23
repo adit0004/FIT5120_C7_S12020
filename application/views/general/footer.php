@@ -643,13 +643,19 @@
                     sheetToFetch.indexOf("hypertension") < 0 ||
                     sheetToFetch.indexOf("kidneyissue") < 0 ||
                     sheetToFetch.indexOf("mentalbehavioural") < 0 ||
-                    sheetToFetch.indexOf("osteoporosis") < 0 ||
-                    sheetToFetch.indexOf("alcohol") < 0) {
+                    sheetToFetch.indexOf("osteoporosis") < 0) {
                     var simulation = d3.forceSimulation()
                         .force("charge", chargeForce.strength(-5))
                         .force("x", centerXForce)
                         .force("y", centerYForce)
                         .force("center", d3.forceCenter(width / 2 + 30, height / 2))
+                        .force('collision', d3.forceCollide(5));
+                } else if (sheetToFetch.indexOf("alcohol") < 0) {
+                    var simulation = d3.forceSimulation()
+                        .force("charge", chargeForce.strength(-7))
+                        .force("x", centerXForce)
+                        .force("y", centerYForce)
+                        .force("center", d3.forceCenter(width / 2, height / 2))
                         .force('collision', d3.forceCollide(5));
                 } else {
                     var simulation = d3.forceSimulation()
@@ -1190,7 +1196,7 @@
                             xCenter = (xMin + xMax) / 2;
                             yCenter = (yMin + yMax) / 2;
                             xMin -= 10;
-                            yMin -= 10;
+                            // yMin -= 10;
                             xMax += 10;
                             yMax += 10;
                             radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
@@ -1240,7 +1246,7 @@
                             xCenter = (xMin + xMax) / 2;
                             yCenter = (yMin + yMax) / 2;
                             xMin -= 10;
-                            yMin -= 10;
+                            // yMin -= 10;
                             xMax += 10;
                             yMax += 10;
                             radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
@@ -1290,7 +1296,7 @@
                             xCenter = (xMin + xMax) / 2;
                             yCenter = (yMin + yMax) / 2;
                             xMin -= 10;
-                            yMin -= 10;
+                            // yMin -= 10;
                             xMax += 10;
                             yMax += 10;
                             radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
@@ -1340,7 +1346,7 @@
                             xCenter = (xMin + xMax) / 2;
                             yCenter = (yMin + yMax) / 2;
                             xMin -= 10;
-                            yMin -= 10;
+                            // yMin -= 10;
                             xMax += 10;
                             yMax += 10;
                             radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
@@ -1390,7 +1396,7 @@
                             xCenter = (xMin + xMax) / 2;
                             yCenter = (yMin + yMax) / 2;
                             xMin -= 10;
-                            yMin -= 10;
+                            // yMin -= 10;
                             xMax += 10;
                             yMax += 10;
                             radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
@@ -1432,8 +1438,7 @@
                     sheetToFetch.indexOf("hypertension") >= 0 ||
                     sheetToFetch.indexOf("kidneyissue") >= 0 ||
                     sheetToFetch.indexOf("mentalbehavioural") >= 0 ||
-                    sheetToFetch.indexOf("osteoporosis") >= 0 ||
-                    sheetToFetch.indexOf("alcohol") >= 0
+                    sheetToFetch.indexOf("osteoporosis") >= 0
                 ) {
                     svgHeight = $(".visualizationContainer").outerHeight();
                     svgWidth = $(".visualizationContainer").outerWidth();
@@ -1478,6 +1483,49 @@
                     simulation.alpha(1).restart();
                     // console.log(bmi);
 
+                } else if (sheetToFetch.indexOf("alcohol") >= 0) {
+                    svgHeight = $(".visualizationContainer").outerHeight();
+                    svgWidth = $(".visualizationContainer").outerWidth();
+
+                    var typeScaleY = d3.scalePoint()
+                        .domain(data.map(function(d) {
+                            return d['type'];
+                        }))
+                        .range([0, svgHeight - 100])
+                        .padding(0.5); // give some space at the outer edges
+
+                    var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
+
+                    simulation.force("charge", chargeForce.strength(-2))
+                    simulation.force("x", centerXForce)
+                    simulation.force("y", centerYForce)
+                    if (sheetToFetch.indexOf("alcohol") >= 0)
+                        simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 20))
+                    else simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) + 100));
+                    simulation.force('collision', d3.forceCollide(5));
+
+                    // console.log("Will this work?");
+
+                    if (!splitState) {
+                        // push the nodes towards respective spots
+                        simulation.force("y", yTypeForce);
+                        // labels.attr("fill", "#000");
+                        d3.selectAll('circle').transition()
+                    } else {
+                        // simulation.force("x", centerXForce);
+                        simulation.force("y", centerYForce);
+                        // labels.attr("fill", "rgba(0,0,0,0)");
+                        d3.selectAll('circle').transition()
+                    }
+
+                    // Toggle state
+                    splitState = !splitState;
+
+                    // NOTE: Very important to call both alphaTarget AND restart in conjunction
+                    // Restart by itself will reset alpha (cooling of simulation)
+                    // but won't reset the velocities of the nodes (inertia)
+                    simulation.alpha(1).restart();
+                    // console.log(bmi);
                 }
 
 
