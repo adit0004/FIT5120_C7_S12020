@@ -443,9 +443,6 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrGmHjWjkwhyXqb9HDaiwQ9htOZCrs0Hs&callback=initMap&libraries=places" async defer></script><?php } ?>
 <?php if ($activePage == 'personalizedHealth') { ?>
     <script>
-        var bmiSplit = false;
-        var metGuidelinesSplit = false;
-
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
@@ -527,59 +524,6 @@
                         .attr("cy", function(d) {
                             return d.y;
                         });
-
-                    d3.selectAll('path').remove();
-                    d3.selectAll('line').remove();
-                    d3.selectAll('text').remove();
-                    var xMin = 9999,
-                        yMin = 9999,
-                        xMax = 0,
-                        yMax = 0,
-                        radius = 0;
-                    $("circle").each(function() {
-                        if (parseFloat($(this).attr('cx')) < xMin)
-                            xMin = parseFloat($(this).attr('cx'));
-                        if (parseFloat($(this).attr('cy')) < yMin)
-                            yMin = parseFloat($(this).attr('cy'));
-                        if (parseFloat($(this).attr('cx')) > xMax)
-                            xMax = parseFloat($(this).attr('cx'));
-                        if (parseFloat($(this).attr('cy')) > yMax)
-                            yMax = parseFloat($(this).attr('cy'));
-                    })
-
-                    // Draw the arc. Keep a 10 px margin
-                    xCenter = (xMin + xMax) / 2;
-                    yCenter = (yMin + yMax) / 2;
-                    radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
-                    if (radius < 20) radius = 20;
-                    xMin -= 10;
-                    if (radius > 20)
-                        yMin += 20;
-                    else yMin -= 10;
-                    xMax += 10;
-                    yMax += 10;
-                    d3.select('svg').append('path')
-                        .attr('d', "M " + xMin + " " + yMin + " A " + radius + " " + radius + " 0 0 1 " + xMax + " " + yMin)
-                        .attr('fill', 'none')
-                        .attr('stroke', '#fff')
-
-                    // Draw a line
-                    d3.select('svg').append('line')
-                        .attr('x1', xCenter)
-                        .attr('y1', yCenter - radius + 8)
-                        .attr('x2', xCenter)
-                        .attr('y2', yCenter - radius - 2)
-                        .attr('stroke', '#fff')
-
-                    // Add the label
-                    d3.select('svg')
-                        .append("text")
-                        .attr("class", "label")
-                        .text('100 Australians')
-                        .attr("fill", "#fff")
-                        .attr("text-anchor", "middle")
-                        .attr("x", xCenter)
-                        .attr("y", yCenter - radius - 10)
                 });
 
             var splitState = false;
@@ -624,75 +568,73 @@
                     .data(data)
                     .enter().append("circle")
                     .attr("r", 5)
-                    .attr("data-type", function(d) {
-                        return d.type
-                    })
+                    .attr("data-type", function(d){return d.type})
                     .attr("fill", "#eeeeee");
 
 
 
-                // if (sheetToFetch.indexOf("bmi") >= 0 ||
-                //     sheetToFetch.indexOf("arthritis") >= 0 ||
-                //     sheetToFetch.indexOf("asthama") >= 0 ||
-                //     sheetToFetch.indexOf("backProblems") >= 0 ||
-                //     sheetToFetch.indexOf("cancer") >= 0 ||
-                //     sheetToFetch.indexOf("copd") >= 0 ||
-                //     sheetToFetch.indexOf("diabetes") >= 0 ||
-                //     sheetToFetch.indexOf("hayfever") >= 0 ||
-                //     sheetToFetch.indexOf("heartstrokevascular") >= 0 ||
-                //     sheetToFetch.indexOf("hypertension") >= 0 ||
-                //     sheetToFetch.indexOf("kidneyissue") >= 0 ||
-                //     sheetToFetch.indexOf("mentalbehavioural") >= 0 ||
-                //     sheetToFetch.indexOf("osteoporosis") >= 0 ||
-                //     sheetToFetch.indexOf("alcohol") >= 0) {
-                //     console.log('bmiLabels');
+                if (sheetToFetch.indexOf("bmi") >= 0 ||
+                    sheetToFetch.indexOf("arthritis") >= 0 ||
+                    sheetToFetch.indexOf("asthama") >= 0 ||
+                    sheetToFetch.indexOf("backProblems") >= 0 ||
+                    sheetToFetch.indexOf("cancer") >= 0 ||
+                    sheetToFetch.indexOf("copd") >= 0 ||
+                    sheetToFetch.indexOf("diabetes") >= 0 ||
+                    sheetToFetch.indexOf("hayfever") >= 0 ||
+                    sheetToFetch.indexOf("heartstrokevascular") >= 0 ||
+                    sheetToFetch.indexOf("hypertension") >= 0 ||
+                    sheetToFetch.indexOf("kidneyissue") >= 0 ||
+                    sheetToFetch.indexOf("mentalbehavioural") >= 0 ||
+                    sheetToFetch.indexOf("osteoporosis") >= 0 ||
+                    sheetToFetch.indexOf("alcohol") >= 0) {
+                    console.log('bmiLabels');
 
-                //     var svgHeight = $(".visualizationContainer").outerHeight();
-                //     var svgWidth = $(".visualizationContainer").outerWidth();
-                //     var typeScaleY = d3.scalePoint()
-                //         .domain(data.map(function(d) {
-                //             return d['type'];
-                //         }))
-                //         .range([0, svgHeight])
-                //         .padding(0.5); // give some space at the outer edges
+                    var svgHeight = $(".visualizationContainer").outerHeight();
+                    var svgWidth = $(".visualizationContainer").outerWidth();
+                    var typeScaleY = d3.scalePoint()
+                        .domain(data.map(function(d) {
+                            return d['type'];
+                        }))
+                        .range([0, svgHeight])
+                        .padding(0.5); // give some space at the outer edges
 
-                //     var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
+                    var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
 
-                //     var labels = svg.selectAll("text")
-                //         .data(typeScale.domain()) // heh, scales take care of the unique, so grab from there
-                //         .enter().append("text")
-                //         .attr("class", "label")
-                //         .text(function(d) {
-                //             return d;
-                //         })
-                //         .attr("fill", "rgba(0,0,0,0")
-                //         .attr("text-anchor", "middle")
-                //         // .attr("x", function(d) { return typeScale(d); })
-                //         // .attr("y", height / 3.0 - 100);
-                //         .attr("x", svgWidth / 2)
-                //         .attr("y", function(d) {
-                //             return typeScaleY(d) - 30;
-                //         });
+                    var labels = svg.selectAll("text")
+                        .data(typeScale.domain()) // heh, scales take care of the unique, so grab from there
+                        .enter().append("text")
+                        .attr("class", "label")
+                        .text(function(d) {
+                            return d;
+                        })
+                        .attr("fill", "rgba(0,0,0,0")
+                        .attr("text-anchor", "middle")
+                        // .attr("x", function(d) { return typeScale(d); })
+                        // .attr("y", height / 3.0 - 100);
+                        .attr("x", svgWidth / 2)
+                        .attr("y", function(d) {
+                            return typeScaleY(d) - 30;
+                        });
 
-                // } else {
-                //     console.log('defaultLabels');
-                //     var labels = svg.selectAll("text")
-                //         .data(typeScale.domain()) // heh, scales take care of the unique, so grab from there
-                //         .enter().append("text")
-                //         .attr("class", "label")
-                //         .text(function(d) {
-                //             return d;
-                //         })
-                //         .attr("fill", "rgba(0,0,0,0)")
-                //         .attr("text-anchor", "middle")
-                //         .attr("x", function(d) {
-                //             return typeScale(d) - 40;
-                //         })
-                //         .attr("y", height / 2.0 - 100);
-                // }
+                } else {
+                    console.log('defaultLabels');
+                    var labels = svg.selectAll("text")
+                        .data(typeScale.domain()) // heh, scales take care of the unique, so grab from there
+                        .enter().append("text")
+                        .attr("class", "label")
+                        .text(function(d) {
+                            return d;
+                        })
+                        .attr("fill", "rgba(0,0,0,0)")
+                        .attr("text-anchor", "middle")
+                        .attr("x", function(d) {
+                            return typeScale(d) - 40;
+                        })
+                        .attr("y", height / 2.0 - 100);
+                }
 
 
-                if (
+                if(
                     sheetToFetch.indexOf("bmi") < 0 ||
                     sheetToFetch.indexOf("arthritis") < 0 ||
                     sheetToFetch.indexOf("asthama") < 0 ||
@@ -706,23 +648,24 @@
                     sheetToFetch.indexOf("kidneyissue") < 0 ||
                     sheetToFetch.indexOf("mentalbehavioural") < 0 ||
                     sheetToFetch.indexOf("osteoporosis") < 0 ||
-                    sheetToFetch.indexOf("alcohol") < 0) {
-                    var simulation = d3.forceSimulation()
-                        .force("charge", chargeForce.strength(-5))
-                        .force("x", centerXForce)
-                        .force("y", centerYForce)
-                        .force("center", d3.forceCenter(width / 2 + 30, height / 2))
-                        .force('collision', d3.forceCollide(5));
-                } else {
-                    var simulation = d3.forceSimulation()
-                        .force("charge", chargeForce.strength(-5))
-                        .force("x", centerXForce)
-                        .force("y", centerYForce)
-                        .force("center", d3.forceCenter(width / 2, height / 2))
-                        .force('collision', d3.forceCollide(5));
-                }
+                    sheetToFetch.indexOf("alcohol") < 0){
+                        var simulation = d3.forceSimulation()
+                    .force("charge", chargeForce.strength(-5))
+                    .force("x", centerXForce)
+                    .force("y", centerYForce)
+                    .force("center", d3.forceCenter(width / 2 + 30, height / 2))
+                    .force('collision', d3.forceCollide(5));
+                    }
+                    else {
+                        var simulation = d3.forceSimulation()
+                    .force("charge", chargeForce.strength(-5))
+                    .force("x", centerXForce)
+                    .force("y", centerYForce)
+                    .force("center", d3.forceCenter(width / 2, height / 2))
+                    .force('collision', d3.forceCollide(5));
+                    }
 
-
+               
 
                 var i = 0;
                 // Add the nodes to the simulation, and specify how to draw
@@ -738,335 +681,7 @@
                             .attr("cy", function(d) {
                                 return d.y;
                             });
-
-                        // Remove all existing labels
-                        d3.selectAll('path').remove();
-                        d3.selectAll('line').remove();
-                        d3.selectAll('text').remove();
-
-                        // All Australians label for met guidelines
-                        if (sheetToFetch.indexOf("bmi") < 0 &&
-                            sheetToFetch.indexOf("arthritis") < 0 &&
-                            sheetToFetch.indexOf("asthama") < 0 &&
-                            sheetToFetch.indexOf("backProblems") < 0 &&
-                            sheetToFetch.indexOf("cancer") < 0 &&
-                            sheetToFetch.indexOf("copd") < 0 &&
-                            sheetToFetch.indexOf("diabetes") < 0 &&
-                            sheetToFetch.indexOf("hayfever") < 0 &&
-                            sheetToFetch.indexOf("heartstrokevascular") < 0 &&
-                            sheetToFetch.indexOf("hypertension") < 0 &&
-                            sheetToFetch.indexOf("kidneyissue") < 0 &&
-                            sheetToFetch.indexOf("mentalbehavioural") < 0 &&
-                            sheetToFetch.indexOf("osteoporosis") < 0 &&
-                            sheetToFetch.indexOf("alcohol") < 0) {
-                            if (!metGuidelinesSplit) {
-
-                                var xMin = 9999,
-                                    yMin = 9999,
-                                    xMax = 0,
-                                    yMax = 0,
-                                    radius = 0;
-                                $("circle").each(function() {
-                                    if (parseFloat($(this).attr('cx')) < xMin)
-                                        xMin = parseFloat($(this).attr('cx'));
-                                    if (parseFloat($(this).attr('cy')) < yMin)
-                                        yMin = parseFloat($(this).attr('cy'));
-                                    if (parseFloat($(this).attr('cx')) > xMax)
-                                        xMax = parseFloat($(this).attr('cx'));
-                                    if (parseFloat($(this).attr('cy')) > yMax)
-                                        yMax = parseFloat($(this).attr('cy'));
-                                })
-
-                                // Draw the arc. Keep a 10 px margin
-                                xCenter = (xMin + xMax) / 2;
-                                yCenter = (yMin + yMax) / 2;
-                                radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
-                                if (radius < 20) radius = 20;
-                                xMin -= 10;
-                                if (radius > 20)
-                                    yMin += 20;
-                                else yMin -= 10;
-                                xMax += 10;
-                                yMax += 10;
-                                d3.select('svg').append('path')
-                                    .attr('d', "M " + xMin + " " + yMin + " A " + radius + " " + radius + " 0 0 1 " + xMax + " " + yMin)
-                                    .attr('fill', 'none')
-                                    .attr('stroke', '#fff')
-
-                                // Draw a line
-                                d3.select('svg').append('line')
-                                    .attr('x1', xCenter)
-                                    .attr('y1', yCenter - radius + 8)
-                                    .attr('x2', xCenter)
-                                    .attr('y2', yCenter - radius - 2)
-                                    .attr('stroke', '#fff')
-
-                                // Add the label
-                                d3.select('svg')
-                                    .append("text")
-                                    .attr("class", "label")
-                                    .text('100 Australians')
-                                    .attr("fill", "#fff")
-                                    .attr("text-anchor", "middle")
-                                    .attr("x", xCenter)
-                                    .attr("y", yCenter - radius - 10)
-                            } else {
-                                var xMin = 9999,
-                                    yMin = 9999,
-                                    xMax = 0,
-                                    yMax = 0,
-                                    radius = 0,
-                                    count = 0;
-                                $("circle[data-type='Met Guidelines']").each(function() {
-                                    if (parseFloat($(this).attr('cx')) < xMin)
-                                        xMin = parseFloat($(this).attr('cx'));
-                                    if (parseFloat($(this).attr('cy')) < yMin)
-                                        yMin = parseFloat($(this).attr('cy'));
-                                    if (parseFloat($(this).attr('cx')) > xMax)
-                                        xMax = parseFloat($(this).attr('cx'));
-                                    if (parseFloat($(this).attr('cy')) > yMax)
-                                        yMax = parseFloat($(this).attr('cy'));
-                                    count += 1;
-                                })
-
-                                // Draw the arc. Keep a 10 px margin
-                                xCenter = (xMin + xMax) / 2;
-                                yCenter = (yMin + yMax) / 2;
-                                xMin -= 10;
-                                yMin -= 10;
-                                xMax += 10;
-                                yMax += 10;
-                                radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
-                                d3.select('svg').append('path')
-                                    .attr('d', "M " + xMin + " " + yMin + " A " + radius + " " + radius + " 0 0 1 " + xMax + " " + yMin)
-                                    .attr('fill', 'none')
-                                    .attr('stroke', '#fff')
-
-                                // Draw a line
-                                d3.select('svg').append('line')
-                                    .attr('x1', xCenter)
-                                    .attr('y1', yCenter - radius)
-                                    .attr('x2', xCenter)
-                                    .attr('y2', yCenter - radius - 10)
-                                    .attr('stroke', '#fff')
-
-                                // Add the label
-                                d3.select('svg')
-                                    .append("text")
-                                    .attr("class", "label")
-                                    .text('Met guidelines (' + count + '%)')
-                                    .attr("fill", "#fff")
-                                    .attr("text-anchor", "middle")
-                                    .attr("x", xCenter)
-                                    .attr("y", yCenter - radius - 15)
-
-
-                                xMin = 9999,
-                                    yMin = 9999,
-                                    xMax = 0,
-                                    yMax = 0,
-                                    radius = 0,
-                                    count = 0;
-                                $("circle[data-type='Did not meet Guidelines']").each(function() {
-                                    if (parseFloat($(this).attr('cx')) < xMin)
-                                        xMin = parseFloat($(this).attr('cx'));
-                                    if (parseFloat($(this).attr('cy')) < yMin)
-                                        yMin = parseFloat($(this).attr('cy'));
-                                    if (parseFloat($(this).attr('cx')) > xMax)
-                                        xMax = parseFloat($(this).attr('cx'));
-                                    if (parseFloat($(this).attr('cy')) > yMax)
-                                        yMax = parseFloat($(this).attr('cy'));
-                                    count += 1;
-                                })
-
-                                // Draw the arc. Keep a 10 px margin
-                                xCenter = (xMin + xMax) / 2;
-                                yCenter = (yMin + yMax) / 2;
-                                xMin -= 10;
-                                yMin -= 10;
-                                xMax += 10;
-                                yMax += 10;
-                                radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
-                                d3.select('svg').append('path')
-                                    .attr('d', "M " + xMin + " " + yMin + " A " + radius + " " + radius + " 0 0 1 " + xMax + " " + yMin)
-                                    .attr('fill', 'none')
-                                    .attr('stroke', '#fff')
-
-                                // Draw a line
-                                d3.select('svg').append('line')
-                                    .attr('x1', xCenter)
-                                    .attr('y1', yCenter - radius)
-                                    .attr('x2', xCenter)
-                                    .attr('y2', yCenter - radius - 10)
-                                    .attr('stroke', '#fff')
-
-                                // Add the label
-                                d3.select('svg')
-                                    .append("text")
-                                    .attr("class", "label")
-                                    .text('Did not meet Guidelines (' + count + '%)')
-                                    .attr("fill", "#fff")
-                                    .attr("text-anchor", "middle")
-                                    .attr("x", xCenter)
-                                    .attr("y", yCenter - radius - 15)
-                            }
-                        }
-
-                        if (sheetToFetch.indexOf('bmi') >= 0) {
-
-                            // BMI After Splitting
-                            if (bmiSplit) {
-                                var xMin = 9999,
-                                    yMin = 9999,
-                                    xMax = 0,
-                                    yMax = 0,
-                                    radius = 0,
-                                    count = 0;
-                                $("circle[data-type='Underweight (less than 18.50)']").each(function() {
-                                    if (parseFloat($(this).attr('cx')) < xMin)
-                                        xMin = parseFloat($(this).attr('cx'));
-                                    if (parseFloat($(this).attr('cy')) < yMin)
-                                        yMin = parseFloat($(this).attr('cy'));
-                                    if (parseFloat($(this).attr('cx')) > xMax)
-                                        xMax = parseFloat($(this).attr('cx'));
-                                    if (parseFloat($(this).attr('cy')) > yMax)
-                                        yMax = parseFloat($(this).attr('cy'));
-                                    count += 1;
-                                })
-
-                                // Draw the arc. Keep a 10 px margin
-                                xCenter = (xMin + xMax) / 2;
-                                yCenter = (yMin + yMax) / 2;
-                                xMin -= 5;
-                                if (radius > 20)
-                                    yMin += 20;
-                                else yMin -= 5;
-                                xMax += 5;
-                                yMax += 5;
-                                radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
-                                if (radius < 20) radius = 20;
-                                d3.select('svg').append('path')
-                                    .attr('d', "M " + xMin + " " + yMin + " A " + radius + " " + radius + " 0 0 1 " + xMax + " " + yMin)
-                                    .attr('fill', 'none')
-                                    .attr('stroke', '#fff')
-
-                                // Draw a line
-                                d3.select('svg').append('line')
-                                    .attr('x1', xCenter)
-                                    .attr('y1', yCenter - radius)
-                                    .attr('x2', xCenter)
-                                    .attr('y2', yCenter - radius - 10)
-                                    .attr('stroke', '#fff')
-
-                                // Add the label
-                                d3.select('svg')
-                                    .append("text")
-                                    .attr("class", "label")
-                                    .text('Underweight (less than 18.50) (' + count + '%)')
-                                    .attr("fill", "#fff")
-                                    .attr("text-anchor", "middle")
-                                    .attr("x", xCenter)
-                                    .attr("y", yCenter - radius - 15)
-
-                                xMin = 9999, yMin = 9999, xMax = 0, yMax = 0, radius = 0, count = 0;
-
-                                $("circle[data-type='Normal (18.50 to 24.99)']").each(function() {
-                                    if (parseFloat($(this).attr('cx')) < xMin)
-                                        xMin = parseFloat($(this).attr('cx'));
-                                    if (parseFloat($(this).attr('cy')) < yMin)
-                                        yMin = parseFloat($(this).attr('cy'));
-                                    if (parseFloat($(this).attr('cx')) > xMax)
-                                        xMax = parseFloat($(this).attr('cx'));
-                                    if (parseFloat($(this).attr('cy')) > yMax)
-                                        yMax = parseFloat($(this).attr('cy'));
-                                    count += 1;
-                                })
-
-
-                                // Draw the arc. Keep a 10 px margin
-                                xCenter = (xMin + xMax) / 2;
-                                yCenter = (yMin + yMax) / 2;
-                                xMin -= 5;
-                                if (radius > 20)
-                                    yMin += 20;
-                                else yMin -= 5;
-                                xMax += 5;
-                                yMax += 5;
-                                radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
-                                if (radius < 20) radius = 20;
-                                d3.select('svg').append('path')
-                                    .attr('d', "M " + xMin + " " + yMin + " A " + radius + " " + radius + " 0 0 1 " + xMax + " " + yMin)
-                                    .attr('fill', 'none')
-                                    .attr('stroke', '#fff')
-
-                                // Draw a line
-                                d3.select('svg').append('line')
-                                    .attr('x1', xCenter)
-                                    .attr('y1', yCenter - radius)
-                                    .attr('x2', xCenter)
-                                    .attr('y2', yCenter - radius - 10)
-                                    .attr('stroke', '#fff')
-
-                                // Add the label
-                                d3.select('svg')
-                                    .append("text")
-                                    .attr("class", "label")
-                                    .text('Normal (18.50 to 24.99) (' + count + '%)')
-                                    .attr("fill", "#fff")
-                                    .attr("text-anchor", "middle")
-                                    .attr("x", xCenter)
-                                    .attr("y", yCenter - radius - 15)
-
-                                xMin = 9999, yMin = 9999, xMax = 0, yMax = 0, radius = 0, count = 0;
-                                $("circle[data-type='Overweight/Obese (25.00 or more)']").each(function() {
-                                    if (parseFloat($(this).attr('cx')) < xMin)
-                                        xMin = parseFloat($(this).attr('cx'));
-                                    if (parseFloat($(this).attr('cy')) < yMin)
-                                        yMin = parseFloat($(this).attr('cy'));
-                                    if (parseFloat($(this).attr('cx')) > xMax)
-                                        xMax = parseFloat($(this).attr('cx'));
-                                    if (parseFloat($(this).attr('cy')) > yMax)
-                                        yMax = parseFloat($(this).attr('cy'));
-                                    count += 1;
-                                })
-
-                                // Draw the arc. Keep a 10 px margin
-                                xCenter = (xMin + xMax) / 2;
-                                yCenter = (yMin + yMax) / 2;
-                                xMin -= 5;
-                                if (radius > 20)
-                                    yMin += 20;
-                                else yMin -= 5;
-                                xMax += 5;
-                                yMax += 5;
-                                radius = Math.sqrt(Math.pow(xCenter - xMin, 2) + Math.pow(yCenter - yMin, 2));
-                                if (radius < 20) radius = 20;
-                                d3.select('svg').append('path')
-                                    .attr('d', "M " + xMin + " " + yMin + " A " + radius + " " + radius + " 0 0 1 " + xMax + " " + yMin)
-                                    .attr('fill', 'none')
-                                    .attr('stroke', '#fff')
-
-                                // Draw a line
-                                d3.select('svg').append('line')
-                                    .attr('x1', xCenter)
-                                    .attr('y1', yCenter - radius)
-                                    .attr('x2', xCenter)
-                                    .attr('y2', yCenter - radius - 10)
-                                    .attr('stroke', '#fff')
-
-                                // Add the label
-                                d3.select('svg')
-                                    .append("text")
-                                    .attr("class", "label")
-                                    .text('Overweight/Obese (25.00 or more) (' + count + '%)')
-                                    .attr("fill", "#fff")
-                                    .attr("text-anchor", "middle")
-                                    .attr("x", xCenter)
-                                    .attr("y", yCenter - radius - 15)
-
-                            }
-                            // REDUCE RADIUS
-                        }
+                        // console.log(i++);
                     });
 
 
@@ -1085,6 +700,58 @@
                     sheetToFetch.indexOf("osteoporosis") >= 0 ||
                     sheetToFetch.indexOf("alcohol") >= 0
                 ) {
+                    // var svgHeight = $(".visualizationContainer").outerHeight();
+                    // var svgWidth = $(".visualizationContainer").outerWidth();
+                    
+                    // simulation.force("charge", chargeForce.strength(-5))
+                    // simulation.force("x", centerXForce)
+                    // simulation.force("y", centerYForce)
+                    // simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 50))
+                    // simulation.force('collision', d3.forceCollide(5));
+                    // console.log("Will this work?");
+
+                    // var splitStateLocal = true;
+                    // if (splitStateLocal) {
+                    //     var typeScaleYLocalForThis = d3.scalePoint()
+                    //         .domain(data.map(function(d) {
+                    //             return d['type'];
+                    //         }))
+                    //         .range([0, svgHeight - 100])
+                    //         .padding(0.5); // give some space at the outer edges
+                    //     var yTypeForceLocalForThis = d3.forceY(d => typeScaleYLocalForThis(d['type']));
+                    //     // push the nodes towards respective spots
+                    //     // yTypeForce = 
+                    //     // simulation.force("x", xTypeForce);
+                    //     console.log("Global Boohoo_1");
+                    //     simulation.force("y", yTypeForceLocalForThis);
+                    //     simulation.force("x", centerXForce)
+                    //     simulation.force("charge", chargeForce.strength(-5));
+                    //     simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 50))
+                    //     simulation.force('collision', d3.forceCollide(5));
+                    //     labels.attr("fill", "#fff");
+                    //     d3.selectAll('circle').transition()
+                    // } else {
+                    //     // simulation.force("x", centerXForce);
+                    //     simulation.force("x", centerXForce)
+                    //     simulation.force("charge", chargeForce.strength(-5));
+                    //     simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 50))
+                    //     simulation.force('collision', d3.forceCollide(5));
+                    //     console.log("Global_Boohoo_2");
+                    //     simulation.force("y", centerYForce);
+                    //     labels.attr("fill", "rgba(0,0,0,0)");
+                    //     d3.selectAll('circle').transition()
+                    // }
+
+                    // // NOTE: Very important to call both alphaTarget AND restart in conjunction
+                    // // Restart by itself will reset alpha (cooling of simulation)
+                    // // but won't reset the velocities of the nodes (inertia)
+                    // simulation.alpha(1).restart();
+                    // simulation = null;
+
+
+
+
+
                     svgHeight = $(".visualizationContainer").outerHeight();
                     svgWidth = $(".visualizationContainer").outerWidth();
 
@@ -1100,22 +767,24 @@
                     simulation.force("charge", chargeForce.strength(-5))
                     simulation.force("x", centerXForce)
                     simulation.force("y", centerYForce)
-                    if (sheetToFetch.indexOf("alcohol") >= 0)
-                        simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 20))
-                    else simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) + 100));
+                    if(sheetToFetch.indexOf("alcohol") >= 0)
+                        simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2)-20))
+                    else simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2)+100));
                     simulation.force('collision', d3.forceCollide(5));
 
                     console.log("Will this work?");
 
                     if (!splitState) {
                         // push the nodes towards respective spots
+                        // yTypeForce = 
+                        // simulation.force("x", xTypeForce);
                         simulation.force("y", yTypeForce);
-                        // labels.attr("fill", "#000");
+                        labels.attr("fill", "#000");
                         d3.selectAll('circle').transition()
                     } else {
                         // simulation.force("x", centerXForce);
                         simulation.force("y", centerYForce);
-                        // labels.attr("fill", "rgba(0,0,0,0)");
+                        labels.attr("fill", "rgba(0,0,0,0)");
                         d3.selectAll('circle').transition()
                     }
 
@@ -1128,39 +797,36 @@
                     simulation.alpha(1).restart();
                     console.log(bmi);
 
+
+
+
+
+
+
+
+
+
                 }
 
 
                 var splitState = false;
 
                 document.getElementById('processMetGuidelinesYes').onclick = function() {
-                    svgHeight = $(".visualizationContainer").outerHeight();
-                    svgWidth = $(".visualizationContainer").outerWidth();
-
-                    var typeScaleY = d3.scalePoint()
-                        .domain(data.map(function(d) {
-                            return d['type'];
-                        }))
-                        .range([0, svgHeight - 100])
-                        .padding(0.5); // give some space at the outer edges
-
-                    var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
                     $("#q2").fadeOut(400, function() {
                         // DO D3 HERE
                         if (!splitState) {
                             // push the nodes towards respective spots
-                            simulation.force("y", yTypeForce);
-                            // labels.attr("fill", "#000");
+                            simulation.force("x", xTypeForce);
+                            labels.attr("fill", "#000");
                             d3.selectAll('circle').transition()
                         } else {
                             simulation.force("x", centerXForce);
-                            // labels.attr("fill", "rgba(0,0,0,0)");
+                            labels.attr("fill", "rgba(0,0,0,0)");
                             d3.selectAll('circle').transition()
                         }
 
                         // Toggle state
                         splitState = !splitState;
-                        metGuidelinesSplit = true;
 
                         // NOTE: Very important to call both alphaTarget AND restart in conjunction
                         // Restart by itself will reset alpha (cooling of simulation)
@@ -1169,7 +835,7 @@
                         $("#q2yes").fadeIn();
                     });
                     // Pick a node with this value and color it black
-                    $("circle[data-type='Met Guidelines']").first().attr('fill', '#000');
+                    $("circle[data-type='Met Guidelines']").first().attr('fill','#000');
                     $("#metGuidelinesPercentage").html($("circle[data-type='Met Guidelines']").length);
                 }
                 $("#skipAge").on('click', function() {
@@ -1183,18 +849,17 @@
                         // DO D3 HERE
                         if (!splitState) {
                             // push the nodes towards respective spots
-                            simulation.force("y", yTypeForce);
-                            // labels.attr("fill", "#000");
+                            simulation.force("x", xTypeForce);
+                            labels.attr("fill", "#000");
                             d3.selectAll('circle').transition()
                         } else {
                             simulation.force("x", centerXForce);
-                            // labels.attr("fill", "rgba(0,0,0,0)");
+                            labels.attr("fill", "rgba(0,0,0,0)");
                             d3.selectAll('circle').transition()
                         }
 
                         // Toggle state
                         splitState = !splitState;
-                        metGuidelinesSplit = true;
 
                         // NOTE: Very important to call both alphaTarget AND restart in conjunction
                         // Restart by itself will reset alpha (cooling of simulation)
@@ -1203,7 +868,7 @@
                         $("#q2no").fadeIn();
                     });
                     // Pick a node with this value and color it black
-                    $("circle[data-type='Did not meet Guidelines']").first().attr('fill', '#000');
+                    $("circle[data-type='Did not meet Guidelines']").first().attr('fill','#000');
                     $("#didNotMeet").html($("circle[data-type='Did not meet Guidelines']").length);
                 }
                 $(".moveToBmi").each(function(e) {
@@ -1250,36 +915,36 @@
                         $("#bmiResult").removeClass("text-success");
                         $("#bmiResult").addClass("text-danger");
                         $("#bmiResult").html("Underweight");
-                        $("#bmiMessage").html("A BMI of " + bmi + " is within the underweight category. You are among the " + $("circle[data-type='Underweight (less than 18.50)']").length + "% of people in this category. It is recommended that you visit a health professional to discuss the impacts this may have on your health.");
+                        $("#bmiMessage").html("A BMI of " + bmi + " is within the underweight category. You are among the "+$("circle[data-type='Underweight (less than 18.50)']").length+"% of people in this category. It is recommended that you visit a health professional to discuss the impacts this may have on your health.");
                         $("#bmiContinue").fadeIn();
-                        $("circle[data-type='Underweight (less than 18.50)']").first().attr('fill', '#000');
+                        $("circle[data-type='Underweight (less than 18.50)']").first().attr('fill','#000');
                     } else if (bmi >= 18.5 && bmi < 25) {
                         // Normal
                         $("#bmiResult").removeClass("text-danger");
                         $("#bmiResult").removeClass("text-success");
                         $("#bmiResult").addClass("text-success");
                         $("#bmiResult").html("Normal");
-                        $("#bmiMessage").html("A BMI of " + bmi + " is within the healthy weight category.You are among the " + $("circle[data-type='Normal (18.50 to 24.99)']").length + "% of people in this category.  This is generally good for your health. The challenge is to maintain your weight. You might like to explore places and events nearby to maintain a healthy weight.");
+                        $("#bmiMessage").html("A BMI of " + bmi + " is within the healthy weight category.You are among the "+$("circle[data-type='Normal (18.50 to 24.99)']").length+"% of people in this category.  This is generally good for your health. The challenge is to maintain your weight. You might like to explore places and events nearby to maintain a healthy weight.");
                         $("#bmiButtons").fadeIn();
                         $("#bmiContinue").fadeIn();
-                        $("circle[data-type='Normal (18.50 to 24.99)']").first().attr('fill', '#000');
+                        $("circle[data-type='Normal (18.50 to 24.99)']").first().attr('fill','#000');
                     } else {
                         // Overweight / Obese
                         $("#bmiResult").removeClass("text-danger");
                         $("#bmiResult").removeClass("text-success");
                         $("#bmiResult").addClass("text-danger");
                         $("#bmiResult").html("Overweight or Obese");
-                        $("#bmiMessage").html("A BMI of " + bmi + " is within the overweight/obese category. You are among the " + $("circle[data-type='Overweight/Obese (25.00 or more)']").length + "% of people in this category. This may not be good for your health. You might like to explore places and events for a more active lifestyle");
+                        $("#bmiMessage").html("A BMI of " + bmi + " is within the overweight/obese category. You are among the "+$("circle[data-type='Overweight/Obese (25.00 or more)']").length+"% of people in this category. This may not be good for your health. You might like to explore places and events for a more active lifestyle");
                         $("#bmiButtons").fadeIn();
                         $("#bmiContinue").fadeIn();
-                        $("circle[data-type='Overweight/Obese (25.00 or more)']").first().attr('fill', '#000');
+                        $("circle[data-type='Overweight/Obese (25.00 or more)']").first().attr('fill','#000');
                     }
                     $("#bmiCalculated").fadeIn();
 
                     // DO D3 HERE
 
 
-                    svgHeightLocal = $(".visualizationContainer").outerHeight();
+                    svgHeightLocal = $(".visualizationContainer").outerHeight()-50;
                     svgWidthLocal = $(".visualizationContainer").outerWidth();
 
                     var typeScaleY = d3.scalePoint()
@@ -1287,14 +952,14 @@
                             return d['type'];
                         }))
                         .range([0, svgHeightLocal])
-                        .padding(50); // give some space at the outer edges
+                        .padding(0.5); // give some space at the outer edges
 
                     var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
 
                     simulation.force("charge", chargeForce.strength(-5))
                     simulation.force("x", centerXForce)
                     simulation.force("y", centerYForce)
-                    simulation.force("center", d3.forceCenter((svgWidthLocal / 2), (svgHeightLocal / 2) + 70))
+                    simulation.force("center", d3.forceCenter((svgWidthLocal / 2), (svgHeightLocal / 2)+70))
                     simulation.force('collision', d3.forceCollide(5));
 
                     console.log("Will this work?");
@@ -1303,12 +968,11 @@
                         // push the nodes towards respective spots
                         // yTypeForce = 
                         // simulation.force("x", xTypeForce);
-                        simulation.force("y", yTypeForce)
-                        // labels.attr("fill", "#000");
+                        simulation.force("y", yTypeForce);
+                        labels.attr("fill", "#000");
                         d3.selectAll('circle').transition()
                         simulation.alpha(1).restart();
-                        bmiSplit = true;
-                    }
+                    } 
 
                     // Toggle state
                     splitState = !splitState;
@@ -1325,7 +989,7 @@
                             updateData($("#longTermHealthIssues").val());
                             $("#q3").fadeOut(400, function() {
                                 $("#q4").fadeIn();
-                                $("#percentageForIssues").html("For " + $("#longTermHealthIssues").find("option:selected").html() + ", " + $("circle[data-type='Underweight/Normal']").length + "% of the people fall under Underweight/Normal category and " + $("circle[data-type='Overweight/Obese']").length + "% of the people fall in the Overweight/Obese category.");
+                                $("#percentageForIssues").html("For " +$("#longTermHealthIssues").find("option:selected").html()+ ", "+$("circle[data-type='Underweight/Normal']").length +"% of the people fall under Underweight/Normal category and " +$("circle[data-type='Overweight/Obese']").length+ "% of the people fall in the Overweight/Obese category.");
                             });
                         } catch (err) {
                             console.log(err);
@@ -1335,7 +999,7 @@
 
                 $("#longTermHealthIssues").on('change', function() {
                     updateData($("#longTermHealthIssues").val());
-                    $("#percentageForIssues").html("For " + $("#longTermHealthIssues").find("option:selected").html() + ", " + $("circle[data-type='Underweight/Normal']").length + "% of the people fall under Underweight/Normal category and " + $("circle[data-type='Overweight/Obese']").length + "% of the people fall in the Overweight/Obese category.");
+                    $("#percentageForIssues").html("For " +$("#longTermHealthIssues").find("option:selected").html()+ ", "+$("circle[data-type='Underweight/Normal']").length +"% of the people fall under Underweight/Normal category and " +$("circle[data-type='Overweight/Obese']").length+ "% of the people fall in the Overweight/Obese category.");
                 })
 
                 $("#continueFromLongTerm").on('click', function() {
@@ -1344,29 +1008,29 @@
                         updateData($("#age-bracket").val() + "alcohol");
                     })
                 })
-                $("#compareAlcohol").on('click', function() {
-                    $("circle").each(function() {
+                $("#compareAlcohol").on('click', function(){
+                    $("circle").each(function(){
                         $(this).attr('fill', "#eeeeee");
                     })
-                    if ($("#alcoholConsumption").val() == "neverConsumedAlcohol") {
-                        $("circle[data-type='Never consumed alcohol']").first().attr('fill', '#000');
-                        $("#alcoholPercentage").html("You are among the " + $("circle[data-type='Never consumed alcohol']").length + "% people who have never consumed alcohol");
+                    if($("#alcoholConsumption").val() == "neverConsumedAlcohol"){
+                        $("circle[data-type='Never consumed alcohol']").first().attr('fill','#000');
+                        $("#alcoholPercentage").html("You are among the "+$("circle[data-type='Never consumed alcohol']").length+"% people who have never consumed alcohol");
                     }
-                    if ($("#alcoholConsumption").val() == "12OrMoreMonths") {
-                        $("circle[data-type='Consumed alcohol 12 or more months ago']").first().attr('fill', '#000');
-                        $("#alcoholPercentage").html("You are among the " + $("circle[data-type='Consumed alcohol 12 or more months ago']").length + "% people who consumed alcohol 12 or more months ago.");
+                    if($("#alcoholConsumption").val() == "12OrMoreMonths"){
+                        $("circle[data-type='Consumed alcohol 12 or more months ago']").first().attr('fill','#000');
+                        $("#alcoholPercentage").html("You are among the "+$("circle[data-type='Consumed alcohol 12 or more months ago']").length+"% people who consumed alcohol 12 or more months ago.");
                     }
-                    if ($("#alcoholConsumption").val() == "notInLastWeekButUnder12Months") {
-                        $("circle[data-type='Did not consume alcohol in the last week but did less than 12 months ago']").first().attr('fill', '#000');
-                        $("#alcoholPercentage").html("You are among the " + $("circle[data-type='Did not consume alcohol in the last week but did less than 12 months ago']").length + "% people who did not consume alcohol in the last week but did less than 12 months ago.");
+                    if($("#alcoholConsumption").val() == "notInLastWeekButUnder12Months"){
+                        $("circle[data-type='Did not consume alcohol in the last week but did less than 12 months ago']").first().attr('fill','#000');
+                        $("#alcoholPercentage").html("You are among the "+$("circle[data-type='Did not consume alcohol in the last week but did less than 12 months ago']").length+"% people who did not consume alcohol in the last week but did less than 12 months ago.");
                     }
-                    if ($("#alcoholConsumption").val() == "didNotExceedGuidelines") {
-                        $("circle[data-type='Alcohol consumption in the last week - Did not exceed guidelines']").first().attr('fill', '#000');
-                        $("#alcoholPercentage").html("You are among the " + $("circle[data-type='Alcohol consumption in the last week - Did not exceed guidelines']").length + "% people who did not exceed guidelines last week.");
+                    if($("#alcoholConsumption").val() == "didNotExceedGuidelines"){
+                        $("circle[data-type='Alcohol consumption in the last week - Did not exceed guidelines']").first().attr('fill','#000');
+                        $("#alcoholPercentage").html("You are among the "+$("circle[data-type='Alcohol consumption in the last week - Did not exceed guidelines']").length+"% people who did not exceed guidelines last week.");
                     }
-                    if ($("#alcoholConsumption").val() == "exceededGuidelines") {
-                        $("circle[data-type='Alcohol consumption in the last week - Exceeded guidelines']").first().attr('fill', '#000');
-                        $("#alcoholPercentage").html("You are among the " + $("circle[data-type='Alcohol consumption in the last week - Exceeded guidelines']").length + "% people who exceeded guidelines last week.");
+                    if($("#alcoholConsumption").val() == "exceededGuidelines"){
+                        $("circle[data-type='Alcohol consumption in the last week - Exceeded guidelines']").first().attr('fill','#000');
+                        $("#alcoholPercentage").html("You are among the "+$("circle[data-type='Alcohol consumption in the last week - Exceeded guidelines']").length+"% people who exceeded guidelines last week.");
                     }
                 })
             });

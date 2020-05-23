@@ -143,22 +143,26 @@
 
 .bgimg-1 {
     background-image: url("../img/body_bg.jpg");
-    min-height: 600px;
+    /* min-height: 600px; */
+    height:100vh;
 }
 
 .bgimg-2 {
     background-image: url("../img/woman_near_flowers.jpg");
-    min-height: 600px;
+    /* min-height: 600px; */
+    height:100vh;
 }
 
 .bgimg-3 {
     background-image: url("../img/spaces_bg.jpg");
-    min-height: 600px;
+    /* min-height: 600px; */
+    height:100vh;
 }
 
 .bgimg-4 {
     background-image: url("../img/events.jpg");
-    min-height: 600px;
+    /* min-height: 600px; */
+    height:100vh;
 }
 
 .emergency-button {
@@ -166,6 +170,10 @@
     top: 85vh;
     left: 5px;
     display: none;
+}
+
+.visualizationContainer{
+    background-color:#3c6998;
 }
 
 @media (max-width: 769px) {
