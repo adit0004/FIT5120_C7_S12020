@@ -115,14 +115,15 @@
                 <p>A standard drink contains 10g of alcohol. Many drinks have more than 1 standard drink in them. Check the label on your bottle or container to see how many standard drinks are in it.</p>
                 <p class="mt-3">Which category do you fall under?</p>
                 <select id="alcoholConsumption" class="form-control">
+                    <option disabled selected>-- Select one --</option>
                     <option value="neverConsumedAlcohol">Never Consumed Alcohol</option>
                     <option value="12OrMoreMonths">Consumed Alchol 12 or more months ago</option>
                     <option value="notInLastWeekButUnder12Months">Did not consume alcohol last week but did less than 12 months ago</option>
                     <option value="didNotExceedGuidelines">Alcohol Consumption in the last week - Did not exceed guidelines</option>
                     <option value="exceededGuidelines">Alcohol Consumption in the last week - Exceeded guidelines</option>
                 </select>
-                <button class="btn btn-outline-primary" id="compareAlcohol">Compare</button>
-                <p class="my-2" id="alcoholPercentage"></p>
+                <!-- <button class="btn btn-outline-primary" id="compareAlcohol">Compare</button> -->
+                <p class="my-2 mt-4" id="alcoholPercentage"></p>
                 <p class="my-2">For some of us, alcohol may become hindrance to healthy lifestyle. EldVisor might be able to help you to explore places and events nearby to maintain a physically active lifestyle.</p>
                 <a href="<?php echo site_url(['general', 'showCharts']); ?>" class="btn btn-sm btn-outline-primary">All Health Statistics</a>
                 <a href="<?php echo site_url(['spaces', 'showSpaces']); ?>" class="btn btn-sm btn-outline-primary">Explore the Outdoors</a>

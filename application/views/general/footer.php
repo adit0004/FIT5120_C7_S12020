@@ -600,8 +600,6 @@
             width = $(".visualizationContainer").outerWidth();
             height = $(".visualizationContainer").outerHeight();
 
-            // var centerXForce = d3.forceX().x(width / 2).strength(forceStrength);
-            // var centerYForce = d3.forceY().y(height / 2).strength(forceStrength);
             var centerXForce = d3.forceX(100);
             var centerYForce = d3.forceY(100);
 
@@ -1539,7 +1537,9 @@
                         $("#q2yes").fadeIn();
                     });
                     // Pick a node with this value and color it black
-                    // $("circle[data-type='Met Guidelines']").first().attr('fill', '#000');
+                    $("circle[data-type='Met Guidelines']").each(function(){
+                        $(this).attr('fill', '#EAAC50');
+                    });
                     $("#metGuidelinesPercentage").html($("circle[data-type='Met Guidelines']").length);
                 }
                 $("#skipAge").on('click', function() {
@@ -1585,7 +1585,9 @@
                         $("#q2no").fadeIn();
                     });
                     // Pick a node with this value and color it black
-                    // $("circle[data-type='Did not meet Guidelines']").first().attr('fill', '#000');
+                    $("circle[data-type='Did not meet Guidelines']").each(function(){
+                        $(this).attr('fill', '#EAAC50');
+                    });
                     $("#didNotMeet").html($("circle[data-type='Did not meet Guidelines']").length);
                 }
                 $(".moveToBmi").each(function(e) {
@@ -1634,7 +1636,9 @@
                         $("#bmiResult").html("Underweight");
                         $("#bmiMessage").html("A BMI of " + bmi + " is within the underweight category. You are among the " + $("circle[data-type='Underweight (less than 18.50)']").length + "% of people in this category. It is recommended that you visit a health professional to discuss the impacts this may have on your health.");
                         $("#bmiContinue").fadeIn();
-                        // $("circle[data-type='Underweight (less than 18.50)']").first().attr('fill', '#000');
+                        $("circle[data-type='Underweight (less than 18.50)']").each(function(){
+                            $(this).attr('fill', '#EAAC50');
+                        });
                     } else if (bmi >= 18.5 && bmi < 25) {
                         // Normal
                         $("#bmiResult").removeClass("text-danger");
@@ -1644,7 +1648,9 @@
                         $("#bmiMessage").html("A BMI of " + bmi + " is within the healthy weight category.You are among the " + $("circle[data-type='Normal (18.50 to 24.99)']").length + "% of people in this category.  This is generally good for your health. The challenge is to maintain your weight. You might like to explore places and events nearby to maintain a healthy weight.");
                         $("#bmiButtons").fadeIn();
                         $("#bmiContinue").fadeIn();
-                        // $("circle[data-type='Normal (18.50 to 24.99)']").first().attr('fill', '#000');
+                        $("circle[data-type='Normal (18.50 to 24.99)']").each(function(){
+                            $(this).attr('fill', '#EAAC50');
+                        });
                     } else {
                         // Overweight / Obese
                         $("#bmiResult").removeClass("text-danger");
@@ -1654,7 +1660,9 @@
                         $("#bmiMessage").html("A BMI of " + bmi + " is within the overweight/obese category. You are among the " + $("circle[data-type='Overweight/Obese (25.00 or more)']").length + "% of people in this category. This may not be good for your health. You might like to explore places and events for a more active lifestyle");
                         $("#bmiButtons").fadeIn();
                         $("#bmiContinue").fadeIn();
-                        // $("circle[data-type='Overweight/Obese (25.00 or more)']").first().attr('fill', '#000');
+                        $("circle[data-type='Overweight/Obese (25.00 or more)']").each(function(){
+                            $(this).attr('fill', '#EAAC50');
+                        });
                     }
                     $("#bmiCalculated").fadeIn();
 
@@ -1724,34 +1732,50 @@
                     $("#q4").fadeOut(400, function() {
                         $("#q5").fadeIn();
                         updateData($("#age-bracket").val() + "alcohol");
+                        $("circle[data-type='Never consumed alcohol']").each(function(){
+                            $(this).attr('fill', '#EAAC50');
+                        });
                         // console.log($("#age-bracket").val() + "alcohol");
                     })
                 })
-                $("#compareAlcohol").on('click', function() {
+                $("#alcoholConsumption").on('change', function(){
                     $("circle").each(function() {
                         $(this).attr('fill', "#eeeeee");
                     })
                     if ($("#alcoholConsumption").val() == "neverConsumedAlcohol") {
-                        // $("circle[data-type='Never consumed alcohol']").first().attr('fill', '#000');
+                        $("circle[data-type='Never consumed alcohol']").each(function(){
+                            $(this).attr('fill', '#EAAC50');
+                        });
                         $("#alcoholPercentage").html("You are among the " + $("circle[data-type='Never consumed alcohol']").length + "% people who have never consumed alcohol");
                     }
                     if ($("#alcoholConsumption").val() == "12OrMoreMonths") {
-                        // $("circle[data-type='Consumed alcohol 12 or more months ago']").first().attr('fill', '#000');
+                        $("circle[data-type='Consumed alcohol 12 or more months ago']").each(function(){
+                            $(this).attr('fill', '#EAAC50');
+                        });
                         $("#alcoholPercentage").html("You are among the " + $("circle[data-type='Consumed alcohol 12 or more months ago']").length + "% people who consumed alcohol 12 or more months ago.");
                     }
                     if ($("#alcoholConsumption").val() == "notInLastWeekButUnder12Months") {
-                        // $("circle[data-type='Did not consume alcohol in the last week but did less than 12 months ago']").first().attr('fill', '#000');
+                        $("circle[data-type='Did not consume alcohol in the last week but did less than 12 months ago']").each(function(){
+                            $(this).attr('fill', '#EAAC50');
+                        });
                         $("#alcoholPercentage").html("You are among the " + $("circle[data-type='Did not consume alcohol in the last week but did less than 12 months ago']").length + "% people who did not consume alcohol in the last week but did less than 12 months ago.");
                     }
                     if ($("#alcoholConsumption").val() == "didNotExceedGuidelines") {
-                        // $("circle[data-type='Alcohol consumption in the last week - Did not exceed guidelines']").first().attr('fill', '#000');
+                        $("circle[data-type='Alcohol consumption in the last week - Did not exceed guidelines']").each(function(){
+                            $(this).attr('fill', '#EAAC50');
+                        });
                         $("#alcoholPercentage").html("You are among the " + $("circle[data-type='Alcohol consumption in the last week - Did not exceed guidelines']").length + "% people who did not exceed guidelines last week.");
                     }
                     if ($("#alcoholConsumption").val() == "exceededGuidelines") {
-                        // $("circle[data-type='Alcohol consumption in the last week - Exceeded guidelines']").first().attr('fill', '#000');
+                        $("circle[data-type='Alcohol consumption in the last week - Exceeded guidelines']").each(function(){
+                            $(this).attr('fill', '#EAAC50');
+                        });
                         $("#alcoholPercentage").html("You are among the " + $("circle[data-type='Alcohol consumption in the last week - Exceeded guidelines']").length + "% people who exceeded guidelines last week.");
                     }
                 })
+                // $("#compareAlcohol").on('click', function() {
+                    
+                // })
             });
         }
     </script>

@@ -9,11 +9,12 @@
     <div class="container-fluid mt-3" id="moreInfo">
         <!-- Quick links section -->
         <div class="row p-4 m-5 d-flex justify-content-center">
-            <div class="col-12">
-                <p class="larger-text">Built for the elderly of Greater Geelong Area to help explore open spaces and fun events nearby. EldVisor aims to break the monotony of an inactive lifestyle indoors and take the elderly closer to a healthier and happier retirement life, by motivating through health facts and making one feel connected to the community.</p>
+            <div class="col-12 col-lg-8">
+                <!-- <p class="larger-text">Built for the elderly of Greater Geelong Area to help explore open spaces and fun events nearby. EldVisor aims to break the monotony of an inactive lifestyle indoors and take the elderly closer to a healthier and happier retirement life, by motivating through health facts and making one feel connected to the community.</p> -->
+                <p class="larger-text text-center">EldVisor aims to break the monotony of an inactive lifestyle indoors and take the elderly closer to a healthier and happier retirement life, by motivating through health facts and making one feel connected to the community.</p>
             </div>
 
-            <div class="col-12 col-md-8 col-lg-4 mt-5">
+            <div class="col-12 col-md-8 col-lg-6 mt-5">
                 <div class="row">
                     <div class="col-6" style='border-right:2px solid #e93f4a;'>
                         <p class="larger-text text-center">Almost 25%</p>
@@ -25,45 +26,46 @@
                     </div>
                 </div>
             </div>
+            <div class="col-12 col-lg-8">
+                <p class="larger-text text-center mt-5">EldVisor is built for the elderly of Greater Geelong Area to help explore open spaces and fun events nearby.</p>
+            </div>
             <div class="col-12 text-center">
                 <a href="#healthFacts" class="btn btn-lg btn-primary mt-5">What can EldVisor do for me?</a>
             </div>
 
         </div>
-        <div class="row p-4 d-flex align-items-center bgimg-2" id="healthFacts">
-            <div class="col-12 col-md-8 offset-md-2 p-5" style="background-color:rgba(255,255,255,0.95);border-radius:5px;">
-                Studies emphasize that the elderly can obtain enormous health benefits with moderate amount of daily physical activities. Regular physical activity is even proven to be associated with a reduction in mortality among older adults. Some effects of physical activity on the issues associated with aging, as proven by research are:
-                <ul class="mt-3">
-                    <li>Increased physical activity has <span class='text-primary'>positive effects</span> on the primary prevention of coronary heart disease, obesity, high blood cholesterol, hypertension, type 2 diabetes, and cancers</li>
-                    <li class='mt-2'>Evidence of reduced risk of developing dementia and Alzheimer’s disease</li>
-                </ul>
+        <div class="row p-5 d-flex align-items-center bgimg-2" id="healthFacts">
+            <div class="col-12 col-md-8 offset-md-2 p-5 larger-text text-white" style="margin-top:200px;">
+                Regular physical activity is proven to have health benefits along with reducing risk of developing Dementia and Alzheimer’s disease and mortality among older adults.
                 <div class="row">
                     <div class="col-12 text-center">
-                        <a href="<?php echo site_url(['general', 'personalizedQuiz']);?>" class="btn btn-lg btn-primary p-3 larger-text px-5 mt-3">See Health Facts</a>
+                        <a href="<?php echo site_url(['general', 'personalizedQuiz']); ?>" class="btn btn-lg btn-primary p-3 larger-text px-5 mt-3">See Health Facts</a>
                     </div>
                 </div>
             </div>
+            <a class="btn btn-rounded btn-primary align-self-end mb-5" style="height:75px; width:75px; border-radius:50%; font-size:40px;" href="#exploreOutdoors"><i class="fa fa-arrow-down"></i></a>
         </div>
 
         <!-- Open Spaces -->
-        <div class="row p-4 d-flex align-items-center bgimg-3">
-            <div class="col-12 col-md-8 offset-md-2 p-5" style="background-color:rgba(255,255,255,0.95);border-radius:5px;">
-            Getting outdoors not only boosts energy but also helps in connecting with people having similar interests, making it easier to have a more social life. The elderly of Greater Geelong can benefit a great deal by exploring the various option available as Open Spaces, so as to have an outing at their convenience. They can get to know the weather of a particular location sitting at their home, and plan their commute by checking the distance to various open spaces, thus make an informed choice about spending quality time outdoors.
+        <div class="row p-5 d-flex align-items-center bgimg-3" id="exploreOutdoors">
+            <div class="col-12 col-md-8 offset-md-2 p-5 larger-text text-white" style="margin-top:200px;">
+                Getting outdoors not only boosts energy but also helps in connecting with people having similar interests, making it easier to have a more social life. The elderly of Greater Geelong can benefit a great deal by exploring the various option available below, so as to have an outing at their convenience.
                 <div class="row">
                     <div class="col-12 text-center">
-                        <a href="<?php echo site_url(['spaces', 'showSpaces']);?>" class="btn btn-lg btn-primary p-3 larger-text px-5 mt-3">Explore the Outdoors</a>
+                        <a href="<?php echo site_url(['spaces', 'showSpaces']); ?>" class="btn btn-lg btn-primary p-3 larger-text px-5 mt-3">Explore the Outdoors</a>
                     </div>
                 </div>
             </div>
+            <a class="btn btn-rounded btn-primary align-self-end mb-5" style="height:75px; width:75px; border-radius:50%; font-size:40px;" href="#exploreEvents"><i class="fa fa-arrow-down"></i></a>
         </div>
 
         <!-- Events -->
-        <div class="row p-4 d-flex align-items-center bgimg-4">
-            <div class="col-12 col-md-8 offset-md-2 p-5" style="background-color:rgba(255,255,255,0.95);border-radius:5px;">
-            Greater Geelong area is involved with a significant number of awesome events each year for family and friends to participate and enjoy. All of the famed events and fun activities can be conveniently tracked through the ‘Explore Events’ option. Just search the type of events and dates you have in mind to attend and be enthralled by the various options the area has to present.
+        <div class="row p-5 d-flex align-items-center bgimg-4" id="exploreEvents">
+            <div class="col-12 col-md-8 offset-md-2 p-5 larger-text text-white" style="margin-top:200px;">
+                Greater Geelong area is involved with a significant number of awesome events each year for family and friends to participate and enjoy. Click below to track the famed events and activities.
                 <div class="row">
                     <div class="col-12 text-center">
-                        <a href="<?php echo site_url(['events','showEvents']);?>" class="btn btn-lg btn-primary p-3 larger-text px-5 mt-3">Explore Events Around</a>
+                        <a href="<?php echo site_url(['events', 'showEvents']); ?>" class="btn btn-lg btn-primary p-3 larger-text px-5 mt-3">Explore Events Around</a>
                     </div>
                 </div>
             </div>
