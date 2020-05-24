@@ -56,8 +56,6 @@
     function getLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(getWeatherAndAqi);
-        } else {
-            console.log("Geolocation is not supported by this browser.");
         }
     }
 
@@ -411,7 +409,7 @@
                         $("tr").eq(i).find("td").eq(1).find("#weatherBlock").html(weatherAqiStr);
 
                     } catch {
-                        console.log('Error fetching weather and aqi');
+                        // console.log('Error fetching weather and aqi');
                     }
                 }
             })
@@ -1459,8 +1457,8 @@
                     simulation.force("y", yTypeForce);
                     // labels.attr("fill", "#000");
                     // d3.selectAll('circle').transition()
-                    console.log(someUndefinedVariableToBreakJSHere);
-
+                    // console.log(someUndefinedVariableToBreakJSHere);
+                    return;
                     simulation.alpha(1).restart();
                     // console.log(bmi);
 
@@ -1468,7 +1466,7 @@
                     svgHeight = $(".visualizationContainer").outerHeight();
                     svgWidth = $(".visualizationContainer").outerWidth();
 
-                    console.log("HEre");
+                    // console.log("HEre");
                     var typeScaleY = d3.scalePoint()
                         .domain(data.map(function(d) {
                             return d['type'];
@@ -1606,7 +1604,7 @@
                             }
                         })
                     } catch (err) {
-                        console.log(err);
+                        // console.log(err);
                     }
                 })
                 $("#processBmi").on('click', function() {
@@ -1712,7 +1710,7 @@
                                 $("#percentageForIssues").html("For " + $("#longTermHealthIssues").find("option:selected").html() + ", " + $("circle[data-type='Underweight/Normal']").length + "% of the people fall under Underweight/Normal category and " + $("circle[data-type='Overweight/Obese']").length + "% of the people fall in the Overweight/Obese category.");
                             });
                         } catch (err) {
-                            console.log(err);
+                            // console.log(err);
                         }
                     })
                 })
@@ -1726,7 +1724,7 @@
                     $("#q4").fadeOut(400, function() {
                         $("#q5").fadeIn();
                         updateData($("#age-bracket").val() + "alcohol");
-                        console.log($("#age-bracket").val() + "alcohol");
+                        // console.log($("#age-bracket").val() + "alcohol");
                     })
                 })
                 $("#compareAlcohol").on('click', function() {
