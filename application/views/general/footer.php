@@ -660,6 +660,7 @@
                 } else {
                     var simulation = d3.forceSimulation()
                         .force("charge", chargeForce.strength(-5))
+                        // .force("charge", null)
                         .force("x", centerXForce)
                         .force("y", centerYForce)
                         .force("center", d3.forceCenter(width / 2, height / 2))
@@ -1452,34 +1453,14 @@
 
                     var yTypeForce = d3.forceY(d => typeScaleY(d['type']));
 
-                    simulation.force("charge", chargeForce.strength(-5))
-                    simulation.force("x", centerXForce)
-                    simulation.force("y", centerYForce)
-                    if (sheetToFetch.indexOf("alcohol") >= 0)
-                        simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 20))
-                    else simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) + 100));
-                    simulation.force('collision', d3.forceCollide(5));
-
                     // console.log("Will this work?");
                     var splitState = false;
-                    if (!splitState) {
-                        // push the nodes towards respective spots
-                        simulation.force("y", yTypeForce);
-                        // labels.attr("fill", "#000");
-                        d3.selectAll('circle').transition()
-                    } else {
-                        // simulation.force("x", centerXForce);
-                        simulation.force("y", centerYForce);
-                        // labels.attr("fill", "rgba(0,0,0,0)");
-                        d3.selectAll('circle').transition()
-                    }
+                    // push the nodes towards respective spots
+                    simulation.force("y", yTypeForce);
+                    // labels.attr("fill", "#000");
+                    // d3.selectAll('circle').transition()
+                    console.log(someUndefinedVariableToBreakJSHere);
 
-                    // Toggle state
-                    splitState = !splitState;
-
-                    // NOTE: Very important to call both alphaTarget AND restart in conjunction
-                    // Restart by itself will reset alpha (cooling of simulation)
-                    // but won't reset the velocities of the nodes (inertia)
                     simulation.alpha(1).restart();
                     // console.log(bmi);
 
@@ -1560,7 +1541,7 @@
                         $("#q2yes").fadeIn();
                     });
                     // Pick a node with this value and color it black
-                    $("circle[data-type='Met Guidelines']").first().attr('fill', '#000');
+                    // $("circle[data-type='Met Guidelines']").first().attr('fill', '#000');
                     $("#metGuidelinesPercentage").html($("circle[data-type='Met Guidelines']").length);
                 }
                 $("#skipAge").on('click', function() {
@@ -1606,7 +1587,7 @@
                         $("#q2no").fadeIn();
                     });
                     // Pick a node with this value and color it black
-                    $("circle[data-type='Did not meet Guidelines']").first().attr('fill', '#000');
+                    // $("circle[data-type='Did not meet Guidelines']").first().attr('fill', '#000');
                     $("#didNotMeet").html($("circle[data-type='Did not meet Guidelines']").length);
                 }
                 $(".moveToBmi").each(function(e) {
@@ -1655,7 +1636,7 @@
                         $("#bmiResult").html("Underweight");
                         $("#bmiMessage").html("A BMI of " + bmi + " is within the underweight category. You are among the " + $("circle[data-type='Underweight (less than 18.50)']").length + "% of people in this category. It is recommended that you visit a health professional to discuss the impacts this may have on your health.");
                         $("#bmiContinue").fadeIn();
-                        $("circle[data-type='Underweight (less than 18.50)']").first().attr('fill', '#000');
+                        // $("circle[data-type='Underweight (less than 18.50)']").first().attr('fill', '#000');
                     } else if (bmi >= 18.5 && bmi < 25) {
                         // Normal
                         $("#bmiResult").removeClass("text-danger");
@@ -1665,7 +1646,7 @@
                         $("#bmiMessage").html("A BMI of " + bmi + " is within the healthy weight category.You are among the " + $("circle[data-type='Normal (18.50 to 24.99)']").length + "% of people in this category.  This is generally good for your health. The challenge is to maintain your weight. You might like to explore places and events nearby to maintain a healthy weight.");
                         $("#bmiButtons").fadeIn();
                         $("#bmiContinue").fadeIn();
-                        $("circle[data-type='Normal (18.50 to 24.99)']").first().attr('fill', '#000');
+                        // $("circle[data-type='Normal (18.50 to 24.99)']").first().attr('fill', '#000');
                     } else {
                         // Overweight / Obese
                         $("#bmiResult").removeClass("text-danger");
@@ -1675,7 +1656,7 @@
                         $("#bmiMessage").html("A BMI of " + bmi + " is within the overweight/obese category. You are among the " + $("circle[data-type='Overweight/Obese (25.00 or more)']").length + "% of people in this category. This may not be good for your health. You might like to explore places and events for a more active lifestyle");
                         $("#bmiButtons").fadeIn();
                         $("#bmiContinue").fadeIn();
-                        $("circle[data-type='Overweight/Obese (25.00 or more)']").first().attr('fill', '#000');
+                        // $("circle[data-type='Overweight/Obese (25.00 or more)']").first().attr('fill', '#000');
                     }
                     $("#bmiCalculated").fadeIn();
 
@@ -1753,23 +1734,23 @@
                         $(this).attr('fill', "#eeeeee");
                     })
                     if ($("#alcoholConsumption").val() == "neverConsumedAlcohol") {
-                        $("circle[data-type='Never consumed alcohol']").first().attr('fill', '#000');
+                        // $("circle[data-type='Never consumed alcohol']").first().attr('fill', '#000');
                         $("#alcoholPercentage").html("You are among the " + $("circle[data-type='Never consumed alcohol']").length + "% people who have never consumed alcohol");
                     }
                     if ($("#alcoholConsumption").val() == "12OrMoreMonths") {
-                        $("circle[data-type='Consumed alcohol 12 or more months ago']").first().attr('fill', '#000');
+                        // $("circle[data-type='Consumed alcohol 12 or more months ago']").first().attr('fill', '#000');
                         $("#alcoholPercentage").html("You are among the " + $("circle[data-type='Consumed alcohol 12 or more months ago']").length + "% people who consumed alcohol 12 or more months ago.");
                     }
                     if ($("#alcoholConsumption").val() == "notInLastWeekButUnder12Months") {
-                        $("circle[data-type='Did not consume alcohol in the last week but did less than 12 months ago']").first().attr('fill', '#000');
+                        // $("circle[data-type='Did not consume alcohol in the last week but did less than 12 months ago']").first().attr('fill', '#000');
                         $("#alcoholPercentage").html("You are among the " + $("circle[data-type='Did not consume alcohol in the last week but did less than 12 months ago']").length + "% people who did not consume alcohol in the last week but did less than 12 months ago.");
                     }
                     if ($("#alcoholConsumption").val() == "didNotExceedGuidelines") {
-                        $("circle[data-type='Alcohol consumption in the last week - Did not exceed guidelines']").first().attr('fill', '#000');
+                        // $("circle[data-type='Alcohol consumption in the last week - Did not exceed guidelines']").first().attr('fill', '#000');
                         $("#alcoholPercentage").html("You are among the " + $("circle[data-type='Alcohol consumption in the last week - Did not exceed guidelines']").length + "% people who did not exceed guidelines last week.");
                     }
                     if ($("#alcoholConsumption").val() == "exceededGuidelines") {
-                        $("circle[data-type='Alcohol consumption in the last week - Exceeded guidelines']").first().attr('fill', '#000');
+                        // $("circle[data-type='Alcohol consumption in the last week - Exceeded guidelines']").first().attr('fill', '#000');
                         $("#alcoholPercentage").html("You are among the " + $("circle[data-type='Alcohol consumption in the last week - Exceeded guidelines']").length + "% people who exceeded guidelines last week.");
                     }
                 })
