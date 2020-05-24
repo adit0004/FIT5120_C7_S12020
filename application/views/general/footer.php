@@ -1461,7 +1461,7 @@
                     simulation.force('collision', d3.forceCollide(5));
 
                     // console.log("Will this work?");
-
+                    var splitState = false;
                     if (!splitState) {
                         // push the nodes towards respective spots
                         simulation.force("y", yTypeForce);
@@ -1487,6 +1487,7 @@
                     svgHeight = $(".visualizationContainer").outerHeight();
                     svgWidth = $(".visualizationContainer").outerWidth();
 
+                    console.log("HEre");
                     var typeScaleY = d3.scalePoint()
                         .domain(data.map(function(d) {
                             return d['type'];
@@ -1498,25 +1499,17 @@
 
                     simulation.force("charge", chargeForce.strength(-2))
                     simulation.force("x", centerXForce)
-                    simulation.force("y", centerYForce)
-                    if (sheetToFetch.indexOf("alcohol") >= 0)
-                        simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 20))
-                    else simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) + 100));
+                    // simulation.force("y", centerYForce)
+                    // push the nodes towards respective spots
+                    simulation.force("y", yTypeForce);
+                    // labels.attr("fill", "#000");
+                    d3.selectAll('circle').transition()
+                    simulation.force("center", d3.forceCenter((svgWidth / 2), (svgHeight / 2) - 20))
+
                     simulation.force('collision', d3.forceCollide(5));
 
-                    // console.log("Will this work?");
 
-                    if (!splitState) {
-                        // push the nodes towards respective spots
-                        simulation.force("y", yTypeForce);
-                        // labels.attr("fill", "#000");
-                        d3.selectAll('circle').transition()
-                    } else {
-                        // simulation.force("x", centerXForce);
-                        simulation.force("y", centerYForce);
-                        // labels.attr("fill", "rgba(0,0,0,0)");
-                        d3.selectAll('circle').transition()
-                    }
+
 
                     // Toggle state
                     splitState = !splitState;
@@ -1752,6 +1745,7 @@
                     $("#q4").fadeOut(400, function() {
                         $("#q5").fadeIn();
                         updateData($("#age-bracket").val() + "alcohol");
+                        console.log($("#age-bracket").val() + "alcohol");
                     })
                 })
                 $("#compareAlcohol").on('click', function() {
