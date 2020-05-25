@@ -1167,6 +1167,8 @@
                                 .attr("text-anchor", "middle")
                                 .attr("x", xCenter)
                                 .attr("y", yCenter - radius - 15)
+
+                                $("#percentageForIssues").html("For " + $("#longTermHealthIssues option:selected").html() + ", " + $("circle[data-type='Underweight/Normal']").length + "% of the people fall under Underweight/Normal category and " + $("circle[data-type='Overweight/Obese']").length + "% of the people fall in the Overweight/Obese category.");
                         }
 
                         if (sheetToFetch.indexOf("alcohol") >= 0) {
@@ -1725,7 +1727,6 @@
 
                 $("#longTermHealthIssues").on('change', function() {
                     updateData($("#longTermHealthIssues").val());
-                    $("#percentageForIssues").html("For " + $("#longTermHealthIssues").find("option:selected").html() + ", " + $("circle[data-type='Underweight/Normal']").length + "% of the people fall under Underweight/Normal category and " + $("circle[data-type='Overweight/Obese']").length + "% of the people fall in the Overweight/Obese category.");
                 })
 
                 $("#continueFromLongTerm").on('click', function() {
