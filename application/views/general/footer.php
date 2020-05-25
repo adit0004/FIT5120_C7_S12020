@@ -644,7 +644,7 @@
                         .force("charge", chargeForce.strength(-5))
                         .force("x", centerXForce)
                         .force("y", centerYForce)
-                        .force("center", d3.forceCenter(width / 2 + 30, height / 2))
+                        .force("center", d3.forceCenter(width / 2 + 30, height / 2 + 50))
                         .force('collision', d3.forceCollide(5));
                 } else if (sheetToFetch.indexOf("alcohol") < 0) {
                     var simulation = d3.forceSimulation()
