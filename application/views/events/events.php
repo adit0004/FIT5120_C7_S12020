@@ -48,7 +48,7 @@
     <div class="row mt-5">
         <div class="col-12">
             <h4>Events</h4>
-            <p class="text-muted">Showing results <?php echo $count < 10 ? ($count == 0 ? '0' : "1 to " . $count) : ((($page - 1) * 10) + 1) . " - " . ((($page - 1) * 10) + 10) . " of " . $count; ?></p>
+            <p class="text-muted">Showing results <?php echo $count < 9 ? ($count == 0 ? '0' : "1 to " . $count) : ((($page - 1) * 9) + 1) . " - " . ((($page - 1) * 9) + 9) . " of " . $count; ?></p>
         </div>
         <?php $iterator = 0;
         foreach ($events as $event) { ?>

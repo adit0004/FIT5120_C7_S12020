@@ -117,7 +117,7 @@
                 <select id="alcoholConsumption" class="form-control">
                     <option disabled selected>-- Select one --</option>
                     <option value="neverConsumedAlcohol">Never Consumed Alcohol</option>
-                    <option value="12OrMoreMonths">Consumed Alchol 12 or more months ago</option>
+                    <option value="12OrMoreMonths">Consumed Alcohol 12 or more months ago</option>
                     <option value="notInLastWeekButUnder12Months">Did not consume alcohol last week but did less than 12 months ago</option>
                     <option value="didNotExceedGuidelines">Alcohol Consumption in the last week - Did not exceed guidelines</option>
                     <option value="exceededGuidelines">Alcohol Consumption in the last week - Exceeded guidelines</option>

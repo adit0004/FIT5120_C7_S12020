@@ -35,7 +35,7 @@
 
         </div>
         <div class="row p-5 d-flex align-items-center bgimg-2" id="healthFacts">
-            <div class="col-12 col-md-8 offset-md-2 p-5 larger-text text-white" style="margin-top:200px;">
+            <div class="col-12 col-md-8 offset-md-2 p-5 larger-text text-white" style="margin-top:200px; text-align:justify;">
                 Regular physical activity is proven to have health benefits along with reducing risk of developing Dementia and Alzheimer’s disease and mortality among older adults.
                 <div class="row">
                     <div class="col-12 text-center">
@@ -48,7 +48,7 @@
 
         <!-- Open Spaces -->
         <div class="row p-5 d-flex align-items-center bgimg-3" id="exploreOutdoors">
-            <div class="col-12 col-md-8 offset-md-2 p-5 larger-text text-white" style="margin-top:200px;">
+            <div class="col-12 col-md-8 offset-md-2 p-5 larger-text text-white" style="margin-top:200px; text-align:justify;">
                 Getting outdoors not only boosts energy but also helps in connecting with people having similar interests, making it easier to have a more social life. The elderly of Greater Geelong can benefit a great deal by exploring the various option available below, so as to have an outing at their convenience.
                 <div class="row">
                     <div class="col-12 text-center">
@@ -61,7 +61,7 @@
 
         <!-- Events -->
         <div class="row p-5 d-flex align-items-center bgimg-4" id="exploreEvents">
-            <div class="col-12 col-md-8 offset-md-2 p-5 larger-text text-white" style="margin-top:200px;">
+            <div class="col-12 col-md-8 offset-md-2 p-5 larger-text text-white" style="margin-top:200px; text-align:justify;">
                 Greater Geelong area is involved with a significant number of awesome events each year for family and friends to participate and enjoy. Click below to track the famed events and activities.
                 <div class="row">
                     <div class="col-12 text-center">
